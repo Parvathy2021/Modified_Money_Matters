@@ -1,1 +1,5 @@
 /* CSS for NavHeader */
+
+.nav-link {
+    padding: 15px;
+}
