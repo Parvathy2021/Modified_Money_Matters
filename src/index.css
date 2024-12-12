@@ -24,6 +24,7 @@ a:hover {
 
 body {
   margin: 0;
+  font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
   display: flex;
   place-items: center;
   min-width: 320px;
@@ -56,13 +57,14 @@ button:focus-visible {
 
 @media (prefers-color-scheme: light) {
   :root {
-    color: #213547;
+    color: #2d353b;
     background-color: #ffffff;
   }
   a:hover {
-    color: #747bff;
+    color: #07070e;
+    
   }
   button {
-    background-color: #f9f9f9;
+    background-color: #bcc0f5;
   }
 }
