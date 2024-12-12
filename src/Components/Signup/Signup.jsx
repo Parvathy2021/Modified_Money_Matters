@@ -21,7 +21,7 @@ function Signup() {
                 <input type="password" placeholder='Password'value={password} onChange={(e) => setPassword(e.target.value)} required/>
             </div>
             <div  className='input-box'>
-                <input type="verify password" placeholder='Confirm Password'value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required/>
+                <input type=" password" placeholder='Confirm Password'value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required/>
             </div>
             <div  className='input-box'>
                 <input type="email" placeholder='email'value={email} onChange={(e) => setEmail(e.target.value)} required/>
