@@ -5,6 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="44c79d80-7e22-4de3-8247-5ca578bdd9a9" name="Changes" comment="">
+
       <change beforePath="$PROJECT_DIR$/.gradle/8.11.1/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.11.1/checksums/checksums.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.11.1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.11.1/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.11.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.11.1/executionHistory/executionHistory.lock" afterDir="false" />
@@ -18,6 +19,8 @@
       <change beforePath="$PROJECT_DIR$/build/resources/main/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/build/resources/main/application.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/moneymatters/mm_backend/models/Tag.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/moneymatters/mm_backend/models/Tag.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -45,6 +48,7 @@
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
                 <item name="mm-backend" type="f1a62948:ProjectNode" />
+
               </path>
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
@@ -77,8 +81,23 @@
         <entry key="$PROJECT_DIR$" value="backend-dev" />
       </map>
     </option>
+  </component>
+  <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "SensibleSidekick"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/AllHubs-June-2024-Liftoff/Liftoff-Doyle-Money-Matters",
+    "accountId": "8a1224d7-5500-4b44-8f74-bb0f7342ac77"
+  }
+}]]></component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6
 }</component>
@@ -90,6 +109,7 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
+
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;Gradle.Liftoff-Doyle-Money-Matters [bootRun].executor&quot;: &quot;Run&quot;,
@@ -102,6 +122,17 @@
   }
 }</component>
   <component name="RunManager" selected="Gradle.Liftoff-Doyle-Money-Matters [bootRun]">
+
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Gradle.mm_BackEnd [:org.moneymatters.mm_BackEnd.MmBackEndApplication.main()].executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "be-dev-budgetClass",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/timothymcdermott/Desktop/Coding File/LaunchCode/MoneyMatters"
+  }
+}]]></component>
+  <component name="RunManager">
     <configuration name="MmBackEndApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.moneymatters.mm_BackEnd.MmBackEndApplication" />
       <extension name="coverage">
@@ -177,6 +208,7 @@
     </task>
     <servers />
   </component>
+
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
       <map>
