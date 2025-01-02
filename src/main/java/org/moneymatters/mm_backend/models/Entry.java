@@ -18,7 +18,7 @@ public abstract class Entry {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @NotNull
+    @NotNull(message = "Amount cannot be null")
     @NotBlank(message = "Amount cannot be blank")
     private int amount;
 
