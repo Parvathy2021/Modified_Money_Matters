@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 
 @Entity
 public class RecurringTransaction extends Entry {
@@ -20,8 +21,17 @@ public class RecurringTransaction extends Entry {
 
     private LocalDate nextTransactionDate;
 
-    //Need to create a method to calculate the nextTransactionDate -Cy
 
+    //This is a method to get what the nextTransactionDate should be after a recurring transaction occurs. If the recurring date is the 30-31 and we reach a month that doesn't have that like February, this will set the next date to be the last day of the month. -Cy
+    public LocalDate calculateNextTransactionDate() {
+
+        YearMonth yearMonth = YearMonth.now();
+        int maxDays = yearMonth.lengthOfMonth();
+
+        int validDay = Math.min(recurringDay,maxDays);
+        return LocalDate.of(yearMonth.getYear(), yearMonth.getMonth(), validDay);
+
+    }
 
     public RecurringTransaction(int recurringDay) {
         super();
