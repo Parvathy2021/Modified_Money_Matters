@@ -5,11 +5,13 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+import java.util.Objects;
+
 @Entity
 public class Budget {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @NotNull
@@ -48,5 +50,18 @@ public class Budget {
 
     public void setUser_id(int user_id) {
         this.user_id = user_id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Budget budget = (Budget) o;
+        return id == budget.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }
