@@ -1,10 +1,7 @@
 package org.moneymatters.mm_backend.models;
 
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -27,8 +24,10 @@ public abstract class Entry {
     @Size(max = 200, message = "Description cannot be larger than 200 characters")
     private String description;
 
+    @OneToOne
     private int budgetId;
 
+    @ManyToOne
     private int userId;
 
     public int getId() {

@@ -19,6 +19,7 @@ public class Budget {
     @Size(min = 3, max = 30, message = "Name must be longer than 3 characters but shorter than 30 characters.")
     private String name;
 
+    @ManyToOne
     private int user_id;
 
     public Budget(String name, int user_id) {
