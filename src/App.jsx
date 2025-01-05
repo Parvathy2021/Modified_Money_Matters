@@ -1,6 +1,6 @@
 import React from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import './App.css'
+import './index.css'
 import Register from './Components/Register/Register'
 import Login from './Components/Login/Login'
 
@@ -8,6 +8,9 @@ import Login from './Components/Login/Login'
 function App() {
                             
   return (
+ 
+
+      
     <BrowserRouter>
       <Routes>
         <Route path='/' element= {<Register />}/>
