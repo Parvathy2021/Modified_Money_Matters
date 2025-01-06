@@ -1,9 +1,6 @@
 package org.moneymatters.mm_backend.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class Tag {
@@ -15,6 +12,8 @@ public class Tag {
     private String name;
     private String color;
     private boolean isDefault;
+
+    @ManyToMany
     private int user_id;
 
     public Tag() {
