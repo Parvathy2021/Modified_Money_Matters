@@ -11,8 +11,7 @@ import NavHeader from './components/navHeader/NavHeader'
 import Footer from './components/footer/Footer'
 
 function App() {
-  const [count, setCount] = useState(0)
-
+                            
   return (
     <>
       <Router>
