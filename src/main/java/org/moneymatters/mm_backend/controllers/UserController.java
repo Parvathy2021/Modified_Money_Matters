@@ -2,7 +2,6 @@ package org.moneymatters.mm_backend.controllers;
 
 import org.moneymatters.mm_backend.data.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -37,3 +36,4 @@ public class UserController {
         return "Delete user";
     }
 }
+
