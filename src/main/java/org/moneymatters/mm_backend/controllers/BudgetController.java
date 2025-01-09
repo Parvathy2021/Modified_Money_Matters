@@ -3,9 +3,10 @@ package org.moneymatters.mm_backend.controllers;
 import org.moneymatters.mm_backend.data.*;
 import org.moneymatters.mm_backend.models.RecurringTransaction;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
+@RequestMapping("/budgets")
 public class BudgetController {
 
     @Autowired
@@ -22,4 +23,36 @@ public class BudgetController {
 
     @Autowired
     private TagRepository tagRepository;
+
+//    Placeholder for creating new budget
+    @PostMapping
+    public String createBudget() {
+        return "Create budget";
+    }
+
+//    Placeholder for retrieving all budgets
+    @GetMapping
+    public String getAllBudgets() {
+        return "Retrieve all budgets";
+    }
+
+//    Placeholder for retrieving specific budget by ID
+    @GetMapping("/{id}")
+    public String getBudgetById(@PathVariable int id) {
+        return "Retrieve budget by Id";
+    }
+
+//    Placeholder for updating budget
+    @PutMapping("/{id")
+    public String updateBudget(@PathVariable int id) {
+        return "Update budget";
+    }
+
+//    Placeholder for deleting a budget
+    @DeleteMapping("/{id}")
+    public String deleteBudget(@PathVariable int id) {
+        return "Delete budget";
+    }
 }
+
+
