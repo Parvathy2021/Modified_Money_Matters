@@ -1,0 +1,26 @@
+[
+    {
+        "id": 1,
+        "username": "Cypress",
+        "password": "abc",
+        "email": "cypress@lc.com"
+    },
+    {
+        "id": 2,
+        "username": "Tim",
+        "password": "123",
+        "email": "tim@lc.com"
+    },
+    {
+        "id": 3,
+        "username": "Parvathy",
+        "password": "def",
+        "email": "parvathy@lc.com"
+    },
+    {
+        "id": 4,
+        "username": "Tri",
+        "password": "333",
+        "email": "tri@lc.com"
+    }
+]
