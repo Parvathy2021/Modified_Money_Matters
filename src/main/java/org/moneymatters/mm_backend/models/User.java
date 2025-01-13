@@ -7,8 +7,6 @@ import jakarta.persistence.Id;
 import jakarta.validation.constraints.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import java.util.Objects;
-
 @Entity
 public class User {
     @Id
@@ -35,11 +33,19 @@ public class User {
 
     public User(){}
 
-    public User(int user_Id, String username, String password, String confirmPassword, String email) {
+    public User(String username, String password) {
         this.user_Id = user_Id;
         this.username = username;
         this.pwhash = encoder.encode(password);
         this.email = email;
+    }
+
+    public int getUser_Id() {
+        return user_Id;
+    }
+
+    public void setUser_Id(int user_Id) {
+        this.user_Id = user_Id;
     }
 
     public void setUsername(@NotNull @NotBlank(message = "Name cannot be left blank") @Size(min = 3, max = 30, message = "Username must be between 3 and 30 characters.") String username) {
