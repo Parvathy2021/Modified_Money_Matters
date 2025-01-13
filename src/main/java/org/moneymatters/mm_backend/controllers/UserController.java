@@ -12,25 +12,31 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-//    Placeholder for creating new user
+//    Retrieve all users
+    @GetMapping
+    public String getAllUsers() {
+        return "Retrieve all users enpoint";
+    }
+
+    //    Retrieve a user by ID
+    @GetMapping("/{id}")
+    public String getUserById(@PathVariable int id)  {
+        return "Retrieve user by id endpoint";
+    }
+
+//    Create new user
     @PostMapping
     public String createUser() {
         return "Create user endpoint";
     }
 
-//    Placeholder for retrieving user by id
-    @GetMapping("/{id}")
-    public String getUserById(@PathVariable int id)  {
-        return "Retrive user by id endpoint";
-    }
-
-//    Placeholder for updating user
+//    Update an existing user
     @PutMapping("/{id}")
     public String updateUser(@PathVariable int id) {
         return "Update user endpoint";
     }
 
-// Placehold for deleting a user
+// Delete a user
     @DeleteMapping("/{id}")
     public String deleteUser(@PathVariable int id) {
         return "Delete user";
