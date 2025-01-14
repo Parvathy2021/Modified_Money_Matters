@@ -26,18 +26,18 @@ public class AuthenticationController {
     private static final String userSessionKey = "user";
 
     private static void setUserInSession(HttpSession session, User user) {
-        session.setAttribute(userSessionKey, user.getUser_Id());
+        session.setAttribute(userSessionKey, user.getUser_id());
     }
 
     public User getUserFromSession(HttpSession session) {
 
-        Integer userId = (Integer) session.getAttribute(userSessionKey);
+        Integer user_id = (Integer) session.getAttribute(userSessionKey);
 
-        if (userId == null) {
+        if (user_id == null) {
             return null;
         }
 
-        Optional<User> userOpt = userRepository.findById(userId);
+        Optional<User> userOpt = userRepository.findById(user_id);
 
         if (userOpt.isEmpty()) {
             return null;
