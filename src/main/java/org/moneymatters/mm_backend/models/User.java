@@ -7,13 +7,11 @@ import jakarta.persistence.Id;
 import jakarta.validation.constraints.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import java.util.Objects;
-
 @Entity
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int user_Id;
+    private int user_id;
 
     @NotNull
     @NotBlank(message = "Name cannot be left blank")
@@ -35,11 +33,19 @@ public class User {
 
     public User(){}
 
-    public User(int user_Id, String username, String password, String confirmPassword, String email) {
-        this.user_Id = user_Id;
+    public User(String username, String password) {
+        this.user_id = user_id;
         this.username = username;
         this.pwhash = encoder.encode(password);
         this.email = email;
+    }
+
+    public int getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(int user_id) {
+        this.user_id = user_id;
     }
 
     public void setUsername(@NotNull @NotBlank(message = "Name cannot be left blank") @Size(min = 3, max = 30, message = "Username must be between 3 and 30 characters.") String username) {
