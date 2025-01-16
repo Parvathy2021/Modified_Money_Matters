@@ -2,6 +2,9 @@ package org.moneymatters.mm_backend.models;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 public class Tag {
 
@@ -13,18 +16,26 @@ public class Tag {
     private String color;
     private boolean isDefault;
 
-    @ManyToMany
-    private int user_id;
+    @ManyToMany(mappedBy = "tags")
+    private List<User> users = new ArrayList<>();
+
+    @OneToMany(mappedBy = "tag")
+    private List<Transaction> transactions = new ArrayList<>();
+
+    @OneToMany(mappedBy = "tag")
+    private List<RecurringTransaction> recurringTransactions = new ArrayList<>();
 
     public Tag() {
     }
 
-    public Tag(int id, String name, String color, boolean isDefault, int user_id) {
+    public Tag(int id, String name, String color, boolean isDefault, List<User> users, List<Transaction> transactions, List<RecurringTransaction> recurringTransactions) {
         this.id = id;
         this.name = name;
         this.color = color;
         this.isDefault = isDefault;
-        this.user_id = user_id;
+        this.users = users;
+        this.transactions = transactions;
+        this.recurringTransactions = recurringTransactions;
     }
 
     public int getId() {
@@ -55,12 +66,28 @@ public class Tag {
         this.isDefault = isDefault;
     }
 
-    public int getUser_id() {
-        return user_id;
+    public List<User> getUser() {
+        return users;
     }
 
-    public void setUser_id(int user_id) {
-        this.user_id = user_id;
+    public void setUser(List<User> users) {
+        this.users = users;
+    }
+
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    public void setTransactions(List<Transaction> transactions) {
+        this.transactions = transactions;
+    }
+
+    public List<RecurringTransaction> getRecurringTransactions() {
+        return recurringTransactions;
+    }
+
+    public void setRecurringTransactions(List<RecurringTransaction> recurringTransactions) {
+        this.recurringTransactions = recurringTransactions;
     }
 
     @Override
@@ -70,7 +97,7 @@ public class Tag {
                 ", name='" + name + '\'' +
                 ", color='" + color + '\'' +
                 ", isDefault=" + isDefault +
-                ", user_id=" + user_id +
+                ", user_id=" + users +
                 '}';
     }
 

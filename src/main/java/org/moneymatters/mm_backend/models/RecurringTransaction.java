@@ -1,6 +1,7 @@
 package org.moneymatters.mm_backend.models;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -21,6 +22,9 @@ public class RecurringTransaction extends Entry {
 
     private LocalDate nextTransactionDate;
 
+    @ManyToOne
+    private Tag tag;
+
 
     //This is a method to get what the nextTransactionDate should be after a recurring transaction occurs. If the recurring date is the 30-31 and we reach a month that doesn't have that like February, this will set the next date to be the last day of the month. -Cy
     public LocalDate calculateNextTransactionDate() {
@@ -33,10 +37,13 @@ public class RecurringTransaction extends Entry {
 
     }
 
-    public RecurringTransaction(int recurringDay) {
+    public RecurringTransaction(int id, int amount, boolean isIncome, String description, Budget budget, User user, int recurringDay, Tag tag) {
         super();
         this.recurringDay = recurringDay;
+        this.tag = tag;
     }
+
+    public RecurringTransaction(){}
 
     public int getRecurringDay() {
         return recurringDay;
@@ -54,4 +61,11 @@ public class RecurringTransaction extends Entry {
         this.nextTransactionDate = nextTransactionDate;
     }
 
+    public Tag getTag() {
+        return tag;
+    }
+
+    public void setTag(Tag tag) {
+        this.tag = tag;
+    }
 }

@@ -20,17 +20,17 @@ public class Budget {
     private String name;
 
     @ManyToOne
-    private int user_id;
+    private User user;
 
-    public Budget(String name, int user_id) {
+    public Budget(String name, User user) {
         this.name = name;
-        this.user_id = user_id;
+        this.user = user;
     }
 
-    public Budget(int id, String name, int user_id) {
+    public Budget(int id, String name, User user) {
         this.id = id;
         this.name = name;
-        this.user_id = user_id;
+        this.user = user;
     }
 
     public int getId() {
@@ -46,11 +46,11 @@ public class Budget {
     }
 
     public int getUser_id() {
-        return user_id;
+        return user.getUser_id();
     }
 
-    public void setUser_id(int user_id) {
-        this.user_id = user_id;
+    public void setUser_id(User user) {
+        this.user = user;
     }
 
     @Override
