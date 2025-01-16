@@ -32,6 +32,18 @@ public abstract class Entry {
     @ManyToOne
     private User user;
 
+    public Entry(int id, int amount, boolean isIncome, String description, Budget budget, User user) {
+        this.id = id;
+        this.amount = amount;
+        this.isIncome = isIncome;
+        this.description = description;
+        this.budget = budget;
+        this.user = user;
+    }
+
+    public Entry() {
+    }
+
     public int getId() {
         return id;
     }

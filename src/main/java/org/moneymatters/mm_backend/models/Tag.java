@@ -28,12 +28,14 @@ public class Tag {
     public Tag() {
     }
 
-    public Tag(int id, String name, String color, boolean isDefault, List<User> users) {
+    public Tag(int id, String name, String color, boolean isDefault, List<User> users, List<Transaction> transactions, List<RecurringTransaction> recurringTransactions) {
         this.id = id;
         this.name = name;
         this.color = color;
         this.isDefault = isDefault;
         this.users = users;
+        this.transactions = transactions;
+        this.recurringTransactions = recurringTransactions;
     }
 
     public int getId() {

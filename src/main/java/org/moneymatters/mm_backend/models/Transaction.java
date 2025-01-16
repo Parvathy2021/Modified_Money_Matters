@@ -14,6 +14,12 @@ public class Transaction extends Entry{
     @ManyToOne
     private Tag tag;
 
+    public Transaction(int id, int amount, boolean isIncome, String description, Budget budget, User user, boolean isRecurring, Tag tag) {
+        super();
+        this.isRecurring = isRecurring;
+        this.tag = tag;
+    }
+
     public Transaction(boolean isRecurring) {
         super();
         this.isRecurring = isRecurring;

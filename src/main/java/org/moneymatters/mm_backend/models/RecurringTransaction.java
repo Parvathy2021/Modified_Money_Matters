@@ -37,10 +37,13 @@ public class RecurringTransaction extends Entry {
 
     }
 
-    public RecurringTransaction(int recurringDay) {
+    public RecurringTransaction(int id, int amount, boolean isIncome, String description, Budget budget, User user, int recurringDay, Tag tag) {
         super();
         this.recurringDay = recurringDay;
+        this.tag = tag;
     }
+
+    public RecurringTransaction(){}
 
     public int getRecurringDay() {
         return recurringDay;
