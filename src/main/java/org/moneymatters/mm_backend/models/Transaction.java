@@ -2,11 +2,23 @@ package org.moneymatters.mm_backend.models;
 
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
+
+import java.util.List;
 
 @Entity
 public class Transaction extends Entry{
 
     private boolean isRecurring = false;
+
+    @ManyToOne
+    private Tag tag;
+
+    public Transaction(int id, int amount, boolean isIncome, String description, Budget budget, User user, boolean isRecurring, Tag tag) {
+        super();
+        this.isRecurring = isRecurring;
+        this.tag = tag;
+    }
 
     public Transaction(boolean isRecurring) {
         super();
@@ -23,4 +35,11 @@ public class Transaction extends Entry{
         isRecurring = recurring;
     }
 
+    public Tag getTag() {
+        return tag;
+    }
+
+    public void setTag(Tag tag) {
+        this.tag = tag;
+    }
 }
