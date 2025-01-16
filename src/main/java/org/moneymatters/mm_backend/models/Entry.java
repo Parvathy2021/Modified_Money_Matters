@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @MappedSuperclass
@@ -25,29 +27,29 @@ public abstract class Entry {
     private String description;
 
     @OneToOne
-    private int budgetId;
+    private Budget budget;
 
     @ManyToOne
-    private int userId;
+    private User user;
 
     public int getId() {
         return id;
     }
 
-    public int getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public int getBudgetId() {
-        return budgetId;
+    public Budget getBudget() {
+        return budget;
     }
 
-    public void setBudgetId(int budgetId) {
-        this.budgetId = budgetId;
+    public void setBudgetId(Budget budget) {
+        this.budget = budget;
     }
 
     public String getDescription() {

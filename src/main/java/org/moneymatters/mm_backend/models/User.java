@@ -1,11 +1,11 @@
 package org.moneymatters.mm_backend.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class User {
@@ -31,6 +31,12 @@ public class User {
     @Email(message = "Invalid email format")
     private String email;
 
+    @ManyToMany
+    private List<Tag> tags = new ArrayList<>();
+
+    @OneToMany
+    private List<Budget> budgets;
+
     public User(){}
 
     public User(String username, String password) {
@@ -54,6 +60,22 @@ public class User {
 
     public @NotNull @NotBlank(message = "Name cannot be left blank") @Size(min = 3, max = 30, message = "Username must be between 3 and 30 characters.") String getUsername() {
         return username;
+    }
+
+    public List<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
+    }
+
+    public List<Budget> getBudgets() {
+        return budgets;
+    }
+
+    public void setBudgets(List<Budget> budgets) {
+        this.budgets = budgets;
     }
 
     private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
