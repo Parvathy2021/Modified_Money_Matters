@@ -10,6 +10,7 @@ function Register() {
 
   // State for error messages
   const [errors, setErrors] = useState({});
+  const navigate = useNavigate();
 
   // Password Regex pattern
   const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_+={}\[\]:;"'<>,.?/\\|`~]).{8,16}$/;
@@ -52,9 +53,18 @@ function Register() {
     e.preventDefault();
 
     if (validateForm()) {
-      // Proceed with signup logic
-      console.log('Signup successful!');
+      
+      
       // Clear form after successful signup
+     
+      setUsername('');
+      setEmail('');
+      setPassword('');
+      setConfirmPassword('');
+
+      // Redirect to the budget page
+      navigate('/budget');  // This should be executed after successful signup
+
     }
   };
   return (

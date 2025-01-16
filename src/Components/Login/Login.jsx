@@ -6,6 +6,7 @@ function Login() {
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({ email: '', password: '' });
 
+  const navigate = useNavigate();
   const handleLogin = (e) => {
     e.preventDefault(); 
 
@@ -37,6 +38,9 @@ function Login() {
 
     
     setErrors({ email: '', password: '' }); // Reset errors if form is valid
+
+    // Redirect to the budget page
+    navigate('/budget');  // This should be executed after successful signup
  
   };
 
