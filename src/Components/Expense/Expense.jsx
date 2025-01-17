@@ -8,6 +8,12 @@ function Expense() {
     const [isIncome, setIsIncome] = useState(false);
     const [recurringDate, setRecurring] = useState('');
 
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const transaction = [amount, isIncome, isRecurring, recurringDate, description];
+        return transaction;
+    }
+
     return (
         <>
         
@@ -16,7 +22,7 @@ function Expense() {
         
                 <h1 className='text-2xl font-semibold text-center mb-6 text-black'>New Transaction</h1>
       
-                    <form>
+                    <form onSubmit= {handleSubmit}>
                         <div className='block text-black'>
            
                             <label    className='mt-2 p-2 w-full border border-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue block'>Amount
