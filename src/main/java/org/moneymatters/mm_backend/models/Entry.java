@@ -26,7 +26,7 @@ public abstract class Entry {
     @Size(max = 200, message = "Description cannot be larger than 200 characters")
     private String description;
 
-    @OneToOne
+    @ManyToOne
     private Budget budget;
 
     @ManyToOne
