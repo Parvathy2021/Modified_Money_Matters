@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import {Link} from 'react-router-dom';
 
 function Expense() {
     const [amount, setAmount] = useState('');
@@ -11,7 +10,14 @@ function Expense() {
     const handleSubmit = (e) => {
         e.preventDefault();
         const transaction = [amount, isIncome, isRecurring, recurringDate, description];
-        return transaction;
+        console.log(transaction)
+        fetch("http://localhost:8080/expense", {
+            method:"POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(transaction)
+        }).then(()=> {
+            console.log("New transaction added.")
+        })
     }
 
     return (
