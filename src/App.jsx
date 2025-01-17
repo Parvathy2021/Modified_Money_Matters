@@ -10,7 +10,7 @@ import Register from './Components/Register/Register'
 import NavHeader from './components/navHeader/NavHeader'
 import Footer from './components/footer/Footer'
 import Profile from './pages/profile/Profile'
-import Expense from './Components/Expense/Expense';
+import Expense from './Components/Expense/Expense'
 
 function App() {
                             

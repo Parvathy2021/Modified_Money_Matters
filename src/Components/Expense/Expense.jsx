@@ -1,10 +1,12 @@
 import React, {useState} from 'react';
 import RecurringDate from './RecurringDate';
+import {Link} from 'react-router-dom';
 
 function Expense() {
     const [amount, setAmount] = useState('');
     const [description, setDescription] = useState('');
     const [isRecurring, setIsRecurring] = useState(false);
+    const [isIncome, setIsIncome] = useState(false);
 
     return (
         <>
@@ -14,15 +16,15 @@ function Expense() {
                 <input type="text" value={amount} onChange={(e) => setAmount(e.target.value)}></input>
             </label>
             <label>Select if transaction is income: 
-                <input type="checkbox" value={isIncome}></input>
+                <input type="checkbox" value={isIncome} onChange={(e) => setIsIncome(e.value.isIncome)}></input>
             </label>
             <label>Select if transaction is recurring: 
                 <input type="checkbox" value={isRecurring} onChange={(e) => setIsRecurring(e.value.isRecurring)}></input>
             </label>
             {/*Want to make the date input show only if isRecurring is checked. */}
-            <label style= {isRecurring ? 'display' : 'display:none'}>Recurring Day's Date (1-31) 
+            {/* <label style= {!isRecurring ? 'display' : 'display:none'}>Recurring Day's Date (1-31) 
                 {<RecurringDate />}
-            </label>
+            </label> */}
 
             <label>Description 
                 <input type="text" value={description} onChange={(e) => setDescription(e.target.description)}></input>
