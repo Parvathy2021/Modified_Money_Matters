@@ -22,6 +22,8 @@ public class Budget {
     @ManyToOne
     private User user;
 
+    public Budget() {}
+
     public Budget(String name, User user) {
         this.name = name;
         this.user = user;
