@@ -62,8 +62,8 @@ function Register() {
       setPassword('');
       setConfirmPassword('');
 
-      // Redirect to the budget page
-      navigate('/budget');  // This should be executed after successful signup
+      // Redirect to the expense page
+      navigate('/expense');  // This should be executed after successful signup
 
     }
   };
