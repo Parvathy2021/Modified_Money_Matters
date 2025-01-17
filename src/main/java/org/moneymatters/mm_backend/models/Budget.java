@@ -22,6 +22,7 @@ public class Budget {
     private String name;
 
     @ManyToOne
+    @JoinColumn
     private User user;
 
     @OneToMany(mappedBy = "budget")

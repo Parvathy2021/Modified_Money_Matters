@@ -2,6 +2,7 @@ package org.moneymatters.mm_backend.models;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -89,6 +90,7 @@ public class Tag {
     public void setRecurringTransactions(List<RecurringTransaction> recurringTransactions) {
         this.recurringTransactions = recurringTransactions;
     }
+
 
     @Override
     public String toString() {
