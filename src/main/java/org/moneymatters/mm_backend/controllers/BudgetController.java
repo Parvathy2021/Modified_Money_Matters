@@ -62,7 +62,6 @@ public class BudgetController {
 //    Create a new budget
     @PostMapping
     public ResponseEntity<String> createBudget(@RequestBody Budget budget) {
-        budget.setId(idCounter++); //Simulate auto-generated ID
         budgets.add(budget);
         return new ResponseEntity<>("Budget created: " + budget.getName(), HttpStatus.CREATED);
     }
