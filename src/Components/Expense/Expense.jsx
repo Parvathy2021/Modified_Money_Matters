@@ -6,10 +6,11 @@ function Expense() {
     const [isRecurring, setIsRecurring] = useState(false);
     const [isIncome, setIsIncome] = useState(false);
     const [recurringDate, setRecurring] = useState('');
+    const [tag, setTag] = useState('')
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const transaction = [amount, isIncome, isRecurring, recurringDate, description];
+        const transaction = [amount, isIncome, isRecurring, recurringDate, description, tag];
         console.log(transaction)
         fetch("http://localhost:8080/expense", {
             method:"POST",
@@ -53,6 +54,18 @@ function Expense() {
                             <label    className='mt-2 p-2 w-full border border-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue block' >Description 
                                 <input type="text" value={description} onChange={(e) => setDescription(e.target.value)}className='mt-2 p-2 border border-gray-300 bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue block' ></input>
                             </label>
+
+                           <label className='mt-2 p-2 w-full border border-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue block' >Tag
+                                <select className='mt-2 p-2 border border-gray-300 bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue block'  name="selectedTag" value={tag} onChange={(e) => setTag(e.target.value)}>
+                                      {/* Placeholder options */}
+                                      <option value="null">Please select a tag</option>
+                                    <option value="Rent/Mortgage">Rent/Mortgage</option>
+                                    <option value="Food">Food</option>
+                                    <option value="Clothing">Clothing</option>
+                                    <option value="Misc.">Misc.</option>
+                                </select>
+
+                           </label>
 
                             <button  className='w-full py-2 bg-lightblue text-white rounded-md hover:bg-green 
                             hover:text-black focus:outline-none focus:ring-2 focus:ring-blue'>
