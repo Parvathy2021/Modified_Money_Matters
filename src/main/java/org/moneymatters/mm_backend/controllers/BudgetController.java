@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/api/budgets")
@@ -30,8 +32,9 @@ public class BudgetController {
     @Autowired
     private TagRepository tagRepository;
 
-//    Temporary in-memory storage for testing
+//    Tempoorary in-memory storage for testing
     private List<Budget> budgets = new ArrayList<>();
+    private int idCounter = 1;      //Simulating auto-incrementing ID
 
 //    Test endpoint for GET request
     @GetMapping("/test")
@@ -39,75 +42,53 @@ public class BudgetController {
         return new ResponseEntity<>("BudgetController is working!", HttpStatus.OK);
     }
 
-//    Retreive all budgets (mock response)
+//     Retrieve all budgets
     @GetMapping
     public ResponseEntity<List<Budget>> getAllBudgets() {
         return new ResponseEntity<>(budgets, HttpStatus.OK);
     }
 
-//    Create new budget (mock saving and response)
+//    Retrieve a single budget by ID
+    @GetMapping("/{id}")
+    public ResponseEntity<Object> getBudgetById(@PathVariable int id) {
+        Optional<Budget> budget = budgets.stream().filter(b -> b.getId() == id).findFirst();
+        if (budget.isPresent()) {
+            return ResponseEntity.ok(budget.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+//    Create a new budget
     @PostMapping
     public ResponseEntity<String> createBudget(@RequestBody Budget budget) {
+        budget.setId(idCounter++); //Simulate auto-generated ID
         budgets.add(budget);
-        return new ResponseEntity<>("Budget received: " + budget.getName(), HttpStatus.CREATED);
+        return new ResponseEntity<>("Budget created: " + budget.getName(), HttpStatus.CREATED);
     }
-//
-//
-////  Get all budgets
-//@GetMapping
-//public ResponseEntity<List<Budget>> getAllBudgets() {
-//    List<Budget> budgets = (List<Budget>) budgetRepository.findAll();
-//    return new ResponseEntity<>(budgets, HttpStatus.OK);
-//}
-//
-////  Get budget by ID
-//    @GetMapping("/{id}")
-//    public ResponseEntity<Budget> getBudgetById(@PathVariable int id) {
-//        Budget budget = budgetRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Budget not found with id: " + id));
-//        return ResponseEntity.ok(budget);
-//    }
-//
-////  Create new budget
-//@PostMapping
-//public ResponseEntity<Budget> createBudget(@RequestBody Map<String, Object> payload) {
-//    // Extract name and user_id from the payload
-//    String name = (String) payload.get("name");
-//    int userId = (int) payload.get("user_id");
-//
-//    // Validate user existence
-//    User user = userRepository.findById(userId)
-//            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found with ID: " + userId));
-//
-//    // Create a new budget and associate the user
-//    Budget budget = new Budget(name, user);
-//    Budget savedBudget = budgetRepository.save(budget);
-//
-//    return new ResponseEntity<>(savedBudget, HttpStatus.CREATED);
-//}
-//
-////    @PutMapping("/{id}")
-////    public ResponseEntity<Budget> updateBudget(@PathVariable int id, @RequestBody @Valid Budget budgetDetails) {
-////        Budget existingBudget = budgetRepository.findById(id)
-////                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Budget not found with id: " + id));
-////
-////        // Update the budget fields
-////        existingBudget.setName(budgetDetails.getName());
-//////        existingBudget.setAmount(budgetDetails.getAmount());
-//////        existingBudget.setUser(budgetDetails.getUser());
-////        // Save the updated budget
-////        Budget updatedBudget = budgetRepository.save(existingBudget);
-////        return ResponseEntity.ok(updatedBudget);
-////    }
-//
-////  Delete budget
-//@DeleteMapping("/{id}")
-//public ResponseEntity<Void> deleteBudget(@PathVariable int id) {
-//    Budget existingBudget = budgetRepository.findById(id)
-//            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Budget not found with id: " + id));
-//
-//    budgetRepository.delete(existingBudget);
-//    return ResponseEntity.noContent().build();
-//}
+
+//    Update an existing budget
+    @PutMapping("/{id}")
+    public ResponseEntity<Object> updateBudget(@PathVariable int id, @RequestBody Budget updatedBudget) {
+        for (Budget budget : budgets) {
+            if (budget.getId() == id) {
+                budget.setName(updatedBudget.getName());
+                return new ResponseEntity<>("Budget updated: " + budget.getName(), HttpStatus.OK);
+            }
+        }
+        return new ResponseEntity<>("Budget not found", HttpStatus.NOT_FOUND);
+    }
+
+//    Delete a budget by ID
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteBudget(@PathVariable int id) {
+        boolean removed = budgets.removeIf(b -> b.getId() == id);
+        if (removed) {
+            return new ResponseEntity<>("Budget deleted successfully", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Budget not found", HttpStatus.NOT_FOUND);
+        }
+    }
 }
 
 

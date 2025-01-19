@@ -40,6 +40,11 @@ public class Budget {
         return id;
     }
 
+//    temporary setId for testing
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public @NotNull @NotBlank(message = "Name cannot be left blank") @Size(min = 3, max = 30, message = "Name must be longer than 3 characters but shorter than 30 characters.") String getName() {
         return name;
     }
