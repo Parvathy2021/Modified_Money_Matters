@@ -6,8 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="44c79d80-7e22-4de3-8247-5ca578bdd9a9" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/moneymatters/mm_backend/controllers/BudgetController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/moneymatters/mm_backend/controllers/BudgetController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/moneymatters/mm_backend/models/Budget.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/moneymatters/mm_backend/models/Budget.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/moneymatters/mm_backend/models/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/moneymatters/mm_backend/models/User.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -91,16 +90,16 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Gradle.Liftoff-Doyle-Money-Matters [bootRun].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.mm_BackEnd [:org.moneymatters.mm_BackEnd.MmBackEndApplication.main()].executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;be-controllers&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/timothymcdermott/Desktop/Coding File/LaunchCode/MoneyMatters&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Gradle.Liftoff-Doyle-Money-Matters [bootRun].executor": "Run",
+    "Gradle.mm_BackEnd [:org.moneymatters.mm_BackEnd.MmBackEndApplication.main()].executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "#41 on be-controllers",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/timothymcdermott/Desktop/Coding File/LaunchCode/MoneyMatters"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected="Gradle.Liftoff-Doyle-Money-Matters [bootRun]">
     <configuration name="MmBackEndApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.moneymatters.mm_BackEnd.MmBackEndApplication" />

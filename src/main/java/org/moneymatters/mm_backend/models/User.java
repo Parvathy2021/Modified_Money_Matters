@@ -23,10 +23,6 @@ public class User {
     @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[!@#$%^&*])(?=.{8,16})", message = "Password must be between 8-16 characters, contain at least one letter, one number, and one special character")
     public String pwhash;
 
-    @NotNull
-    @NotBlank(message = "Confirm password must not be blank")
-    private String ConfirmPassword;
-
     @NotNull(message = "Email must not be null")
     @Email(message = "Invalid email format")
     private String email;
