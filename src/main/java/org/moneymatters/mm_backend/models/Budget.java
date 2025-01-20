@@ -31,6 +31,7 @@ public class Budget {
     @OneToMany(mappedBy = "budget")
     private List<RecurringTransaction> recurringTransactions = new ArrayList<>();
 
+
     public Budget(String name, User user) {
         this.name = name;
         this.user = user;
@@ -47,6 +48,7 @@ public class Budget {
     public int getId() {
         return id;
     }
+
 
     public @NotNull @NotBlank(message = "Name cannot be left blank") @Size(min = 3, max = 30, message = "Name must be longer than 3 characters but shorter than 30 characters.") String getName() {
         return name;
