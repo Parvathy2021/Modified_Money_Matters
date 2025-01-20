@@ -5,6 +5,8 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 node_modules
+.DS_Store
+.idea/workspace.xml
 
 ### STS ###
 .apt_generated
