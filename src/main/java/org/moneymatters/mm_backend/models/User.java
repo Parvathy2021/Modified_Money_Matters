@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,10 +24,6 @@ public class User {
     @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[!@#$%^&*])(?=.{8,16})", message = "Password must be between 8-16 characters, contain at least one letter, one number, and one special character")
     public String pwhash;
 
-    @NotNull
-    @NotBlank(message = "Confirm password must not be blank")
-    private String ConfirmPassword;
-
     @NotNull(message = "Email must not be null")
     @Email(message = "Invalid email format")
     private String email;
@@ -40,7 +37,6 @@ public class User {
     public User(){}
 
     public User(String username, String password) {
-        this.user_id = user_id;
         this.username = username;
         this.pwhash = encoder.encode(password);
         this.email = email;
