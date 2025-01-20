@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -26,11 +27,15 @@ public abstract class Entry {
     @Size(max = 200, message = "Description cannot be larger than 200 characters")
     private String description;
 
-    @OneToOne
+    @ManyToOne
     private Budget budget;
 
     @ManyToOne
+    @JoinColumn
     private User user;
+
+    @Column(name="created_date", updatable = false)
+    private LocalDateTime createdDate;
 
     public Entry(int id, int amount, boolean isIncome, String description, Budget budget, User user) {
         this.id = id;
@@ -86,6 +91,15 @@ public abstract class Entry {
 
     public void setAmount(int amount) {
         this.amount = amount;
+    }
+
+    public LocalDateTime getCreatedDate() {
+        return createdDate;
+    }
+
+    @PrePersist
+    public void prePersist(){
+        this.createdDate = LocalDateTime.now();
     }
 
     @Override

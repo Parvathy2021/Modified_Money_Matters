@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -20,20 +22,27 @@ public class Budget {
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "user_user_id", nullable = false)
+    @JoinColumn
     private User user;
 
-    public Budget() {}
+    @OneToMany(mappedBy = "budget")
+    private List<Transaction> transactions = new ArrayList<>();
+
+    @OneToMany(mappedBy = "budget")
+    private List<RecurringTransaction> recurringTransactions = new ArrayList<>();
+
 
     public Budget(String name, User user) {
         this.name = name;
         this.user = user;
     }
 
-    public Budget(int id, String name, User user) {
+    public Budget(int id, String name, User user, List<Transaction> transactions, List<RecurringTransaction> recurringTransactions) {
         this.id = id;
         this.name = name;
         this.user = user;
+        this.transactions = transactions;
+        this.recurringTransactions = recurringTransactions;
     }
 
     public int getId() {
@@ -49,12 +58,28 @@ public class Budget {
         this.name = name;
     }
 
-    public int getUser_id() {
-        return user.getUser_id();
+    public User getUser() {
+        return user;
     }
 
-    public void setUser_id(User user) {
+    public void setUser(User user) {
         this.user = user;
+    }
+
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    public void setTransactions(List<Transaction> transactions) {
+        this.transactions = transactions;
+    }
+
+    public List<RecurringTransaction> getRecurringTransactions() {
+        return recurringTransactions;
+    }
+
+    public void setRecurringTransactions(List<RecurringTransaction> recurringTransactions) {
+        this.recurringTransactions = recurringTransactions;
     }
 
     @Override
