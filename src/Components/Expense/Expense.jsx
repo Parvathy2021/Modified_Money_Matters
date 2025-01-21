@@ -6,11 +6,12 @@ function Expense() {
     const [isRecurring, setIsRecurring] = useState(false);
     const [isIncome, setIsIncome] = useState(false);
     const [recurringDate, setRecurring] = useState('');
+    const [frequency, setFrequency] = useState('monthly')
     const [tag, setTag] = useState('')
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const transaction = [amount, isIncome, isRecurring, recurringDate, description, tag];
+        const transaction = [amount, isIncome, isRecurring, recurringDate, frequency, description, tag];
         console.log(transaction)
         fetch("http://localhost:8080/expense", {
             method:"POST",
@@ -45,11 +46,20 @@ function Expense() {
                             </label>
           
                             {isRecurring &&  (
+                                <label className='mt-2 p-2 w-full border border-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue block' >Frequency of Recurrence
+                                <select className='mt-2 p-2 border border-gray-300 bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue block'  name="selectedTag" value={tag} onChange={(e) => setFrequency(e.target.value)}>
+                                      {/* Placeholder options */}
+                                      <option value="null">Set Frequency</option>
+                                    <option value="monthly">Monthly</option>
+                                    <option value="weekly">Weekly</option>
+                                    <option value="daily">Daily</option>
+                                </select>
                                 <label    className='mt-2 p-2 border border-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue block' > Recurring Day's Date (1-31) 
                                     <input type="text" value={recurringDate} onChange={(e) => setRecurring(e.target.value)}className='mt-2 p-2 border border-black rounded-md focus:outline-none focus:ring-2 focus:ring-blue bg-white' ></input>
-                                </label>    
+                                </label>
+                           </label>                                
                             )}
-            
+                            
 
                             <label    className='mt-2 p-2 w-full border border-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue block' >Description 
                                 <input type="text" value={description} onChange={(e) => setDescription(e.target.value)}className='mt-2 p-2 border border-gray-300 bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue block' ></input>
