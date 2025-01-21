@@ -11,6 +11,7 @@ import NavHeader from './components/navHeader/NavHeader'
 import Footer from './components/footer/Footer'
 import Profile from './pages/profile/Profile'
 import Expense from './Components/Expense/Expense'
+import IncomeSplit from './Components/IncomeSplit/IncomeSplit'
 
 function App() {
                             
@@ -25,6 +26,7 @@ function App() {
           <Route path='/register' element={<Register />}/>
           <Route path='/profile' element={<Profile />}/>
           <Route path='/expense' element={<Expense />}/>
+          <Route path='/incomeSplit' element={<IncomeSplit />}/>
         </Routes>
         <Footer />
       </Router>
