@@ -89,16 +89,16 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Gradle.Liftoff-Doyle-Money-Matters [bootRun].executor": "Run",
-    "Gradle.mm_BackEnd [:org.moneymatters.mm_BackEnd.MmBackEndApplication.main()].executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "#43 on be-controllers",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/Users/timothymcdermott/Desktop/Coding File/LaunchCode/MoneyMatters"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Gradle.Liftoff-Doyle-Money-Matters [bootRun].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.mm_BackEnd [:org.moneymatters.mm_BackEnd.MmBackEndApplication.main()].executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;#43 on be-controllers&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/timothymcdermott/Desktop/Coding File/LaunchCode/MoneyMatters&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="Gradle.Liftoff-Doyle-Money-Matters [bootRun]">
     <configuration name="MmBackEndApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.moneymatters.mm_BackEnd.MmBackEndApplication" />
