@@ -7,10 +7,10 @@ const Profile = () => {
   const [username, setUsername] = useState("")
   const [budgetName, setBudgetName] = useState("")
   const [monthlyExpenses, setMonthlyExpenses] = useState([])
-  const [expenseDescription, setExpenseDescription] = useState([])
+  const [expenseTags, setExpenseTags] = useState([])
   const [income, setIncome] = useState(0)
 
-  const findUsername = async() => {
+  const findUsername = async () => {
     try {
       const data = await axios.get('/users.json')
       setUsername(data.data.find(obj => obj.id === userId).username)
@@ -19,7 +19,7 @@ const Profile = () => {
     }
   }
 
-  const findBudgetName = async() => {
+  const findBudgetName = async () => {
     try {
       const data = await axios.get('/budgets.json')
       setBudgetName(data.data.find(obj => obj.user_id === userId).name)
@@ -28,12 +28,26 @@ const Profile = () => {
     }
   }
 
-  const findMonthlyExpenses = async() => {
+  const findMonthlyExpenses = async () => {
     try {
-      const data = await axios.get('/recurringTransactions.json')
-      let arr = data.data.filter(obj => obj.user_id === userId && obj.isIncome === false)
-      setMonthlyExpenses(arr.map(item => item.amount))
-      setExpenseDescription(arr.map(item => item.description))
+      const recurringData = await axios.get('/recurringTransactions.json')
+      const transactionData = await axios.get('/transactions.json')
+      const tagsData = await axios.get('./tags.json')
+
+      let date = new Date().toISOString()
+      let yearMonth = date.slice(0, 7)
+
+      let recurringArr = recurringData.data.filter(obj => obj.user_id === userId && obj.isIncome === false && obj.created_date.startsWith(yearMonth))
+      let transactionArr = transactionData.data.filter(obj => obj.user_id === userId && obj.isIncome === false && obj.created_date.startsWith(yearMonth))
+      let recurringExpense = recurringArr.map(item => item.amount)
+      let transactionExpense = transactionArr.map(item => item.amount)
+      let expenses = [...recurringExpense, ...transactionExpense]
+      setMonthlyExpenses(expenses)
+
+      let recurringTags = recurringArr.map(item => tagsData.data.find(tag => tag.id === item.tag).name)
+      let transactionTags = transactionArr.map(item => tagsData.data.find(tag => tag.id === item.tag).name)
+      let tags = [...recurringTags, ...transactionTags]
+      setExpenseTags(tags)
     } catch (e) {
       console.error(e)
     }
@@ -43,13 +57,14 @@ const Profile = () => {
     findUsername()
     findBudgetName()
     findMonthlyExpenses()
+    findYearlyData()
   }, [])
 
   return (
     <>
       <h1 className='text-6xl'>Profile: {username}</h1>
       <p>{budgetName}</p>
-      <PieChart budgetName={budgetName} monthlyExpenses={monthlyExpenses} expenseDescription={expenseDescription} />
+      <PieChart budgetName={budgetName} monthlyExpenses={monthlyExpenses} expenseTags={expenseTags} />
     </>
   )
 }
