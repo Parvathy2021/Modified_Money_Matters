@@ -11,12 +11,26 @@ function IncomeSplit(){
         'Misc.' : 20
     };
 
+    // Handle total income input change
+    const handleIncomeChange = (e) => {
+        const income = e.target.value;
+        setTotalIncome(income);
+
+        // Calculate the allocated funds based on total income and default percentages
+        const newAllocatedFunds = {};
+        for (const tag in defaultAllocations) {
+            newAllocatedFunds[tag] = (income * defaultAllocations[tag]) / 100;
+        }
+
+        setAllocatedFunds(newAllocatedFunds); // Update the allocated funds
+    };
+
     return(
         <div>
             <h1> Income Split Allocator</h1>
             <div>
                 <label>Total Income :
-                    <input type="number" value={totalIncome} placeholder="Enter youe total income" />
+                    <input type="number" value={totalIncome} onChange={handleIncomeChange} placeholder="Enter youe total income" />
                 </label>
             </div>
             <h3>Allocate Funds for each tags</h3>
