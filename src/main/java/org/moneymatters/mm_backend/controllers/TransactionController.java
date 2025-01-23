@@ -5,10 +5,7 @@ import org.moneymatters.mm_backend.data.BudgetRepository;
 import org.moneymatters.mm_backend.data.TagRepository;
 import org.moneymatters.mm_backend.data.TransactionRepository;
 import org.moneymatters.mm_backend.data.UserRepository;
-import org.moneymatters.mm_backend.models.Budget;
-import org.moneymatters.mm_backend.models.Tag;
-import org.moneymatters.mm_backend.models.Transaction;
-import org.moneymatters.mm_backend.models.User;
+import org.moneymatters.mm_backend.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +16,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/transactions")
+@CrossOrigin(origins = "http://localhost:3000")
 public class TransactionController {
 
     @Autowired
@@ -33,12 +31,13 @@ public class TransactionController {
     @Autowired
     private TagRepository tagRepository;
 
-//    Create transaction
-@PostMapping
-    public ResponseEntity<?> createTransaction(@RequestBody @Valid Transaction transaction,
-                                               @RequestParam Integer user_id,
-                                               @RequestParam(required = false) Integer budget_id,
-                                               @RequestParam(required = false) Integer tag_id) {
+//    Create transaction with budget and tag assignment options
+@PostMapping("/add")
+    public ResponseEntity<?> addTransaction(@RequestBody @Valid Transaction transaction,
+                                            @RequestParam Integer user_id,
+                                            @RequestParam(required = false) Integer budget_id,
+                                            @RequestParam(required = false) Integer tag_id) {
+
     Optional<User> userOptional = userRepository.findById(user_id);
     if (userOptional.isEmpty()) {
         return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
@@ -52,6 +51,7 @@ public class TransactionController {
     }
     transaction.setBudgetId(budgetOptional.get());
     }
+
     if (tag_id != null) {
         Optional<Tag> tagOptional = tagRepository.findById(tag_id);
         if (tagOptional.isEmpty()) {
@@ -63,7 +63,7 @@ public class TransactionController {
     return new ResponseEntity<>(savedTransaction, HttpStatus.CREATED);
 }
 
-//      Get all transactions for a user
+//      View all transactions for a user
     @GetMapping("/user/{user_id}")
     public ResponseEntity<?> getUserTransactions(@PathVariable Integer user_id) {
     Optional<User> userOptional = userRepository.findById(user_id);
@@ -74,7 +74,7 @@ public class TransactionController {
         return new ResponseEntity<>(transactions, HttpStatus.OK);
     }
 
-//    Get transactions by budget
+//    View all transactions by specific budget
     @GetMapping("/budget/{budget_id}")
     public ResponseEntity<?> getBudgetTransactions(@PathVariable Integer budget_id) {
     Optional<Budget> budgetOptional = budgetRepository.findById(budget_id);
@@ -85,7 +85,7 @@ public class TransactionController {
     return new ResponseEntity<>(transactions, HttpStatus.OK);
     }
 
-//    Get transactions by tag
+//    View transactions by specific tag
     @GetMapping("/tag/{tag_id}")
     public ResponseEntity<?> getTagTransactions(@PathVariable Integer tag_id) {
     Optional<Tag> tagOptional = tagRepository.findById(tag_id);
@@ -96,8 +96,8 @@ public class TransactionController {
     return new ResponseEntity<>(transactions, HttpStatus.OK);
     }
 
-//    Get specific transactions
-    @GetMapping("/{id}")
+//    View details of specific transaction
+    @GetMapping("/view/{id}")
     public ResponseEntity<?> getTransaction(@PathVariable Integer id) {
     Optional<Transaction> transaction = transactionRepository.findById(id);
     if (transaction.isEmpty()) {
@@ -106,23 +106,24 @@ public class TransactionController {
     return new ResponseEntity<>(transaction.get(), HttpStatus.OK);
     }
 
-//    Update transaction
-    @PutMapping("/{id}")
+//    Update transaction with budget and tag reassignments
+    @PutMapping("/update/{id}")
     public ResponseEntity<?> updateTransaction(@PathVariable Integer id,
                                                @RequestBody @Valid Transaction transaction,
                                                @RequestParam(required = false) Integer budget_id,
                                                @RequestParam(required = false) Integer tag_id) {
+//        Verify transaction exists
     Optional<Transaction> existingTransactionOpt = transactionRepository.findById(id);
     if (existingTransactionOpt.isEmpty()) {
         return new ResponseEntity<>("Transaction not found", HttpStatus.NOT_FOUND);
     }
+
     Transaction existingTransaction = existingTransactionOpt.get();
     existingTransaction.setAmount(transaction.getAmount());
     existingTransaction.setDescription(transaction.getDescription());
     existingTransaction.setIncome(transaction.isIncome());
     existingTransaction.setRecurring(transaction.isRecurring());
 
-//    Update budget if provided
         if (budget_id != null) {
             Optional<Budget> budgetOptional = budgetRepository.findById(budget_id);
             if (budgetOptional.isEmpty()) {
@@ -131,7 +132,6 @@ public class TransactionController {
             existingTransaction.setBudgetId(budgetOptional.get());
         }
 
-//        Update tag if provided
         if (tag_id != null) {
             Optional<Tag> tagOptional = tagRepository.findById(tag_id);
             if (tagOptional.isEmpty()) {
@@ -143,15 +143,16 @@ public class TransactionController {
         return new ResponseEntity<>(updatedTransaction, HttpStatus.OK);
     }
 
-//    Delete transaction
+//    Delete a transaction
+@DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteTransaction(@PathVariable Integer id) {
-    Optional<Transaction> transaction = transactionRepository.findById(id);
-    if (transaction.isEmpty()) {
-        return new ResponseEntity<>("Transaction not found", HttpStatus.NOT_FOUND);
+    Optional<Transaction> transactionOptional = transactionRepository.findById(id);
+    if (transactionOptional.isEmpty()) {
+        return new ResponseEntity<>("Budget not found", HttpStatus.NOT_FOUND);
     }
     transactionRepository.deleteById(id);
     return new ResponseEntity<>("Transaction deleted successfully", HttpStatus.OK);
-    }
+}
 
 
 
