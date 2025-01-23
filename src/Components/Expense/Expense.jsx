@@ -3,6 +3,7 @@ import React, {useState} from 'react';
 
 function Expense() {
     const [amount, setAmount] = useState('');
+    const [splitAmount, setSplitAmount] = useState('')
     const [date, setDate] = useState('');
     const [description, setDescription] = useState('');
     const [isRecurring, setIsRecurring] = useState(false);
@@ -10,11 +11,22 @@ function Expense() {
     const [recurringDate, setRecurring] = useState('');
     const [frequency, setFrequency] = useState('monthly')
     const [tag, setTag] = useState('')
-    const [isSplits, setIsSplits] = useState([{tag: "", amount: 0}]);
+    const [splits, setSplits] = useState([]);   // Array to hold splits with tag and amount
+    const [isSplits, setIsSplits] = useState(false);    // State for split Tags checkbox
  
+    const handleAddSplit = () => {
+        if(splitAmount && tag)   {
+            const newSplit = {amount: parseFloat(splitAmount), tag};
+            setSplits([...splits, newSplit]);   
+            setSplitAmount('');
+            setTag('');
+        } else {
+            alert('Please enter both split amount and tag for the split');
+        }
+    };
     const handleSubmit = (e) => {
         e.preventDefault();
-        const transaction = [amount,date, isSplits, isIncome, isRecurring, recurringDate, frequency, description, tag];
+        const transaction = [amount,date, splits, isIncome, isRecurring, recurringDate, frequency, description, tag];
         console.log(transaction)
         fetch("http://localhost:8080/expense", {
             method:"POST",
@@ -22,7 +34,7 @@ function Expense() {
             body: JSON.stringify(transaction)
         }).then(()=> {
             console.log("New transaction added.")
-        })
+        });
         
     }
 
@@ -48,14 +60,12 @@ function Expense() {
                                 <input type="checkbox" checked={isIncome} onChange={(e) => setIsIncome(e.target.checked)}className='mt-2 p-2 border border-black rounded-md focus:outline-none focus:ring-2 focus:ring-blue block' ></input>
                             </label>
                             <label    className='mt-2 p-2 w-full border border-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 block' >Select if transaction need Split Tags: 
-                                <input type="checkbox" checked={isSplits} onChange={(e) => setIsSplits(e.target.checked)}className='mt-2 p-2 border border-black rounded-md focus:outline-none focus:ring-2 focus:ring-blue block' ></input>
-                                
-      
+                                <input type="checkbox" checked={isSplits} onChange={() =>setIsSplits(!isSplits)}className='mt-2 p-2 border border-black rounded-md focus:outline-none focus:ring-2 focus:ring-blue block' ></input>      
                             </label>
-                                {isSplits && (
-                                    <label    className='mt-2 p-2 w-full border border-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue block'>Amount
-                                        <input type="text" value={amount} onChange={(e) => setAmount(e.target.value)}className='mt-2 p-2 w-full border border-gray-300 bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue' ></input>
-                                        <label className='mt-2 p-2 w-full border border-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue block' >Tag
+                                {isSplits && (     
+                                    <label    className='mt-2 p-2 w-full border border-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue block'>Amount (Split)
+                                        <input type="text" value={splitAmount} onChange={(e) => setSplitAmount(e.target.value)}className='mt-2 p-2 w-full border border-gray-300 bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue' ></input>
+                                        <label className='mt-2 p-2 w-full border border-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue block' >Tag (Split)
                                             <select className='mt-2 p-2 border border-gray-300 bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue block'  name="selectedTag" value={tag} onChange={(e) => setTag(e.target.value)}>
                                             {/* Placeholder options */}
                                             <option value="null">Please select a tag</option>
@@ -66,7 +76,7 @@ function Expense() {
                                             </select>
                                         </label>
                                         <button  className='w-full py-2 bg-lightblue text-white rounded-md hover:bg-green 
-                                                 hover:text-black focus:outline-none focus:ring-2 focus:ring-blue' type="button" > Add Split </button>
+                                                 hover:text-black focus:outline-none focus:ring-2 focus:ring-blue' type="button" onClick={handleAddSplit} > Add Split </button>
                                     </label>
                                 )}   
 
