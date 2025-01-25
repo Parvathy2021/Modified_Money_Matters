@@ -14,8 +14,10 @@ public class LoginFormDto {
 
     @NotNull
     @NotBlank(message = "Password must not be blank")
-    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[!@#$%^&*])(?=.{8,16})", message = "Password must be between 8-16 characters, contain at least one letter, one number, and one special character")
+    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[!@#$%^&*]).{8,16}$", message = "Password must be between 8-16 characters, contain at least one letter, one number, and one special character")
     private String password;
+
+    public LoginFormDto() {}
 
     public String getEmail() {
         return email;

@@ -21,7 +21,6 @@ public class User {
 
     @NotNull
     @NotBlank(message = "Password must not be blank")
-    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[!@#$%^&*])(?=.{8,16})", message = "Password must be between 8-16 characters, contain at least one letter, one number, and one special character")
     public String pwhash;
 
     @NotNull(message = "Email must not be null")
@@ -36,10 +35,11 @@ public class User {
 
     public User(){}
 
-    public User(String username, String password) {
+    public User(String email, String username, String password) {
+        this.email = email;
         this.username = username;
         this.pwhash = encoder.encode(password);
-        this.email = email;
+
     }
 
     public int getUser_id() {
@@ -82,6 +82,10 @@ public class User {
 
     public @NotNull(message = "Email must not be null") @Email(message = "Invalid email format") String getEmail() {
         return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
 
