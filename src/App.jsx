@@ -13,6 +13,7 @@ import Profile from './pages/profile/Profile'
 import Expense from './Components/Expense/Expense'
 import IncomeSplit from './Components/IncomeSplit/IncomeSplit'
 
+
 function App() {
                             
   return (
