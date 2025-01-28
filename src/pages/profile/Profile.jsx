@@ -1,7 +1,9 @@
+
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { PieChart } from '../../components/pieChart/PieChart'
 import { VertBarChart } from '../../Components/vertBarChart/VertBarChart'
+import AuthStatus from "../../components/auth/authStatus/AuthStatus";
 
 const Profile = () => {
   const [userId, setUserId] = useState(1)
@@ -14,21 +16,21 @@ const Profile = () => {
 
   const findUsername = async () => {
     try {
-      const data = await axios.get('/users.json')
-      setUsername(data.data.find(obj => obj.id === userId).username)
+      const data = await axios.get("/users.json");
+      setUsername(data.data.find((obj) => obj.id === userId).username);
     } catch (e) {
-      console.error(e)
+      console.error(e);
     }
-  }
+  };
 
   const findBudgetName = async () => {
     try {
-      const data = await axios.get('/budgets.json')
-      setBudgetName(data.data.find(obj => obj.user_id === userId).name)
+      const data = await axios.get("/budgets.json");
+      setBudgetName(data.data.find((obj) => obj.user_id === userId).name);
     } catch (e) {
-      console.error(e)
+      console.error(e);
     }
-  }
+  };
 
   const findMonthlyExpenses = async () => {
     try {
@@ -112,9 +114,9 @@ const Profile = () => {
       setYearlyIncome(yearIncome)
       setYearlyExpenses(yearExpenses)
     } catch (e) {
-      console.error(e)
+      console.error(e);
     }
-  }
+  };
 
   useEffect(() => {
     findUsername()
@@ -135,4 +137,5 @@ const Profile = () => {
   )
 }
 
-export default Profile
+
+export default Profile;

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import authService from '../../services/api';
 
 function Register() {
   const [username, setUsername]= useState('');  
@@ -7,10 +8,11 @@ function Register() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [validationMessage, setValidationMessage] = useState('');
+  const navigate = useNavigate();
 
   // State for error messages
   const [errors, setErrors] = useState({});
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // duplicated hook
 
   // Password Regex pattern
   const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_+={}\[\]:;"'<>,.?/\\|`~]).{8,16}$/;
@@ -49,22 +51,48 @@ function Register() {
 
 
     // Handle form submission
-  const handleSignup = (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
 
     if (validateForm()) {
-      
-      
-      // Clear form after successful signup
-     
-      setUsername('');
-      setEmail('');
-      setPassword('');
-      setConfirmPassword('');
 
-      // Redirect to the expense page
-      navigate('/expense');  // This should be executed after successful signup
+      try {
+        const userData = {
+          username,
+          email,
+          password,
+          confirmPassword
+        };
 
+        const response = await authService.register(userData);
+        console.log('Registration successful:', response);
+
+        setValidationMessage('Registration successful!');
+
+        // Clear form after successful signup
+        setUsername('');
+        setEmail('');
+        setPassword('');
+        setConfirmPassword('');
+
+        setTimeout(() => {
+          navigate('/login');
+        }, 2000);
+      } catch (error) {
+        if (error.error === 'email_registered') {
+          setErrors(prev => ({
+            ...prev,
+            email: 'This email is already registered'
+          }));
+        } else if (error.error === 'username_taken') {
+          setErrors(prev => ({
+            ...prev,
+            username: 'This username is already taken'
+          }));
+        } else {
+          setValidationMessage(error.message || 'Registration failed. Please try again.');
+        }
+        }
     }
   };
   return (
