@@ -4,8 +4,8 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 // Page Components
 import Home from "./pages/home/Home";
 import About from "./pages/about/About";
-import Login from "./pages/login/Login";
-import Register from "./pages/register/Register";
+import Login from "./Components/Login/Login";
+import Register from "./Components/Register/Register";
 import Profile from "./pages/profile/Profile";
 
 // Layout Components
