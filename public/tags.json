@@ -1,0 +1,32 @@
+[
+    {
+        "id": 1,
+        "name": "Rent/Mortgage",
+        "isDefault": true,
+        "user_id": 1
+    },
+    {
+        "id": 2,
+        "name": "Food",
+        "isDefault": true,
+        "user_id": 1
+    },
+    {
+        "id": 3,
+        "name": "Clothing",
+        "isDefault": true,
+        "user_id": 1
+    },
+    {
+        "id": 4,
+        "name": "Misc.",
+        "isDefault": true,
+        "user_id": 1
+    }, 
+    {
+        "id": 5,
+        "name": "Car",
+        "isDefault": false,
+        "user_id": 1
+    }
+]

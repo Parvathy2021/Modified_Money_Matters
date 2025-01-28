@@ -12,6 +12,7 @@ function Register() {
 
   // State for error messages
   const [errors, setErrors] = useState({});
+  const navigate = useNavigate(); // duplicated hook
 
   // Password Regex pattern
   const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_+={}\[\]:;"'<>,.?/\\|`~]).{8,16}$/;
@@ -54,6 +55,7 @@ function Register() {
     e.preventDefault();
 
     if (validateForm()) {
+
       try {
         const userData = {
           username,
@@ -66,6 +68,12 @@ function Register() {
         console.log('Registration successful:', response);
 
         setValidationMessage('Registration successful!');
+
+        // Clear form after successful signup
+        setUsername('');
+        setEmail('');
+        setPassword('');
+        setConfirmPassword('');
 
         setTimeout(() => {
           navigate('/login');

@@ -4,9 +4,9 @@ import { Pie } from 'react-chartjs-2';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-export function PieChart({ budgetName, monthlyExpenses, expenseDescription }) {
+export function PieChart({ budgetName, monthlyExpenses, expenseDescription, expenseTags }) {
     const data = {
-        labels: expenseDescription,
+        labels: expenseTags,
         datasets: [
             {
                 label: 'Monthly Amount: ',
@@ -35,7 +35,7 @@ export function PieChart({ budgetName, monthlyExpenses, expenseDescription }) {
     return (
         <>
             <div className='size-5/12'>
-                <Pie data={data} />;
+                <Pie data={data} />
             </div>
         </>
     )
