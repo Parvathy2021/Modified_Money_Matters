@@ -14,8 +14,7 @@ function Login() {
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  const navigate = useNavigate();
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault(); 
 
     setErrors({
