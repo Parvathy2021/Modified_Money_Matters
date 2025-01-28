@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="44c79d80-7e22-4de3-8247-5ca578bdd9a9" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="44c79d80-7e22-4de3-8247-5ca578bdd9a9" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -94,9 +92,10 @@
     "Gradle.Liftoff-Doyle-Money-Matters [bootRun].executor": "Run",
     "Gradle.mm_BackEnd [:org.moneymatters.mm_BackEnd.MmBackEndApplication.main()].executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "#43 on be-controllers",
+    "git-widget-placeholder": "be-controllers",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/Users/timothymcdermott/Desktop/Coding File/LaunchCode/MoneyMatters"
+    "last_opened_file_path": "/Users/timothymcdermott/Desktop/Coding File/LaunchCode/MoneyMatters",
+    "run.code.analysis.last.selected.profile": "pProject Default"
   }
 }]]></component>
   <component name="RunManager" selected="Gradle.Liftoff-Doyle-Money-Matters [bootRun]">
@@ -161,6 +160,8 @@
         <item itemvalue="Gradle.Liftoff-Doyle-Money-Matters [bootRun]" />
         <item itemvalue="Gradle.Liftoff-Doyle-Money-Matters [dependencies]" />
         <item itemvalue="Application.MmBackEndApplication" />
+        <item itemvalue="Gradle.Liftoff-Doyle-Money-Matters [bootRun]" />
+        <item itemvalue="Gradle.Liftoff-Doyle-Money-Matters [dependencies]" />
       </list>
     </recent_temporary>
   </component>
