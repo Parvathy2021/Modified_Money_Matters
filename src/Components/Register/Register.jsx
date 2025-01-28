@@ -12,7 +12,7 @@ function Register() {
 
   // State for error messages
   const [errors, setErrors] = useState({});
-  const navigate = useNavigate(); // duplicated hook
+
 
   // Password Regex pattern
   const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_+={}\[\]:;"'<>,.?/\\|`~]).{8,16}$/;
