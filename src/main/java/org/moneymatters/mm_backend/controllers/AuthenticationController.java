@@ -23,7 +23,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class AuthenticationController {
 
     @Autowired
@@ -128,7 +128,7 @@ public class AuthenticationController {
                 successResponse.put("username", newUser.getUsername());
                 successResponse.put("email", newUser.getEmail());
 
-            return ResponseEntity.ok(successResponse);
+            return ResponseEntity.status(HttpStatus.CREATED).body(successResponse);
 
 
 
