@@ -2,13 +2,10 @@ package org.moneymatters.mm_backend.models;
 
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 @MappedSuperclass
@@ -19,8 +16,7 @@ public abstract class Entry {
     private int id;
 
     @NotNull(message = "Amount cannot be null")
-    @NotBlank(message = "Amount cannot be blank")
-    private int amount;
+    private Integer amount;
 
     private boolean isIncome = false;
 
@@ -85,7 +81,7 @@ public abstract class Entry {
         isIncome = income;
     }
 
-    public int getAmount() {
+    public Integer getAmount() {
         return amount;
     }
 

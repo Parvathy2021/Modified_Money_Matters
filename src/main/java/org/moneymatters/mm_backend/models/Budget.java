@@ -21,8 +21,8 @@ public class Budget {
     @Size(min = 3, max = 30, message = "Name must be longer than 3 characters but shorter than 30 characters.")
     private String name;
 
-    @ManyToOne
-    @JoinColumn
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @OneToMany(mappedBy = "budget")
@@ -31,6 +31,7 @@ public class Budget {
     @OneToMany(mappedBy = "budget")
     private List<RecurringTransaction> recurringTransactions = new ArrayList<>();
 
+    public Budget(){}
 
     public Budget(String name, User user) {
         this.name = name;
