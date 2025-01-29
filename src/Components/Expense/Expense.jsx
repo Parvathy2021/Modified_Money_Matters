@@ -1,5 +1,8 @@
+
 import { split } from 'postcss/lib/list';
 import React, {useState} from 'react';
+import api from '../../services/api';
+import {useNavigate} from "react-router-dom";
 
 function Expense() {
     const [amount, setAmount] = useState('');
@@ -12,6 +15,10 @@ function Expense() {
     const [splits, setSplits] = useState([]);   // Array to hold splits with tag and amount
     const [isSplits, setIsSplits] = useState(false);    // State for split Tags checkbox
  
+    const navigate = useNavigate();
+
+    const {transService} = api;
+
     const handleAddSplit = () => {
         if(splitAmount && tag)   {
             const newSplit = {amount: parseFloat(splitAmount), tag};
@@ -22,18 +29,17 @@ function Expense() {
             alert('Please enter both split amount and tag for the split');
         }
     };
-    const handleSubmit = (e) => {
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        const transaction = [amount, splits, isIncome, isRecurring, recurringDate, description, tag];
-        console.log(transaction)
-        fetch("http://localhost:8080/expense", {
-            method:"POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(transaction)
-        }).then(()=> {
-            console.log("New transaction added.")
-        });
-        
+
+        try {
+            const response = await transService.add({amount, splitAmount, description, isRecurring, isIncome, recurringDate, tag, splits, isSplits});
+            add(response);
+            console.log("Transaction saved:", response);
+        } catch (error) {
+            console.log("Transaction error:", error);
+        }
     }
 
     return (
@@ -55,21 +61,14 @@ function Expense() {
                                 <input type="checkbox" checked={isIncome} onChange={(e) => setIsIncome(e.target.checked)}className='mt-2 p-2 border border-black rounded-md focus:outline-none focus:ring-2 focus:ring-blue block' ></input>
                             </label>
 
-                            <label    className='mt-2 p-2 w-full border border-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 block' >Select if transaction need Split Tags: 
+                            <label    className='mt-2 p-2 w-full border border-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 block' >Select if transaction needs Split Tags: 
                                 <input type="checkbox" checked={isSplits} onChange={() =>setIsSplits(!isSplits)}className='mt-2 p-2 border border-black rounded-md focus:outline-none focus:ring-2 focus:ring-blue block' ></input>      
                             </label>
                                 {isSplits && (     
                                     <label    className='mt-2 p-2 w-full border border-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue block'>Amount (Split)
                                         <input type="text" value={splitAmount} onChange={(e) => setSplitAmount(e.target.value)}className='mt-2 p-2 w-full border border-gray-300 bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue' ></input>
                                         <label className='mt-2 p-2 w-full border border-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue block' >Tag (Split)
-                                            <select className='mt-2 p-2 border border-gray-300 bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue block'  name="selectedTag" value={tag} onChange={(e) => setTag(e.target.value)}>
-                                            {/* Placeholder options */}
-                                            <option value="null">Please select a tag</option>
-                                            <option value="Rent/Mortgage">Rent/Mortgage</option>
-                                            <option value="Food">Food</option>
-                                            <option value="Clothing">Clothing</option>
-                                            <option value="Misc.">Misc.</option>
-                                            </select>
+                                        <input type="text" value={tag} onChange={(e) => setTag(e.target.value)}className='mt-2 p-2 w-full border border-gray-300 bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue' ></input>
                                         </label>
                                         <button  className='w-full py-2 bg-lightblue text-white rounded-md hover:bg-green 
                                                  hover:text-black focus:outline-none focus:ring-2 focus:ring-blue' type="button" onClick={handleAddSplit} > Add Split </button>
@@ -88,17 +87,10 @@ function Expense() {
                                 <input type="text" value={description} onChange={(e) => setDescription(e.target.value)}className='mt-2 p-2 border border-gray-300 bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue block' ></input>
                             </label>
 
-                           <label className='mt-2 p-2 w-full border border-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue block' >Tag
-                                <select className='mt-2 p-2 border border-gray-300 bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue block'  name="selectedTag" value={tag} onChange={(e) => setTag(e.target.value)}>
-                                      {/* Placeholder options */}
-                                      <option value="null">Please select a tag</option>
-                                    <option value="Rent/Mortgage">Rent/Mortgage</option>
-                                    <option value="Food">Food</option>
-                                    <option value="Clothing">Clothing</option>
-                                    <option value="Misc.">Misc.</option>
-                                </select>
+                            <label    className='mt-2 p-2 w-full border border-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue block'>Tag
+                                <input type="text" value={tag} onChange={(e) => setTag(e.target.value)}className='mt-2 p-2 w-full border border-gray-300 bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue' ></input>
+                            </label>
 
-                           </label>
 
                             <button  className='w-full py-2 bg-lightblue text-white rounded-md hover:bg-green 
                             hover:text-black focus:outline-none focus:ring-2 focus:ring-blue'>
@@ -115,3 +107,4 @@ function Expense() {
 }
 
 export default Expense;
+
