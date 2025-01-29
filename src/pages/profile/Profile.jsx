@@ -130,8 +130,8 @@ const Profile = () => {
     <>
       <h1 className='text-6xl'>Profile: {username}</h1>
       <p>{budgetName}</p>
-      <div> <Link to="/expense">
-                <button className="rounded-full px-4 py-2 bg-blue-500 text-white">Expense</button>
+      <div> <Link to="/transaction/add">
+                <button className="rounded-full px-4 py-2 bg-blue-500 text-white">Add Transaction</button>
               </Link></div>
       <div class="flex space-x-24">
         <PieChart budgetName={budgetName} monthlyExpenses={monthlyExpenses} expenseTags={expenseTags} />

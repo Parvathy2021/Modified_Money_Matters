@@ -1,10 +1,10 @@
-
 import { split } from 'postcss/lib/list';
 import React, {useState} from 'react';
 import api from '../../services/api';
-import {useNavigate} from "react-router-dom";
+import {useNavigate, Link} from "react-router-dom";
 
-function Expense() {
+function Transaction() {
+    const [budget, setBudget] = useState('');
     const [amount, setAmount] = useState('');
     const [splitAmount, setSplitAmount] = useState('')
     const [description, setDescription] = useState('');
@@ -32,14 +32,17 @@ function Expense() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const transaction = {budget, amount, description, isRecurring, isIncome, recurringDate, tag, splits, isSplits}
+        console.log("Attempting to save transaction");
 
         try {
-            const response = await transService.add({amount, splitAmount, description, isRecurring, isIncome, recurringDate, tag, splits, isSplits});
-            add(response);
+            const response = await transService.add(transaction);
             console.log("Transaction saved:", response);
         } catch (error) {
             console.log("Transaction error:", error);
+            console.log(transaction);
         }
+        navigate('/transaction/add');
     }
 
     return (
@@ -52,6 +55,8 @@ function Expense() {
       
                     <form onSubmit= {handleSubmit}>
                         <div className='block text-black'>
+
+                            <label className='mt-2 p-2 w-full border border-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue block'>Budget <input type= 'text' value={budget} onChange={(e) => setBudget(e.target.value)} className='mt-2 p-2 w-full border border-gray-300 bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue'></input></label>
            
                             <label    className='mt-2 p-2 w-full border border-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue block'>Amount
                                 <input type="text" value={amount} onChange={(e) => setAmount(e.target.value)}className='mt-2 p-2 w-full border border-gray-300 bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue' ></input>
@@ -79,9 +84,11 @@ function Expense() {
                                 <input type="checkbox" checked={isRecurring} onChange={(e) => setIsRecurring(e.target.checked)}className='mt-2 p-2 border border-black rounded-md focus:outline-none focus:ring-2 focus:ring-blue block' ></input>
                             </label>
           
-                            <label    className='mt-2 p-2 border border-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue block' > Recurring Day's Date (1-31) 
-                                <input type="text" value={recurringDate} onChange={(e) => setRecurring(e.target.value)}className='mt-2 p-2 border border-black rounded-md focus:outline-none focus:ring-2 focus:ring-blue bg-white' ></input>
-                            </label>                              
+                            {isRecurring &&  (
+                                <label    className='mt-2 p-2 border border-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue block' > Recurring Day's Date (1-31) 
+                                    <input type="text" value={recurringDate} onChange={(e) => setRecurring(e.target.value)}className='mt-2 p-2 border border-black rounded-md focus:outline-none focus:ring-2 focus:ring-blue bg-white' ></input>
+                                </label>    
+                            )}                           
                                                     
                             <label    className='mt-2 p-2 w-full border border-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue block' >Description 
                                 <input type="text" value={description} onChange={(e) => setDescription(e.target.value)}className='mt-2 p-2 border border-gray-300 bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue block' ></input>
@@ -96,6 +103,10 @@ function Expense() {
                             hover:text-black focus:outline-none focus:ring-2 focus:ring-blue'>
                                 Submit
                             </button>
+
+                            <Link to='/profile'>
+                                <button  className="rounded-full px-4 py-2 bg-blue-500 text-white">Cancel</button>
+                            </Link>
            
                         </div>
                     </form>
@@ -106,5 +117,5 @@ function Expense() {
     )
 }
 
-export default Expense;
+export default Transaction;
 

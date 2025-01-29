@@ -40,7 +40,7 @@ const authService = {
 const transService = {
     add: async(transaction) => {
         try {
-            const response = await api.post('/expense', transaction);
+            const response = await api.post('/transaction/add', transaction);
             return response.data;
         } catch (error) {
             if (error.response) {
