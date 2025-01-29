@@ -57,7 +57,6 @@ public class BudgetController {
         try {
             User user = userOptional.get();
             budget.setUser(user);
-
             Budget savedBudget = budgetRepository.save(budget);
             return new ResponseEntity<>(savedBudget, HttpStatus.CREATED);
         } catch (Exception e) {
@@ -111,10 +110,9 @@ public ResponseEntity<?> getBudget(@PathVariable Integer id) {
         }
 
         Budget existingBudget = budgetOptional.get();
-        // Keep the existing user while updating other fields
         User existingUser = existingBudget.getUser();
         existingBudget.setName(updatedBudget.getName());
-        existingBudget.setUser(existingUser); // Maintain the user relationship
+        existingBudget.setUser(existingUser);
 
         Budget savedBudget = budgetRepository.save(existingBudget);
         return new ResponseEntity<>(savedBudget, HttpStatus.OK);

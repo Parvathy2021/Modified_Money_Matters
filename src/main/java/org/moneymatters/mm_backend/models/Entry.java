@@ -1,6 +1,8 @@
 package org.moneymatters.mm_backend.models;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -24,10 +26,13 @@ public abstract class Entry {
     private String description;
 
     @ManyToOne
+    @JoinColumn(name = "budget_id", unique = false)
+    @JsonBackReference
     private Budget budget;
 
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    @JsonIgnoreProperties({"transactions", "budgets"})
     private User user;
 
     @Column(name="created_date", updatable = false)

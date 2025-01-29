@@ -1,5 +1,8 @@
 package org.moneymatters.mm_backend.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -21,14 +24,17 @@ public class Budget {
     @Size(min = 3, max = 30, message = "Name must be longer than 3 characters but shorter than 30 characters.")
     private String name;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnoreProperties({"budgets", "transactions"})
     private User user;
 
     @OneToMany(mappedBy = "budget")
+    @JsonIgnoreProperties("budget")
     private List<Transaction> transactions = new ArrayList<>();
 
     @OneToMany(mappedBy = "budget")
+    @JsonIgnoreProperties("budget")
     private List<RecurringTransaction> recurringTransactions = new ArrayList<>();
 
     public Budget(){}

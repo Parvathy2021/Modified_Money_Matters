@@ -7,9 +7,9 @@
     <list default="true" id="44c79d80-7e22-4de3-8247-5ca578bdd9a9" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/moneymatters/mm_backend/controllers/BudgetController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/moneymatters/mm_backend/controllers/BudgetController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/moneymatters/mm_backend/controllers/TransactionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/moneymatters/mm_backend/controllers/TransactionController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/moneymatters/mm_backend/models/Budget.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/moneymatters/mm_backend/models/Budget.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/moneymatters/mm_backend/models/Entry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/moneymatters/mm_backend/models/Entry.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
