@@ -1,14 +1,13 @@
 package org.moneymatters.mm_backend.models;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 @MappedSuperclass
@@ -19,8 +18,7 @@ public abstract class Entry {
     private int id;
 
     @NotNull(message = "Amount cannot be null")
-    @NotBlank(message = "Amount cannot be blank")
-    private int amount;
+    private Integer amount;
 
     private boolean isIncome = false;
 
@@ -28,10 +26,13 @@ public abstract class Entry {
     private String description;
 
     @ManyToOne
+    @JoinColumn(name = "budget_id", unique = false)
+    @JsonBackReference
     private Budget budget;
 
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    @JsonIgnoreProperties({"transactions", "budgets"})
     private User user;
 
     @Column(name="created_date", updatable = false)
@@ -85,7 +86,7 @@ public abstract class Entry {
         isIncome = income;
     }
 
-    public int getAmount() {
+    public Integer getAmount() {
         return amount;
     }
 

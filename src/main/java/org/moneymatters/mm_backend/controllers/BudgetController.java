@@ -41,26 +41,41 @@ public class BudgetController {
         return new ResponseEntity<>(budgets, HttpStatus.OK);
     }
 
-//    Create new budget
+
+    // Create new budget
     @PostMapping("/add")
     public ResponseEntity<?> addBudget(@RequestBody @Valid Budget budget,
-                                          @RequestParam Integer user_id) {
+                                       @RequestParam Integer user_id) {
         Optional<User> userOptional = userRepository.findById(user_id);
+
         if (userOptional.isEmpty()) {
-            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+            Map<String, String> response = new HashMap<>();
+            response.put("error", "User not found");
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
-        budget.setUser(userOptional.get());
-        Budget savedBudget = budgetRepository.save(budget);
-        return new ResponseEntity<>(savedBudget, HttpStatus.CREATED);
+
+        try {
+            User user = userOptional.get();
+            budget.setUser(user);
+            Budget savedBudget = budgetRepository.save(budget);
+            return new ResponseEntity<>(savedBudget, HttpStatus.CREATED);
+        } catch (Exception e) {
+            Map<String, String> response = new HashMap<>();
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
-//     View all budgets for specific user
+    // Get all budgets for a specific user
     @GetMapping("/user/{user_id}")
     public ResponseEntity<?> getUserBudgets(@PathVariable Integer user_id) {
         Optional<User> userOptional = userRepository.findById(user_id);
         if (userOptional.isEmpty()) {
-            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+            Map<String, String> response = new HashMap<>();
+            response.put("error", "User not found");
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
+
         List<Budget> budgets = budgetRepository.findByUser(userOptional.get());
         return new ResponseEntity<>(budgets, HttpStatus.OK);
     }
@@ -82,46 +97,47 @@ public ResponseEntity<?> getBudget(@PathVariable Integer id) {
     return new ResponseEntity<>(response, HttpStatus.OK);
 }
 
-//    Update an existing budget
+
+    // Update an existing budget
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateBudget(@PathVariable Integer id,
                                           @RequestBody @Valid Budget updatedBudget) {
         Optional<Budget> budgetOptional = budgetRepository.findById(id);
         if (budgetOptional.isEmpty()) {
-            return new ResponseEntity<>("Budget not found", HttpStatus.NOT_FOUND);
+            Map<String, String> response = new HashMap<>();
+            response.put("error", "Budget not found");
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
+
         Budget existingBudget = budgetOptional.get();
+        User existingUser = existingBudget.getUser();
         existingBudget.setName(updatedBudget.getName());
+        existingBudget.setUser(existingUser);
+
         Budget savedBudget = budgetRepository.save(existingBudget);
         return new ResponseEntity<>(savedBudget, HttpStatus.OK);
     }
 
-//    Delete a budget and handle its associated transactions
+    // Delete a budget
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteBudget(@PathVariable Integer id) {
         Optional<Budget> budgetOptional = budgetRepository.findById(id);
         if (budgetOptional.isEmpty()) {
-            return new ResponseEntity<>("Budget not found", HttpStatus.NOT_FOUND);
-        }
-        Budget budget = budgetOptional.get();
-
-//        Find and update all associated transacctions
-        List<Transaction> transactions = transactionRepository.findByBudget(budget);
-        for (Transaction transaction : transactions) {
-            transaction.setBudgetId(null);
-            transactionRepository.save(transaction);
+            Map<String, String> response = new HashMap<>();
+            response.put("error", "Budget not found");
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
 
-//        Find and update all associated recurring transactions
-        List<RecurringTransaction> recurringTransactions = recurringTransactionRepository.findByBudget(budget);
-        for (RecurringTransaction rt : recurringTransactions) {
-            rt.setBudgetId(null);
-            recurringTransactionRepository.save(rt);
+        try {
+            budgetRepository.deleteById(id);
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Budget deleted successfully");
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            Map<String, String> response = new HashMap<>();
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
-//        Delete the budget
-        budgetRepository.deleteById(id);
-        return new ResponseEntity<>("Budget deleted successfully", HttpStatus.OK);
     }
 
 
