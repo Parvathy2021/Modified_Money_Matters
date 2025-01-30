@@ -124,7 +124,7 @@ function Transaction() {
                                 )}   
 
                             <label className='mt-2 p-2 w-full border border-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 block' >Select if transaction is recurring: 
-                                <input type="checkbox" checked={isRecurring} onChange={(e) => setIsRecurring(e.target.checked)}className='mt-2 p-2 border border-black rounded-md focus:outline-none focus:ring-2 focus:ring-blue block' ></input>
+                                <input type="checkbox" checked={isRecurring} onChange={(e) => { console.log("Box status", e.target.checked); setIsRecurring(e.target.checked)}}className='mt-2 p-2 border border-black rounded-md focus:outline-none focus:ring-2 focus:ring-blue block'></input>
                             </label>
           
                             {isRecurring &&  (

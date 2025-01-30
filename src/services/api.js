@@ -58,6 +58,26 @@ const transService = {
         }
     },
 
+    get: async(budget, params) => {
+        try {
+            const response = await api.get('api/transactions/budget/{budget_id}', budget, {params : params});
+            return response.data;
+        } catch (error) {
+            if (error.response) {
+                console.error("API response error data:", error.response.data);
+                console.error("API  response error status". error.response.status);
+                console.error("API response error headers", error.response.headers);
+            
+            } else if(error.request) {
+                console.error("No response received", error.request);
+            } else {
+                console.error("Error setting up the request", error.message);
+            }
+            throw { message: 'Network error occurred'}
+            
+        }
+    }
+
 }
 
 export default {
