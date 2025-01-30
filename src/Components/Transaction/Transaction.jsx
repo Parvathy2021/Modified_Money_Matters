@@ -43,19 +43,13 @@ function Transaction() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        console.log("Current user", user);
-
         if(!user || !user.userId){
             console.error("user object or user.id is missing. Check user state:", user);
             alert("user is not logged in or user ID is missing!");
             return;
         }
-
-      
         
         const user_id = user.userId;
-        console.log(user_id);
-
         const transaction = { 
             amount: Number(amount), 
             description, 
@@ -64,15 +58,12 @@ function Transaction() {
             recurringDate,  
             splits, 
             isSplits}
-       
-       
 
         const params = {
             user_id, 
             budget_id: Number(budget_id),
             tag_id: Number(tag_id)
         }
-        console.log("Attempting to save transaction");
 
         try {
             const response = await transService.add(transaction, params);
@@ -85,6 +76,16 @@ function Transaction() {
             alert("There was an error saving the Transaction!");
         }
         navigate('/transaction/add');
+        setBudget_Id('');
+        setAmount('');
+        setDescription('');
+        setIsIncome(false);
+        setIsRecurring(false);
+        setRecurring(null);
+        setTag_Id('');
+        setSplits([]);
+        setIsSplits(false);
+        setSplitAmount('');
     }
 
     return (
