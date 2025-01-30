@@ -30,7 +30,7 @@ function Transaction() {
     }
 
     const handleAddSplit = () => {
-        if(splitAmount && tag)   {
+        if(splitAmount && tag_id)   {
             const newSplit = {amount: parseFloat(splitAmount), tag_id};
             setSplits([...splits, newSplit]);   
             setSplitAmount('');
