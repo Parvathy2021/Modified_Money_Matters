@@ -6,6 +6,7 @@ import org.moneymatters.mm_backend.data.TagRepository;
 import org.moneymatters.mm_backend.data.TransactionRepository;
 import org.moneymatters.mm_backend.data.UserRepository;
 import org.moneymatters.mm_backend.models.*;
+import org.moneymatters.mm_backend.models.dto.TransactionDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -153,4 +154,29 @@ public class TransactionController {
     transactionRepository.deleteById(id);
     return new ResponseEntity<>("Transaction deleted successfully", HttpStatus.OK);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
