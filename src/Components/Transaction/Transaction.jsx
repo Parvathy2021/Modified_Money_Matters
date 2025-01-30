@@ -8,14 +8,14 @@ function Transaction() {
 
 
     const {user, isLoading} = useAuth();
-    const [budget, setBudget] = useState('');
+    const [budget_id, setBudget_Id] = useState('');
     const [amount, setAmount] = useState('');
     const [splitAmount, setSplitAmount] = useState('')
     const [description, setDescription] = useState('');
     const [isRecurring, setIsRecurring] = useState(false);
     const [isIncome, setIsIncome] = useState(false);
-    const [recurringDate, setRecurring] = useState('');
-    const [tag, setTag] = useState('')
+    const [recurringDate, setRecurring] = useState(null);
+    const [tag_id, setTag_Id] = useState('')
     const [splits, setSplits] = useState([]);   // Array to hold splits with tag and amount
     const [isSplits, setIsSplits] = useState(false);    // State for split Tags checkbox
  
@@ -31,10 +31,10 @@ function Transaction() {
 
     const handleAddSplit = () => {
         if(splitAmount && tag)   {
-            const newSplit = {amount: parseFloat(splitAmount), tag};
+            const newSplit = {amount: parseFloat(splitAmount), tag_id};
             setSplits([...splits, newSplit]);   
             setSplitAmount('');
-            setTag('');
+            setTag_Id('');
         } else {
             alert('Please enter both split amount and tag for the split');
         }
@@ -51,16 +51,38 @@ function Transaction() {
             return;
         }
 
-        const transaction = {userId: user.userId, budget, amount, description, isRecurring, isIncome, recurringDate, tag, splits, isSplits}
-        console.log("userId", transaction.userId);
+      
+        
+        const user_id = user.userId;
+        console.log(user_id);
+
+        const transaction = { 
+            amount: Number(amount), 
+            description, 
+            isRecurring, 
+            isIncome, 
+            recurringDate,  
+            splits, 
+            isSplits}
+       
+       
+
+        const params = {
+            user_id, 
+            budget_id: Number(budget_id),
+            tag_id: Number(tag_id)
+        }
         console.log("Attempting to save transaction");
 
         try {
-            const response = await transService.add(transaction);
+            const response = await transService.add(transaction, params);
             console.log("Transaction saved:", response);
         } catch (error) {
             console.log("Transaction error:", error);
-            console.log(transaction);
+            if (error.response){
+                console.error("API response error data:", error.response.data);
+            }
+            alert("There was an error saving the Transaction!");
         }
         navigate('/transaction/add');
     }
@@ -76,7 +98,7 @@ function Transaction() {
                     <form onSubmit= {handleSubmit}>
                         <div className='block text-black'>
 
-                            <label className='mt-2 p-2 w-full border border-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue block'>Budget <input type= 'text' value={budget} onChange={(e) => setBudget(e.target.value)} className='mt-2 p-2 w-full border border-gray-300 bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue'></input></label>
+                            <label className='mt-2 p-2 w-full border border-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue block'>Budget <input type= 'text' value={budget_id} onChange={(e) => setBudget_Id(e.target.value)} className='mt-2 p-2 w-full border border-gray-300 bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue'></input></label>
            
                             <label    className='mt-2 p-2 w-full border border-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue block'>Amount
                                 <input type="text" value={amount} onChange={(e) => setAmount(e.target.value)}className='mt-2 p-2 w-full border border-gray-300 bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue' ></input>
@@ -93,7 +115,7 @@ function Transaction() {
                                     <label    className='mt-2 p-2 w-full border border-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue block'>Amount (Split)
                                         <input type="text" value={splitAmount} onChange={(e) => setSplitAmount(e.target.value)}className='mt-2 p-2 w-full border border-gray-300 bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue' ></input>
                                         <label className='mt-2 p-2 w-full border border-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue block' >Tag (Split)
-                                        <input type="text" value={tag} onChange={(e) => setTag(e.target.value)}className='mt-2 p-2 w-full border border-gray-300 bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue' ></input>
+                                        <input type="text" value={tag_id} onChange={(e) => setTag_Id(e.target.value)}className='mt-2 p-2 w-full border border-gray-300 bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue' ></input>
                                         </label>
                                         <button  className='w-full py-2 bg-lightblue text-white rounded-md hover:bg-green 
                                                  hover:text-black focus:outline-none focus:ring-2 focus:ring-blue' type="button" onClick={handleAddSplit} > Add Split </button>
@@ -115,7 +137,7 @@ function Transaction() {
                             </label>
 
                             <label    className='mt-2 p-2 w-full border border-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue block'>Tag
-                                <input type="text" value={tag} onChange={(e) => setTag(e.target.value)}className='mt-2 p-2 w-full border border-gray-300 bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue' ></input>
+                                <input type="text" value={tag_id} onChange={(e) => setTag_Id(e.target.value)}className='mt-2 p-2 w-full border border-gray-300 bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue' ></input>
                             </label>
 
 

@@ -38,15 +38,23 @@ const authService = {
 };
 
 const transService = {
-    add: async(transaction) => {
+    add: async(transaction, params) => {
         try {
-            const response = await api.post('/transaction/add', transaction);
+            const response = await api.post('/api/transactions/add', transaction, {params: params});
             return response.data;
         } catch (error) {
             if (error.response) {
-                throw error.response.data;
+                console.error("API response error data:", error.response.data);
+                console.error("API  response error status". error.response.status);
+                console.error("API response error headers", error.response.headers);
+            
+            } else if(error.request) {
+                console.error("No response received", error.request);
+            } else {
+                console.error("Error setting up the request", error.message);
             }
             throw { message: 'Network error occurred'}
+            
         }
     },
 
