@@ -10,7 +10,7 @@ public class TransactionDTO {
     private String description;
     private boolean isRecurring;
     private boolean isIncome;
-    private String recurringDate;
+    private int recurringDate;
 
     public Integer getUserId() {
         return userId;
@@ -68,11 +68,11 @@ public class TransactionDTO {
         isIncome = income;
     }
 
-    public String getRecurringDate() {
+    public int getRecurringDate() {
         return recurringDate;
     }
 
-    public void setRecurringDate(String recurringDate) {
+    public void setRecurringDate(int recurringDate) {
         this.recurringDate = recurringDate;
     }
 }
