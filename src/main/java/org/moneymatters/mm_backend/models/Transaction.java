@@ -9,7 +9,7 @@ import java.util.List;
 @Entity
 public class Transaction extends Entry{
 
-    private boolean isRecurring = false;
+    private boolean isRecurring;
 
     @ManyToOne
     private Tag tag;

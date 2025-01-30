@@ -13,8 +13,9 @@ import java.time.YearMonth;
 @Entity
 public class RecurringTransaction extends Entry {
 
+    @ManyToOne
+    private Transaction transaction;
 
-    @NotNull (message = "Day cannot be null")
     @NotBlank(message = "Day cannot be blank")
     @Min(value = 1, message = "Number cannot be less than 1 or greater than 31")
     @Max(value = 31, message = "Number cannot be less than 1 or greater than 31")
@@ -37,13 +38,23 @@ public class RecurringTransaction extends Entry {
 
     }
 
-    public RecurringTransaction(int id, int amount, boolean isIncome, String description, Budget budget, User user, int recurringDay, Tag tag) {
+    public RecurringTransaction(int id, int amount, boolean isIncome, String description, Budget budget, User user, Transaction transaction, int recurringDay, Tag tag) {
         super();
+        this.transaction = transaction;
         this.recurringDay = recurringDay;
         this.tag = tag;
+        this.nextTransactionDate = calculateNextTransactionDate();
     }
 
     public RecurringTransaction(){}
+
+    public Transaction getTransaction() {
+        return transaction;
+    }
+
+    public void setTransaction(Transaction transaction) {
+        this.transaction = transaction;
+    }
 
     public int getRecurringDay() {
         return recurringDay;

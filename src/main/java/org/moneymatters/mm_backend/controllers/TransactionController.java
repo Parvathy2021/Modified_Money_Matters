@@ -1,10 +1,7 @@
 package org.moneymatters.mm_backend.controllers;
 
 import jakarta.validation.Valid;
-import org.moneymatters.mm_backend.data.BudgetRepository;
-import org.moneymatters.mm_backend.data.TagRepository;
-import org.moneymatters.mm_backend.data.TransactionRepository;
-import org.moneymatters.mm_backend.data.UserRepository;
+import org.moneymatters.mm_backend.data.*;
 import org.moneymatters.mm_backend.models.*;
 import org.moneymatters.mm_backend.models.dto.TransactionDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +21,9 @@ public class TransactionController {
     private TransactionRepository transactionRepository;
 
     @Autowired
+    private RecurringTransactionRepository recurringTransactionRepository;
+
+    @Autowired
     private UserRepository userRepository;
 
     @Autowired
@@ -34,10 +34,16 @@ public class TransactionController {
 
 //    Create transaction with budget and tag assignment options
 @PostMapping("/add")
-    public ResponseEntity<?> addTransaction(@RequestBody @Valid Transaction transaction,
+    public ResponseEntity<?> addTransaction(@RequestBody @Valid TransactionDTO transactionDTO,
                                             @RequestParam Integer user_id,
                                             @RequestParam(required = false) Integer budget_id,
                                             @RequestParam(required = false) Integer tag_id) {
+
+    Transaction transaction = new Transaction();
+    transaction.setAmount(transactionDTO.getAmount());
+    transaction.setDescription(transactionDTO.getDescription());
+    transaction.setRecurring(transactionDTO.isRecurring());
+    transaction.setIncome(transactionDTO.isIncome());
 
     Optional<User> userOptional = userRepository.findById(user_id);
     if (userOptional.isEmpty()) {
@@ -59,6 +65,15 @@ public class TransactionController {
             return new ResponseEntity<>("Tag not found", HttpStatus.NOT_FOUND);
         }
         transaction.setTag(tagOptional.get());
+    }
+
+    if (transaction.isRecurring()){
+        RecurringTransaction recurringTransaction= new RecurringTransaction();
+        recurringTransaction.setTransaction(transaction);
+        recurringTransaction.setRecurringDay(transactionDTO.getRecurringDate());
+        recurringTransaction.setTag(transaction.getTag());
+
+        recurringTransactionRepository.save(recurringTransaction);
     }
     Transaction savedTransaction = transactionRepository.save(transaction);
     return new ResponseEntity<>(savedTransaction, HttpStatus.CREATED);
@@ -154,29 +169,4 @@ public class TransactionController {
     transactionRepository.deleteById(id);
     return new ResponseEntity<>("Transaction deleted successfully", HttpStatus.OK);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
