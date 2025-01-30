@@ -63,7 +63,7 @@ public class AuthenticationController {
     public ResponseEntity<?> handleGeneralExceptions(Exception exception) {
         Map<String, Object> errorResponse = new HashMap<>();
         errorResponse.put("error", "server_error");
-        errorResponse.put("message", "An unexpected error occured");
+        errorResponse.put("message", "An unexpected error occurred");
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
     }
@@ -151,7 +151,7 @@ public class AuthenticationController {
         Map<String, Object> response = new HashMap<>();
 
         response.put("message", "Login form loaded");
-        response.put("isLoggdedIn", session.getAttribute("user") != null);
+        response.put("isLoggedIn", session.getAttribute("user") != null);
         response.put("form", new LoginFormDto());
 
         return ResponseEntity.ok(response);

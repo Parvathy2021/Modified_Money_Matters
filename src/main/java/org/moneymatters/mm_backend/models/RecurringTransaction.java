@@ -14,7 +14,6 @@ import java.time.YearMonth;
 public class RecurringTransaction extends Entry {
 
 
-    @NotNull (message = "Day cannot be null")
     @NotBlank(message = "Day cannot be blank")
     @Min(value = 1, message = "Number cannot be less than 1 or greater than 31")
     @Max(value = 31, message = "Number cannot be less than 1 or greater than 31")
