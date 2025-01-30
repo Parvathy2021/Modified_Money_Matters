@@ -1,30 +1,40 @@
 import { split } from 'postcss/lib/list';
 import React, {useState} from 'react';
-import api from '../../services/api';
+import api from '../../services/api.js';
 import {useNavigate, Link} from "react-router-dom";
+import { useAuth } from '../../context/AuthContext';
 
 function Transaction() {
-    const [budget, setBudget] = useState('');
+
+
+    const {user, isLoading} = useAuth();
+    const [budget_id, setBudget_Id] = useState('');
     const [amount, setAmount] = useState('');
     const [splitAmount, setSplitAmount] = useState('')
     const [description, setDescription] = useState('');
     const [isRecurring, setIsRecurring] = useState(false);
     const [isIncome, setIsIncome] = useState(false);
-    const [recurringDate, setRecurring] = useState('');
-    const [tag, setTag] = useState('')
+    const [recurringDate, setRecurring] = useState(null);
+    const [tag_id, setTag_Id] = useState('')
     const [splits, setSplits] = useState([]);   // Array to hold splits with tag and amount
     const [isSplits, setIsSplits] = useState(false);    // State for split Tags checkbox
  
     const navigate = useNavigate();
 
+
     const {transService} = api;
 
+    
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
+
     const handleAddSplit = () => {
-        if(splitAmount && tag)   {
-            const newSplit = {amount: parseFloat(splitAmount), tag};
+        if(splitAmount && tag_id)   {
+            const newSplit = {amount: parseFloat(splitAmount), tag_id};
             setSplits([...splits, newSplit]);   
             setSplitAmount('');
-            setTag('');
+            setTag_Id('');
         } else {
             alert('Please enter both split amount and tag for the split');
         }
@@ -32,17 +42,50 @@ function Transaction() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const transaction = {budget, amount, description, isRecurring, isIncome, recurringDate, tag, splits, isSplits}
-        console.log("Attempting to save transaction");
+
+        if(!user || !user.userId){
+            console.error("user object or user.id is missing. Check user state:", user);
+            alert("user is not logged in or user ID is missing!");
+            return;
+        }
+        
+        const user_id = user.userId;
+        const transaction = { 
+            amount: Number(amount), 
+            description, 
+            isRecurring, 
+            isIncome, 
+            recurringDate,  
+            splits, 
+            isSplits}
+
+        const params = {
+            user_id, 
+            budget_id: Number(budget_id),
+            tag_id: Number(tag_id)
+        }
 
         try {
-            const response = await transService.add(transaction);
+            const response = await transService.add(transaction, params);
             console.log("Transaction saved:", response);
         } catch (error) {
             console.log("Transaction error:", error);
-            console.log(transaction);
+            if (error.response){
+                console.error("API response error data:", error.response.data);
+            }
+            alert("There was an error saving the Transaction!");
         }
         navigate('/transaction/add');
+        setBudget_Id('');
+        setAmount('');
+        setDescription('');
+        setIsIncome(false);
+        setIsRecurring(false);
+        setRecurring(null);
+        setTag_Id('');
+        setSplits([]);
+        setIsSplits(false);
+        setSplitAmount('');
     }
 
     return (
@@ -56,7 +99,7 @@ function Transaction() {
                     <form onSubmit= {handleSubmit}>
                         <div className='block text-black'>
 
-                            <label className='mt-2 p-2 w-full border border-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue block'>Budget <input type= 'text' value={budget} onChange={(e) => setBudget(e.target.value)} className='mt-2 p-2 w-full border border-gray-300 bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue'></input></label>
+                            <label className='mt-2 p-2 w-full border border-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue block'>Budget <input type= 'text' value={budget_id} onChange={(e) => setBudget_Id(e.target.value)} className='mt-2 p-2 w-full border border-gray-300 bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue'></input></label>
            
                             <label    className='mt-2 p-2 w-full border border-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue block'>Amount
                                 <input type="text" value={amount} onChange={(e) => setAmount(e.target.value)}className='mt-2 p-2 w-full border border-gray-300 bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue' ></input>
@@ -73,7 +116,7 @@ function Transaction() {
                                     <label    className='mt-2 p-2 w-full border border-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue block'>Amount (Split)
                                         <input type="text" value={splitAmount} onChange={(e) => setSplitAmount(e.target.value)}className='mt-2 p-2 w-full border border-gray-300 bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue' ></input>
                                         <label className='mt-2 p-2 w-full border border-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue block' >Tag (Split)
-                                        <input type="text" value={tag} onChange={(e) => setTag(e.target.value)}className='mt-2 p-2 w-full border border-gray-300 bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue' ></input>
+                                        <input type="text" value={tag_id} onChange={(e) => setTag_Id(e.target.value)}className='mt-2 p-2 w-full border border-gray-300 bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue' ></input>
                                         </label>
                                         <button  className='w-full py-2 bg-lightblue text-white rounded-md hover:bg-green 
                                                  hover:text-black focus:outline-none focus:ring-2 focus:ring-blue' type="button" onClick={handleAddSplit} > Add Split </button>
@@ -81,7 +124,7 @@ function Transaction() {
                                 )}   
 
                             <label className='mt-2 p-2 w-full border border-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 block' >Select if transaction is recurring: 
-                                <input type="checkbox" checked={isRecurring} onChange={(e) => setIsRecurring(e.target.checked)}className='mt-2 p-2 border border-black rounded-md focus:outline-none focus:ring-2 focus:ring-blue block' ></input>
+                                <input type="checkbox" checked={isRecurring} onChange={(e) => { console.log("Box status", e.target.checked); setIsRecurring(e.target.checked)}}className='mt-2 p-2 border border-black rounded-md focus:outline-none focus:ring-2 focus:ring-blue block'></input>
                             </label>
           
                             {isRecurring &&  (
@@ -95,7 +138,7 @@ function Transaction() {
                             </label>
 
                             <label    className='mt-2 p-2 w-full border border-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue block'>Tag
-                                <input type="text" value={tag} onChange={(e) => setTag(e.target.value)}className='mt-2 p-2 w-full border border-gray-300 bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue' ></input>
+                                <input type="text" value={tag_id} onChange={(e) => setTag_Id(e.target.value)}className='mt-2 p-2 w-full border border-gray-300 bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue' ></input>
                             </label>
 
 
