@@ -1,9 +1,13 @@
 import { split } from 'postcss/lib/list';
 import React, {useState} from 'react';
-import api from '../../services/api';
+import api from '../../services/api.js';
 import {useNavigate, Link} from "react-router-dom";
+import { useAuth } from '../../context/AuthContext';
 
 function Transaction() {
+
+
+    const {user, isLoading} = useAuth();
     const [budget, setBudget] = useState('');
     const [amount, setAmount] = useState('');
     const [splitAmount, setSplitAmount] = useState('')
@@ -17,7 +21,13 @@ function Transaction() {
  
     const navigate = useNavigate();
 
+
     const {transService} = api;
+
+    
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
 
     const handleAddSplit = () => {
         if(splitAmount && tag)   {
@@ -32,7 +42,17 @@ function Transaction() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const transaction = {budget, amount, description, isRecurring, isIncome, recurringDate, tag, splits, isSplits}
+
+        console.log("Current user", user);
+
+        if(!user || !user.userId){
+            console.error("user object or user.id is missing. Check user state:", user);
+            alert("user is not logged in or user ID is missing!");
+            return;
+        }
+
+        const transaction = {userId: user.userId, budget, amount, description, isRecurring, isIncome, recurringDate, tag, splits, isSplits}
+        console.log("userId", transaction.userId);
         console.log("Attempting to save transaction");
 
         try {
