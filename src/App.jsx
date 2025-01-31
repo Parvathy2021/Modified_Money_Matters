@@ -23,6 +23,9 @@ function App() {
   return (
     <AuthProvider>
       <Router>
+        <NavHeader>
+
+        </NavHeader>
         <Routes>
           <Route path='/' element={<Home />}/>
           <Route path='/about' element={<About />}/>

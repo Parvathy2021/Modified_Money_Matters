@@ -28,10 +28,13 @@ export const AuthProvider = ({ children }) => {
 
 
   const login = async (credentials) => {
-    const response = await authService.login(credentials);
-    setUser(response);
-    localStorage.setItem("user", JSON.stringify(response));
-    return response;
+    try {
+      const response = await authService.login(credentials);
+      localStorage.setItem("user", JSON.stringify(response));
+      setUser(response);
+    } catch (error) {
+      console.error("Login error:", error);
+    }
   };
 
  
@@ -43,7 +46,8 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     await authService.logout();
     setUser(null);
-    localStorage.removeItem("user");
+    localStorage.removeItem("user");  //  remove stored user
+    setUser(null);  //  clear user state
   };
 
   return (
