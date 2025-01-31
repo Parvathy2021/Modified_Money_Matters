@@ -4,8 +4,6 @@ package org.moneymatters.mm_backend.models;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 
-import java.util.List;
-
 @Entity
 public class Transaction extends Entry{
 
