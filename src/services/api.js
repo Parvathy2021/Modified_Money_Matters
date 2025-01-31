@@ -60,12 +60,12 @@ const transService = {
 
     getAll: async(budget_id, params) => {
         try {
-            const response = await api.get('api/transactions/budget/${budget_id}', {params : params});
+            const response = await api.get(`api/transactions/budget/${budget_id}`, {params : params});
             return response.data;
         } catch (error) {
             if (error.response) {
                 console.error("API response error data:", error.response.data);
-                console.error("API  response error status". error.response.status);
+                console.error("API  response error status", error.response.status);
                 console.error("API response error headers", error.response.headers);
             
             } else if(error.request) {
@@ -80,7 +80,7 @@ const transService = {
 
     getTag: async(tag_id, params) => {
         try {
-            const response = await api.get('api/transactions/tag/${tag_id}', {params : params})
+            const response = await api.get(`api/transactions/tag/${tag_id}`, {params : params})
             return response.data;
         } catch (error) {
             if (error.response) {
@@ -100,7 +100,7 @@ const transService = {
 
     update: async(id, params) => {
         try{
-            const response = await api.put('api/transactions/update/${id}', {params: params});
+            const response = await api.put(`api/transactions/update/${id}`, {params: params});
             return response.data;
         }catch (error) {
             if (error.response) {
@@ -120,7 +120,27 @@ const transService = {
 
     delete: async(id, params) => {
         try{
-            const response = await api.delete('api/transactions/delete/${id}', {params : params});
+            const response = await api.delete(`api/transactions/delete/${id}`, {params : params});
+            return response.data;
+        }catch (error) {
+            if (error.response) {
+                console.error("API response error data:", error.response.data);
+                console.error("API  response error status", error.response.status);
+                console.error("API response error headers", error.response.headers);
+            
+            } else if(error.request) {
+                console.error("No response received", error.request);
+            } else {
+                console.error("Error setting up the request", error.message);
+            }
+            throw { message: 'Network error occurred'}
+        }
+    },
+
+    search: async(query) => {
+
+        try {
+            const response = await api.get(`api/transactions/search?query=${query}`);
             return response.data;
         }catch (error) {
             if (error.response) {
