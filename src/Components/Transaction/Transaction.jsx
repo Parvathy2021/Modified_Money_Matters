@@ -5,8 +5,6 @@ import {useNavigate, Link} from "react-router-dom";
 import { useAuth } from '../../context/AuthContext';
 
 function Transaction() {
-
-
     const {user, isLoading} = useAuth();
     const [budget_id, setBudget_Id] = useState('');
     const [amount, setAmount] = useState('');
