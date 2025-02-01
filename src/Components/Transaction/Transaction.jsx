@@ -79,7 +79,7 @@ function Transaction() {
             alert("There was an error saving the Transaction!");
             return;
         }
-        
+
         navigate('/transaction/add');
         setBudget_Id('');
         setAmount('');
