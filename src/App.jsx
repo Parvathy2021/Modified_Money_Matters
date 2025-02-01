@@ -9,6 +9,7 @@ import Register from './Components/Register/Register';
 import Profile from './pages/profile/Profile';
 import Transaction from './Components/Transaction/Transaction'
 import IncomeSplit from './Components/IncomeSplit/IncomeSplit'
+import Contact from './pages/contact/Contact';
 
 // Layout Components
 import NavHeader from './Components/navHeader/NavHeader';
@@ -32,6 +33,7 @@ function App() {
           <Route path='/profile' element={<Profile />}/>
           <Route path='/transaction/add' element={<Transaction />}/>
           <Route path='/incomeSplit' element={<IncomeSplit />}/>
+          <Route path='/contact' element={<Contact />}/>
         </Routes>
         <Footer />
       </Router>
