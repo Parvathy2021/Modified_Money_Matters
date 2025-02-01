@@ -35,7 +35,7 @@ function App() {
           <Route path='/transaction/add' element={<Transaction />}/>
           <Route path='/incomeSplit' element={<IncomeSplit />}/>
           <Route path='/contact' element={<Contact />}/>
-          <Route path='/transaction/search' element={<TransactionSearch/>}/>
+          <Route path="/transaction/budget/:budget_id" element={<TransactionSearch/>}/>
         </Routes>
         <Footer />
       </Router>
