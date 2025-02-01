@@ -64,6 +64,7 @@ const transService = {
         } catch (error) {
             if (error.response) {
                 console.error("API response error data:", error.response.data);
+                console.error("API  response error status", error.response.status);
                 console.error("API response error headers", error.response.headers);
             
             } else if(error.request) {

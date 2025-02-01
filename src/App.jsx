@@ -9,10 +9,7 @@ import Register from './Components/Register/Register';
 import Profile from './pages/profile/Profile';
 import Transaction from './Components/Transaction/Transaction'
 import IncomeSplit from './Components/IncomeSplit/IncomeSplit'
-<<<<<<< HEAD
 import Contact from './pages/contact/Contact';
-=======
->>>>>>> 997309646cd019b98dc2179ab5b4626478945df4
 import TransactionSearch from './Components/TransactionSearch/TransactionSearch';
 
 // Layout Components
@@ -37,10 +34,7 @@ function App() {
           <Route path='/profile' element={<Profile />}/>
           <Route path='/transaction/add' element={<Transaction />}/>
           <Route path='/incomeSplit' element={<IncomeSplit />}/>
-<<<<<<< HEAD
           <Route path='/contact' element={<Contact />}/>
-=======
->>>>>>> 997309646cd019b98dc2179ab5b4626478945df4
           <Route path='/transaction/search' element={<TransactionSearch/>}/>
         </Routes>
         <Footer />
