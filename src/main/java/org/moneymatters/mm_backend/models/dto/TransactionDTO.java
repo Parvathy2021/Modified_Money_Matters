@@ -1,6 +1,8 @@
 package org.moneymatters.mm_backend.models.dto;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class TransactionDTO {
 
     private Integer userId;
@@ -8,7 +10,9 @@ public class TransactionDTO {
     private Integer tagId;
     private int amount;
     private String description;
+    @JsonProperty
     private boolean isRecurring;
+    @JsonProperty
     private boolean isIncome;
     private int recurringDate;
 

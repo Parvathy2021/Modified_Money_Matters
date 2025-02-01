@@ -39,11 +39,13 @@ public class TransactionController {
                                             @RequestParam(required = false) Integer budget_id,
                                             @RequestParam(required = false) Integer tag_id) {
 
-    Transaction transaction = new Transaction();
+   Transaction transaction = new Transaction();
     transaction.setAmount(transactionDTO.getAmount());
     transaction.setDescription(transactionDTO.getDescription());
     transaction.setRecurring(transactionDTO.isRecurring());
     transaction.setIncome(transactionDTO.isIncome());
+
+
 
     Optional<User> userOptional = userRepository.findById(user_id);
     if (userOptional.isEmpty()) {
