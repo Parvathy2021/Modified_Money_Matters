@@ -133,9 +133,10 @@ const Profile = () => {
       <div> <Link to="/transaction/add">
                 <button className="rounded-full px-4 py-2 bg-blue-500 text-white">Add Transaction</button>
               </Link></div>
+              {/* Add an input here for budget_id to pass to TransactionSearch */}
       <div> <Link to='/transaction/search'>
                 <button className="rounded-full px-4 py-2 bg-blue-500 text-white">Search Transactions</button>
-              </Link></div>
+              </Link></div> 
       <div class="flex space-x-24">
       
     
