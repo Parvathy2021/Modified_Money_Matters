@@ -11,12 +11,11 @@ const api = axios.create({
 const authService = {
     login: async (credentials) => {
         try {
-            const response = await api.post('/login', credentials);
-            // Store user data in localStorage or state management
+            const response = await api.post(`/login`, credentials);
+            console.log("Login Response Data:", response.data);
             localStorage.setItem('user', JSON.stringify(response.data));
             return response.data;
         } catch (error) {
-            // Transform the error into a user-friendly format
             if (error.response) {
                 throw error.response.data;
             }
@@ -26,7 +25,7 @@ const authService = {
 
     register: async (userData) => {
         try {
-            const response = await api.post('/register', userData);
+            const response = await api.post(`/register`, userData);
             return response.data;
         } catch (error) {
             if (error.response) {
@@ -40,12 +39,12 @@ const authService = {
 const transService = {
     add: async(transaction, params) => {
         try {
-            const response = await api.post('/api/transactions/add', transaction, {params: params});
+            const response = await api.post(`/api/transactions/add`, transaction, {params: params});
             return response.data;
         } catch (error) {
             if (error.response) {
                 console.error("API response error data:", error.response.data);
-                console.error("API  response error status". error.response.status);
+                console.error("API  response error status", error.response.status);
                 console.error("API response error headers", error.response.headers);
             
             } else if(error.request) {
@@ -60,7 +59,7 @@ const transService = {
 
     getAll: async(budget_id, params) => {
         try {
-            const response = await api.get('api/transactions/budget/${budget_id}', {params : params});
+            const response = await api.get(`api/transactions/budget/${budget_id}`, {params : params});
             return response.data;
         } catch (error) {
             if (error.response) {
@@ -80,7 +79,7 @@ const transService = {
 
     getTag: async(tag_id, params) => {
         try {
-            const response = await api.get('api/transactions/tag/${tag_id}', {params : params})
+            const response = await api.get(`api/transactions/tag/${tag_id}`, {params : params})
             return response.data;
         } catch (error) {
             if (error.response) {
@@ -100,7 +99,7 @@ const transService = {
 
     update: async(id, params) => {
         try{
-            const response = await api.put('api/transactions/update/${id}', {params: params});
+            const response = await api.put(`api/transactions/update/${id}`, {params: params});
             return response.data;
         }catch (error) {
             if (error.response) {
@@ -120,7 +119,7 @@ const transService = {
 
     delete: async(id, params) => {
         try{
-            const response = await api.delete('api/transactions/delete/${id}', {params : params});
+            const response = await api.delete(`api/transactions/delete/${id}`, {params : params});
             return response.data;
         }catch (error) {
             if (error.response) {
