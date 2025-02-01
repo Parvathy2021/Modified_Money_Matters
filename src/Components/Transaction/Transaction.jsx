@@ -7,7 +7,7 @@ import { useAuth } from '../../context/AuthContext';
 function Transaction() {
 
 
-    const {user, isLoading} = useAuth();
+    const {user} = useAuth();
     const [budget_id, setBudget_Id] = useState('');
     const [amount, setAmount] = useState('');
     const [splitAmount, setSplitAmount] = useState('')
@@ -20,13 +20,22 @@ function Transaction() {
     const [isSplits, setIsSplits] = useState(false);    // State for split Tags checkbox
  
     const navigate = useNavigate();
-
-
     const {transService} = api;
 
-    
-    if (isLoading) {
-        return <div>Loading...</div>;
+    if (!user) {
+        return (
+            <div className="flex justify-center items-center min-h-screen bg-black">
+                <div className="bg-white p-8 rounded-lg shadow-lg">
+                    <p className="text-black">Please log in to add transactions</p>
+                    <Link to="/login">
+                        <button className="mt-4 w-full py-2 bg-lightblue text-white rounded-md hover:bg-green 
+                        hover:text-black focus:outline-none focus:ring-2 focus:ring-blue">
+                            Go to Login
+                        </button>
+                    </Link>
+                </div>
+            </div>
+        );
     }
 
     const handleAddSplit = () => {
@@ -42,12 +51,6 @@ function Transaction() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        if(!user || !user.userId){
-            console.error("user object or user.id is missing. Check user state:", user);
-            alert("user is not logged in or user ID is missing!");
-            return;
-        }
         
         const user_id = user.userId;
         const transaction = { 
@@ -74,7 +77,9 @@ function Transaction() {
                 console.error("API response error data:", error.response.data);
             }
             alert("There was an error saving the Transaction!");
+            return;
         }
+        
         navigate('/transaction/add');
         setBudget_Id('');
         setAmount('');
