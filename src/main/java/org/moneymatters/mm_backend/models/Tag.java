@@ -1,5 +1,6 @@
 package org.moneymatters.mm_backend.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -21,9 +22,11 @@ public class Tag {
     private List<User> users = new ArrayList<>();
 
     @OneToMany(mappedBy = "tag")
+    @JsonManagedReference
     private List<Transaction> transactions = new ArrayList<>();
 
     @OneToMany(mappedBy = "tag")
+    @JsonManagedReference
     private List<RecurringTransaction> recurringTransactions = new ArrayList<>();
 
     public Tag() {

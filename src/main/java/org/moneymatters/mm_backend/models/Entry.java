@@ -20,7 +20,7 @@ public abstract class Entry {
     @NotNull(message = "Amount cannot be null")
     private Integer amount;
 
-    private boolean isIncome = false;
+    private boolean isIncome;
 
     @Size(max = 200, message = "Description cannot be larger than 200 characters")
     private String description;

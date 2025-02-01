@@ -1,5 +1,6 @@
 package org.moneymatters.mm_backend.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.Max;
@@ -24,6 +25,7 @@ public class RecurringTransaction extends Entry {
     private LocalDate nextTransactionDate;
 
     @ManyToOne
+    @JsonIgnore
     private Tag tag;
 
 
