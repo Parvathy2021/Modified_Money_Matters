@@ -59,7 +59,8 @@ const transService = {
 
     getAll: async(budget_id, params) => {
         try {
-            const response = await api.get(`api/transactions/budget/${budget_id}`, {params : params});
+            const response = await api.get(`/api/transactions/budget/${budget_id}`, {params : params});
+            console.log("API Response", response);
             return response.data;
         } catch (error) {
             if (error.response) {
@@ -79,7 +80,7 @@ const transService = {
 
     getTag: async(tag_id, params) => {
         try {
-            const response = await api.get('api/transactions/tag/${tag_id}', {params : params})
+            const response = await api.get(`api/transactions/tag/${tag_id}`, {params : params})
             return response.data;
         } catch (error) {
             if (error.response) {
@@ -158,7 +159,31 @@ const transService = {
 }
 
 
+const budgetService = {
+
+    getByUser: async (user_id) => {
+        try{
+            const response = await api.get(`api/budgets/user/${user_id}`)
+            return response.data;
+        }catch (error) {
+            if (error.response) {
+                console.error("API response error data:", error.response.data);
+                console.error("API  response error status", error.response.status);
+                console.error("API response error headers", error.response.headers);
+            
+            } else if(error.request) {
+                console.error("No response received", error.request);
+            } else {
+                console.error("Error setting up the request", error.message);
+            }
+            throw { message: 'Network error occurred'}
+        }
+
+    }
+}
+
 export default {
     authService,
-    transService
+    transService,
+    budgetService
 };
