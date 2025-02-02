@@ -140,7 +140,25 @@ const handleAddTag = async (e) => {
                                 }`}
               style={{ backgroundColor: `${tag.color}20` }}
             >
-              <span
+              <div 
+              key={tag.tag_id}
+              data-tag-id={tag.tag_id}
+              onClick={() => onTagSelect(tag.tag_id)}
+              className= {`flex items-center p-3 rounded-lg cursor pointer transition-all
+                ${
+                  tag_id === tag.tag_id
+                  ? "ring-2 riing-blue-500 shadow-lg"
+                  : "hover:shadow-md"
+                }`}
+                style={{backgroundColor: `${tag.color}20`, minWidth: '0'}}
+                >
+                  <span
+                  className="w-4 h-4 rounded-full mr-2"
+                  style={{backgroundColor: tag.color}}
+                  />
+                  <span className="text-gray-800 whitepsace-nowrap overflow-hidden text-ellipsis flex-1 min-w-0">{tag.name}</span>
+
+              {/* <span
                 className="w-4 h-4 rounded-full mr-2"
                 style={{ backgroundColor: tag.color }}
               />
@@ -151,7 +169,7 @@ const handleAddTag = async (e) => {
                 className="ml-auto text-sm text-blue-500 hover:text-blue-600"
               >
                 Select
-              </button>
+              </button> */}
             </div>
           ))}
         </div>
