@@ -19,7 +19,20 @@ function TransactionList({budget_id}) {
             try{
                 const results = await transService.getAll(budget_id);
                 console.log("Fetched transactions", results, budget_id);
-                setTransactions(results);
+
+                const transactionsTag = await Promise.all(results.map( async (transaction) => {
+                    console.log("Processing transaction", transaction);
+                    if (transaction.tagId) {
+                        const tagData = await transService.getTag(transaction.tagId);
+                        console.log("Fetched tag data:", tagData);
+                        return { ...transaction, tag: tagData};
+                    } else {
+                        return {...transaction, tag: null};
+                    }
+                }))
+
+
+                setTransactions(transactionsTag);
             } catch (error) {
                 console.error('Could not fetch transactions', error);
             }
@@ -29,6 +42,16 @@ function TransactionList({budget_id}) {
         }
        
     }, [budget_id, transService]);
+
+    const formatDate= (dateStr) => {
+        const dateObj = new Date(dateStr);
+        return dateObj.toLocaleDateString('en-US', {
+            
+            day: 'numeric',
+            month: 'numeric',
+            year: 'numeric'
+        })
+    }
     
 
     return(
@@ -50,9 +73,9 @@ function TransactionList({budget_id}) {
                         <tr key={index}>
                             <td>{transaction.id}</td>
                             <td>{transaction.amount}</td>
-                            <td>{transaction.tag_id}</td>
+                            <td>{transaction.tag ? transaction.tag.name : 'No tag'}</td>
                             <td>{transaction.description}</td>
-                            <td>{transaction.created_date}</td>
+                            <td>{transaction.createdDate ? formatDate(transaction.createdDate) : 'No Date'}</td>
                         </tr>
                     ))
                 )}
