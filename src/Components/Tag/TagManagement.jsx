@@ -157,6 +157,14 @@ const handleAddTag = async (e) => {
                   style={{backgroundColor: tag.color}}
                   />
                   <span className="text-gray-800 whitepsace-nowrap overflow-hidden text-ellipsis flex-1 min-w-0">{tag.name}</span>
+                  <span 
+                  className="m1-2 text-sm text-blue-500 hover:text-blue-600 cursor-pointer"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onTagSelect(tag.tag_id);
+                  }}
+                  ></span>
+                  </div>
 
               {/* <span
                 className="w-4 h-4 rounded-full mr-2"
