@@ -120,7 +120,7 @@ function Transaction() {
                                 {isSplits && (     
                                     <label    className='mt-2 p-2 w-full border border-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue block'>Amount (Split)
                                         <input type="text" value={splitAmount} onChange={(e) => setSplitAmount(e.target.value)}className='mt-2 p-2 w-full border border-gray-300 bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue' ></input>
-                                        <label className='mt-2 p-2 w-full border border-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue block' >Tag (Split)
+                                        <label className='mt-2 p-2 w-full border border-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue block' >Tag ID(Split)
                                         <input type="text" value={tag_id} onChange={(e) => setTag_Id(e.target.value)}className='mt-2 p-2 w-full border border-gray-300 bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue' ></input>
                                         </label>
                                         <button  className='w-full py-2 bg-lightblue text-white rounded-md hover:bg-green 
@@ -142,7 +142,7 @@ function Transaction() {
                                 <input type="text" value={description} onChange={(e) => setDescription(e.target.value)}className='mt-2 p-2 border border-gray-300 bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue block' ></input>
                             </label>
 
-                            <label    className='mt-2 p-2 w-full border border-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue block'>Tag
+                            <label    className='mt-2 p-2 w-full border border-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue block'>Tag ID
                                 <input type="text" value={tag_id} onChange={(e) => setTag_Id(e.target.value)}className='mt-2 p-2 w-full border border-gray-300 bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue' ></input>
                             </label>
 
