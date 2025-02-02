@@ -12,6 +12,7 @@ public class Transaction extends Entry{
     private boolean isRecurring;
 
     @ManyToOne
+    @JsonIgnore
     private Tag tag;
 
     public Transaction(int id, int amount, boolean isIncome, String description, Budget budget, User user, boolean isRecurring, Tag tag) {

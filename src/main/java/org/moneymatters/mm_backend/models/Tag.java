@@ -1,5 +1,6 @@
 package org.moneymatters.mm_backend.models;
 
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -26,6 +27,7 @@ public class Tag {
     private List<User> users = new ArrayList<>();
 
     @OneToMany(mappedBy = "tag")
+
     @JsonIgnore
     private List<Transaction> transactions = new ArrayList<>();
 
