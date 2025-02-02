@@ -9,6 +9,5 @@ import java.util.Optional;
 
 @Repository
 public interface TagRepository extends CrudRepository<Tag, Integer> {
-    Optional<Tag> findByNameAndUser(org.moneymatters.mm_backend.models.User user);
-    Optional<Tag>findByName(String name);
+       Optional<Tag>findByName(String name);
 }
