@@ -1,5 +1,8 @@
 package org.moneymatters.mm_backend.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -8,6 +11,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@JsonIgnoreProperties({"transactions", "tags"})
 @Entity
 public class User {
     @Id
@@ -21,16 +25,21 @@ public class User {
 
     @NotNull
     @NotBlank(message = "Password must not be blank")
+    @JsonIgnore
     public String pwhash;
 
     @NotNull(message = "Email must not be null")
     @Email(message = "Invalid email format")
     private String email;
 
-    @ManyToMany
-    private List<Tag> tags = new ArrayList<>();
 
-    @OneToMany
+    @ManyToMany
+    @JoinTable(name = "user_tags", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "tag_id"))
+    @JsonManagedReference
+   private List<Tag> tags = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private List<Budget> budgets;
 
     public User(){}

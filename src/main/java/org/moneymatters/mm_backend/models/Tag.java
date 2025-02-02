@@ -1,12 +1,16 @@
 package org.moneymatters.mm_backend.models;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@JsonIgnoreProperties({"transactions", "users"})
 @Entity
 public class Tag {
 
@@ -19,14 +23,16 @@ public class Tag {
     private boolean isDefault;
 
     @ManyToMany(mappedBy = "tags")
+    @JsonBackReference
     private List<User> users = new ArrayList<>();
 
     @OneToMany(mappedBy = "tag")
-    @JsonManagedReference
+
+    @JsonIgnore
     private List<Transaction> transactions = new ArrayList<>();
 
     @OneToMany(mappedBy = "tag")
-    @JsonManagedReference
+    @JsonIgnore
     private List<RecurringTransaction> recurringTransactions = new ArrayList<>();
 
     public Tag() {
