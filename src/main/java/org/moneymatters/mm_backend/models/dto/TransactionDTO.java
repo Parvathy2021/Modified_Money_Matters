@@ -3,8 +3,11 @@ package org.moneymatters.mm_backend.models.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.time.LocalDateTime;
+
 public class TransactionDTO {
 
+    private Integer id;
     private Integer userId;
     private Integer budgetId;
     private Integer tagId;
@@ -15,6 +18,15 @@ public class TransactionDTO {
     @JsonProperty
     private boolean isIncome;
     private int recurringDate;
+    private LocalDateTime createdDate;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public Integer getUserId() {
         return userId;
@@ -78,6 +90,14 @@ public class TransactionDTO {
 
     public void setRecurringDate(int recurringDate) {
         this.recurringDate = recurringDate;
+    }
+
+    public LocalDateTime getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(LocalDateTime createdDate) {
+        this.createdDate = createdDate;
     }
 }
 

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/transactions")
@@ -100,7 +101,25 @@ public class TransactionController {
         return new ResponseEntity<>("Budget not found", HttpStatus.NOT_FOUND);
     }
     List<Transaction> transactions = transactionRepository.findByBudget(budgetOptional.get());
-    return new ResponseEntity<>(transactions, HttpStatus.OK);
+
+    List<TransactionDTO> transactionDTOS = transactions.stream().map(transaction -> {
+        TransactionDTO dto = new TransactionDTO();
+        dto.setId(transaction.getId());
+        dto.setUserId(transaction.getUser().getUser_id());
+        dto.setBudgetId(transaction.getBudget().getId());
+        dto.setAmount(transaction.getAmount());
+        dto.setDescription(transaction.getDescription());
+        dto.setRecurring(transaction.isRecurring());
+        dto.setIncome(transaction.isIncome());
+        dto.setCreatedDate(transaction.getCreatedDate());
+
+        if (transaction.getTag() != null) {
+            dto.setTagId(transaction.getTag().getId());
+        }
+        return dto;
+    }).collect(Collectors.toList());
+
+    return new ResponseEntity<>(transactionDTOS, HttpStatus.OK);
     }
 
 //    View transactions by specific tag
