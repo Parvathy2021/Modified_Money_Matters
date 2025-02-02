@@ -1,8 +1,11 @@
 import { useState } from "react";
+import api from "../../services/api";
 
 function IncomeSplit(){
     const [totalIncome, setTotalIncome] = useState('');
-    const [allocatedFunds, setAllocatedFunds] = useState('');
+    const [allocatedFunds, setAllocatedFunds] = useState({});
+    const [loading, setLoading] = useState(false);
+    const [error, serError] = useState(null)
 
     const defaultAllocations = {
         'Rent/Mortage' : 40,
@@ -23,6 +26,29 @@ function IncomeSplit(){
         }
 
         setAllocatedFunds(newAllocatedFunds); // Update the allocated funds
+    };
+
+    const handleSubmit = async() =>{
+        const incomeSplitDto = {
+            totalIncome : par (totalIncome),
+            allocations : allocatedFunds,
+        };
+        
+        try{
+            setLoading(true);
+            serError(null);
+
+            const response = await api.post("/api/transactions/split-income", incomeSplitDto);
+
+            if(response.status === 201){
+                alert("income split successfully created!");
+            }
+        } catch (err){
+            serError("failed to create income split.");
+            console.error(err);
+        }finally{
+            setLoading(false);
+        }
     };
 
     return(
@@ -46,8 +72,14 @@ function IncomeSplit(){
                     <label> Total Allocated: 
                         <div>${Object.values(allocatedFunds).reduce((acc, value) => acc + value, 0).toFixed(2)}</div>
                     </label>
-
                 </div>
+                <div>{loading ?(
+                    <button disabled> Loading...</button>) : (
+                        <button onClick={handleSubmit}>Submit Income Split</button>)}
+                </div>
+                {error && <div style={{color: 'red'}}>{error}</div>
+                
+                }
 
         </div>
     )
