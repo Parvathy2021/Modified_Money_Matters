@@ -102,6 +102,20 @@ public class TagController {
         return new ResponseEntity<>(tags, HttpStatus.OK);
     }
 
+    @GetMapping("/{tag_id}")
+    public ResponseEntity<?> getTagById(@PathVariable Integer tag_id){
+
+        Optional<Tag> tagOptional = tagRepository.findById(tag_id);
+        if(tagOptional.isEmpty()){
+            return new ResponseEntity<>("Tag not found", HttpStatus.NOT_FOUND);
+        }
+
+        Tag tag = tagOptional.get();
+        return new ResponseEntity<>(tag, HttpStatus.OK);
+
+
+    }
+
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateTag(@PathVariable Integer id, @RequestBody @Valid TagDTO tagDTO, @RequestParam Integer user_id) {
         Optional<Tag> tagOptional = tagRepository.findById(id);
