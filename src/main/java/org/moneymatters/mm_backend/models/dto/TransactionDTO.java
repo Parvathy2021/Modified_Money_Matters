@@ -1,7 +1,7 @@
 package org.moneymatters.mm_backend.models.dto;
 
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.List;
 
 public class TransactionDTO {
 
@@ -10,11 +10,10 @@ public class TransactionDTO {
     private Integer tagId;
     private int amount;
     private String description;
-    @JsonProperty
     private boolean isRecurring;
-    @JsonProperty
     private boolean isIncome;
     private int recurringDate;
+    private List<SplitDto> splits;
 
     public Integer getUserId() {
         return userId;
@@ -79,5 +78,37 @@ public class TransactionDTO {
     public void setRecurringDate(int recurringDate) {
         this.recurringDate = recurringDate;
     }
+
+    public List<SplitDto> getSplits() {
+        return splits;
+    }
+
+    public void setSplits(List<SplitDto> splits) {
+        this.splits = splits;
+    }
+
+    // Nested DTO for split
+    public static class SplitDto{
+
+            private Integer splitAmount;
+            private String tag;
+
+            public String getTag() {
+                return tag;
+            }
+
+            public void setTag(String tag) {
+                this.tag = tag;
+            }
+
+            public Integer getSplitAmount() {
+                return splitAmount;
+            }
+
+            public void setSplitAmount(Integer splitAmount) {
+                this.splitAmount = splitAmount;
+            }
+        }
+
 }
 
