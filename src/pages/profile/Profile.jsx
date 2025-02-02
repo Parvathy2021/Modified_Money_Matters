@@ -3,22 +3,47 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { PieChart } from '../../components/pieChart/PieChart'
 import { VertBarChart } from '../../Components/vertBarChart/VertBarChart'
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AuthStatus from "../../components/auth/authStatus/AuthStatus";
+import { useAuth } from '../../context/AuthContext';
+import api from '../../services/api';
 
 const Profile = () => {
-  const [userId, setUserId] = useState(1)
+  const {user} = useAuth();
   const [username, setUsername] = useState("")
   const [budgetName, setBudgetName] = useState("")
   const [monthlyExpenses, setMonthlyExpenses] = useState([])
   const [expenseTags, setExpenseTags] = useState([])
   const [yearlyIncome, setYearlyIncome] = useState([])
   const [yearlyExpenses, setYearlyExpenses] = useState([])
+  const [budget_id, setBudgetId] = useState("");
+  const [budgetList, setBudgetList] = useState([]);
+
+  const user_id = user.userId;
+  const {transService, budgetService} = api;
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const budgetList = async() =>{
+
+      try{
+        const result = await budgetService.getByUser(user_id);
+        setBudgetList(result);
+      } catch (error) {
+        console.error("Error fetching budget data", error);
+      }
+    };
+    budgetList();
+  } ,[]);
+
+  const handleChange = (e) => {
+    setBudgetId(e.target.value);
+  }
 
   const findUsername = async () => {
     try {
       const data = await axios.get("/users.json");
-      setUsername(data.data.find((obj) => obj.id === userId).username);
+      setUsername(data.data.find((obj) => obj.id === user_id).username);
     } catch (e) {
       console.error(e);
     }
@@ -126,6 +151,7 @@ const Profile = () => {
     findYearlyData()
   }, [])
 
+
   return (
     <>
       <h1 className='text-6xl'>Profile: {username}</h1>
@@ -133,13 +159,19 @@ const Profile = () => {
       <div> <Link to="/transaction/add">
                 <button className="rounded-full px-4 py-2 bg-blue-500 text-white">Add Transaction</button>
               </Link></div>
-              {/* Add an input here for budget_id to pass to TransactionSearch */}
-      <div> <Link to='/transaction/search'>
-                <button className="rounded-full px-4 py-2 bg-blue-500 text-white">Search Transactions</button>
-              </Link></div> 
-      <div className="flex space-x-24">
+
+      <div> 
+          <select id="budgetSelect" value={budget_id} onChange={handleChange}>
+            <option value=''>Please Select a Budget</option>
+            {budgetList.map(budget => (
+            <option key={budget.id} value={budget.id}>{budget.name}</option>
+            ))}
+          </select>
+                <button className="rounded-full px-4 py-2 bg-blue-500 text-white" onClick={(e) => {console.log("Navigating to: ", `/transaction/budget/${budget_id}`); navigate(`/transaction/budget/${budget_id}`)}}>Search Transactions</button>
+          </div>
+             
+      <div class="flex space-x-24">
       
-    
         <PieChart budgetName={budgetName} monthlyExpenses={monthlyExpenses} expenseTags={expenseTags} />
         <VertBarChart yearlyIncome={yearlyIncome} yearlyExpenses={yearlyExpenses} />
       </div>

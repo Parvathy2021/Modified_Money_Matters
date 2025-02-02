@@ -2,29 +2,38 @@ import React, {useState, useEffect } from 'react';
 import SearchBar from './SearchBar';
 import api from '../../services/api.js';
 
-function TransactionList() {
+function TransactionList({budget_id}) {
+
+    console.log("Received budget ID", budget_id);
 
     const [transactions, setTransactions] = useState([]);
     const {transService} = api;
 
     useEffect(() => {
 
-        const fetchAllTranscations = async() => {
+        const fetchAllTransactions = async() => {
+            if (!budget_id) {
+                console.error("No budget ID");
+                return;
+            }
             try{
-                const results = await transService.getAll();
+                const results = await transService.getAll(budget_id);
+                console.log("Fetched transactions", results, budget_id);
                 setTransactions(results);
             } catch (error) {
                 console.error('Could not fetch transactions', error);
             }
         };
-        fetchAllTranscations();
+        if(budget_id){
+            fetchAllTransactions();
+        }
        
-    }, []);
+    }, [budget_id, transService]);
     
 
     return(
         <div>
-            <SearchBar setTransactions = {setTransactions} />
+            <SearchBar setTransactions = {setTransactions} budget_id={budget_id} />
             <table class="table-auto">
                 <thead>
                     <tr>
@@ -36,7 +45,8 @@ function TransactionList() {
                     </tr>
                 </thead>
                 <tbody>
-                    {transactions.map((transaction,index) => (
+                    {transactions.length === 0 ? (<tr><td>No transactions available</td></tr>) : (
+                    transactions.map((transaction,index) => (
                         <tr key={index}>
                             <td>{transaction.id}</td>
                             <td>{transaction.amount}</td>
@@ -44,7 +54,8 @@ function TransactionList() {
                             <td>{transaction.description}</td>
                             <td>{transaction.created_date}</td>
                         </tr>
-                    ))}
+                    ))
+                )}
                 </tbody>
             </table>
         </div>
