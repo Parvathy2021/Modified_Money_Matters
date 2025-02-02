@@ -1,9 +1,6 @@
 package org.moneymatters.mm_backend.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class Split {
@@ -11,13 +8,25 @@ public class Split {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String tag;
+    @ManyToOne
+    @JoinColumn(name = "tag_id", nullable = false)
+    private Tag tag;
+
     private Integer splitAmount;
 
-    public Split(Integer id, Integer splitAmount, String tag) {
+    @ManyToOne
+    @JoinColumn(name = "transaction_id", nullable = false)
+    private Transaction transaction;
+
+    public Split(){
+
+    }
+
+    public Split(Integer id, Tag tag, Integer splitAmount, Transaction transaction) {
         this.id = id;
-        this.splitAmount = splitAmount;
         this.tag = tag;
+        this.splitAmount = splitAmount;
+        this.transaction = transaction;
     }
 
     public Integer getId() {
@@ -36,11 +45,19 @@ public class Split {
         this.splitAmount = splitAmount;
     }
 
-    public String getTag() {
+    public Tag getTag() {
         return tag;
     }
 
-    public void setTag(String tag) {
+    public void setTag(Tag tag) {
         this.tag = tag;
+    }
+
+    public Transaction getTransaction() {
+        return transaction;
+    }
+
+    public void setTransaction(Transaction transaction) {
+        this.transaction = transaction;
     }
 }

@@ -3,6 +3,7 @@ package org.moneymatters.mm_backend.controllers;
 import jakarta.validation.Valid;
 import org.moneymatters.mm_backend.data.*;
 import org.moneymatters.mm_backend.models.*;
+import org.moneymatters.mm_backend.models.dto.SplitDto;
 import org.moneymatters.mm_backend.models.dto.TransactionDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,6 +32,10 @@ public class TransactionController {
 
     @Autowired
     private TagRepository tagRepository;
+
+    @Autowired
+    private SplitRepository splitRepository;
+
 
 //    Create transaction with budget and tag assignment options
 @PostMapping("/add")
@@ -78,6 +83,25 @@ public class TransactionController {
         recurringTransactionRepository.save(recurringTransaction);
     }
     Transaction savedTransaction = transactionRepository.save(transaction);
+
+    if(transactionDTO.getSplits() != null && !transactionDTO.getSplits().isEmpty()){
+        for(TransactionDTO.SplitDto splitDto: transactionDTO.getSplits()){
+            double splitAmount = splitDto.getSplitAmount();
+            String tag = splitDto.getTag();
+
+            Optional<Tag> tagOptional = tagRepository.findById(tag_id);
+            if(tagOptional.isEmpty()){
+                return new ResponseEntity<>("Tag not found for id: " + splitDto.getTag(),HttpStatus.NOT_FOUND);
+            }
+
+            Split split = new Split();
+            split.setSplitAmount(splitDto.getSplitAmount());
+            split.setTag(tagOptional.get());
+            split.setTransaction(savedTransaction);
+
+            splitRepository.save(split);
+        }
+    }
     return new ResponseEntity<>(savedTransaction, HttpStatus.CREATED);
 }
 
