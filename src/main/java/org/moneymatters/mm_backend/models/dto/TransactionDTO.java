@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 
 public class TransactionDTO {
 
+    private Integer id;
     private Integer userId;
     private Integer budgetId;
     private Integer tagId;
@@ -18,6 +19,14 @@ public class TransactionDTO {
     private boolean isIncome;
     private int recurringDate;
     private LocalDateTime createdDate;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public Integer getUserId() {
         return userId;

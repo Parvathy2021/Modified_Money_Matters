@@ -104,7 +104,7 @@ public class TransactionController {
 
     List<TransactionDTO> transactionDTOS = transactions.stream().map(transaction -> {
         TransactionDTO dto = new TransactionDTO();
-
+        dto.setId(transaction.getId());
         dto.setUserId(transaction.getUser().getUser_id());
         dto.setBudgetId(transaction.getBudget().getId());
         dto.setAmount(transaction.getAmount());
