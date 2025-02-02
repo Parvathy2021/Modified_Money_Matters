@@ -1,9 +1,11 @@
 package org.moneymatters.mm_backend.models;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 
+@JsonIgnoreProperties({"user", "tag"})
 @Entity
 public class Transaction extends Entry{
 
