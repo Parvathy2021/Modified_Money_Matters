@@ -1,7 +1,10 @@
 import React, {useState} from 'react';
 import api from '../../services/api.js';
+import { useNavigate } from 'react-router-dom';
 
 function SearchBar({ setTransactions, budget_id}) {
+
+    const navigate= useNavigate();
 
     console.log("Received budget ID:", budget_id);
 
