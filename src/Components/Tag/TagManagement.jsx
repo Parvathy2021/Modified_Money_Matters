@@ -191,7 +191,7 @@ const handleAddTag = async (e) => {
             value={newTagName}
             onChange={(e) => setNewTagName(e.target.value)}
             placeholder="Tag name"
-            className="flex-1 p-2 border rounded focus:ring-2 focus:ring-blue-500"
+            className="flex-1 p-2 border rounded focus:ring-2 focus:ring-blue-500 bg-white"
           />
           <input
             type="color"

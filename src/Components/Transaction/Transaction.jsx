@@ -159,7 +159,7 @@ function Transaction() {
           <div className="space-y-4 text-black">
             <div>
               <label className="block">Budget</label>
-              <select id="budgetSelect" value={budget_id} onChange={handleChange}>
+              <select id="budgetSelect" value={budget_id} onChange={handleChange} class = "text-gray bg-white">
             <option value=''>Please Select a Budget</option>
             {budgetList.map(budget => (
             <option key={budget.id} value={budget.id}>{budget.name}</option>
@@ -173,7 +173,7 @@ function Transaction() {
                 type="number"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
-                className="mt-1 p-2 w-full border rounded-md"
+                className="mt-1 p-2 w-full border rounded-md bg-white"
                 required
               />
             </div>
@@ -184,7 +184,7 @@ function Transaction() {
                 type="text"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                className="mt-1 p-2 w-full border rounded-md"
+                className="mt-1 p-2 w-full border rounded-md bg-white"
                 required
               />
             </div>
@@ -217,7 +217,7 @@ function Transaction() {
                     max="31"
                     value={recurringDate || ""}
                     onChange={(e) => setRecurring(e.target.value)}
-                    className="mt-1 p-2 w-full border rounded-md"
+                    className="mt-1 p-2 w-full border rounded-md bg-white"
                   />
                 </div>
               )}
@@ -244,7 +244,7 @@ function Transaction() {
                       value={splitAmount}
                       onChange={(e) => setSplitAmount(e.target.value)}
                       placeholder="Split amount"
-                      className="flex-1 p-2 border rounded-md"
+                      className="flex-1 p-2 border rounded-md bg-white"
                     />
                     <button
                       type="button"
