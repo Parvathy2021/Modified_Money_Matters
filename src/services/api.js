@@ -36,24 +36,73 @@ const authService = {
     }
 };
 
-const transService = {
-    add: async(transaction, params) => {
+const tagService = {
+    getUserTags: async (userId) => {
         try {
-            const response = await api.post(`/api/transactions/add`, transaction, {params: params});
+            const response = await api.get(`/api/tags/user/${userId}`);
             return response.data;
         } catch (error) {
             if (error.response) {
                 console.error("API response error data:", error.response.data);
-                console.error("API  response error status", error.response.status);
+                console.error("API response error status", error.response.status);
                 console.error("API response error headers", error.response.headers);
-            
+            } else if (error.request) {
+                console.error("No response received", error.request);
+            } else {
+                console.error("Error setting up the request", error.message);
+            }
+            throw { message: 'Network error occurred' };
+        }
+    },
+
+    createTag: async (tagData, userId) => {
+        try {
+            const response = await api.post('/api/tags/add', tagData, {
+                params: { user_id: userId }
+            });
+            return response.data;
+        } catch (error) {
+            if (error.response) {
+                console.error("API response error data:", error.response.data);
+                console.error("API response error status", error.response.status);
+                console.error("API response error headers", error.response.headers);
             } else if(error.request) {
                 console.error("No response received", error.request);
             } else {
                 console.error("Error setting up the request", error.message);
             }
-            throw { message: 'Network error occurred'}
-            
+            throw { message: 'Network error occurred' };
+        }
+    }
+};
+
+
+const transService = {
+    add: async (transaction, params) => {
+        if (!params.user_id) {
+            console.error("Error: 'user_id' is missing in API call!", params);
+            throw new Error("User ID missing")
+        }
+        try {
+          const response = await api.post(
+            `/api/transactions/add`,
+            transaction,
+            { params: params }
+          );
+          return response.data;
+        } catch (error) {
+          console.error("API request failed:", error);
+
+          if (error.response) {
+            console.error("API response error data:", error.response.data);
+            console.error("API  response error status", error.response.status);
+            console.error("API response error headers", error.response.headers);
+          } else if (error.request) {
+            console.error("No response received", error.request);
+          } else {
+            console.error("Error setting up the request", error.message);
+          }
+          throw { message: "Network error occurred" };
         }
     },
 
@@ -117,24 +166,20 @@ const transService = {
         }
     },
 
-    delete: async(id, params) => {
-        try{
-            const response = await api.delete(`api/transactions/delete/${id}`, {params : params});
-            return response.data;
-        }catch (error) {
-            if (error.response) {
-                console.error("API response error data:", error.response.data);
-                console.error("API  response error status", error.response.status);
-                console.error("API response error headers", error.response.headers);
-            
-            } else if(error.request) {
-                console.error("No response received", error.request);
-            } else {
-                console.error("Error setting up the request", error.message);
-            }
-            throw { message: 'Network error occurred'}
-        }
-    },
+delete: async (id, params = {}) => {
+    if (!id) {
+        console.error("Error: Transaction ID is missing.");
+        return;
+    }
+
+    try {
+        const response = await api.delete(`/api/transactions/delete/${id}`, { params });
+        return response.data;
+    } catch (error) {
+        console.error("Delete request error:", error);
+        throw error;
+    }
+},
 
     search: async(query) => {
 
@@ -160,5 +205,6 @@ const transService = {
 
 export default {
     authService,
-    transService
+    transService,
+    tagService
 };
