@@ -1,6 +1,7 @@
 package org.moneymatters.mm_backend.models;
 
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
@@ -16,8 +17,8 @@ public class Transaction extends Entry{
     @ManyToOne
     private Tag tag;
 
-    @OneToMany
-    private List<Split> splits = new ArrayList<>();
+    @OneToMany(mappedBy = "transaction", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Split> splits;
 
     public Transaction(int id, int amount, boolean isIncome, String description, Budget budget, User user, boolean isRecurring, Tag tag, List<Split> splits) {
         super(id, amount, isIncome, description, budget, user);

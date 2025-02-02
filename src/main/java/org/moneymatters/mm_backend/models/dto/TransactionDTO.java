@@ -1,6 +1,8 @@
 package org.moneymatters.mm_backend.models.dto;
 
 
+import java.util.List;
+
 public class TransactionDTO {
 
     private Integer userId;
@@ -11,6 +13,7 @@ public class TransactionDTO {
     private boolean isRecurring;
     private boolean isIncome;
     private int recurringDate;
+    private List<SplitDto> splits;
 
     public Integer getUserId() {
         return userId;
@@ -75,5 +78,37 @@ public class TransactionDTO {
     public void setRecurringDate(int recurringDate) {
         this.recurringDate = recurringDate;
     }
+
+    public List<SplitDto> getSplits() {
+        return splits;
+    }
+
+    public void setSplits(List<SplitDto> splits) {
+        this.splits = splits;
+    }
+
+    // Nested DTO for split
+    public static class SplitDto{
+
+            private Integer splitAmount;
+            private String tag;
+
+            public String getTag() {
+                return tag;
+            }
+
+            public void setTag(String tag) {
+                this.tag = tag;
+            }
+
+            public Integer getSplitAmount() {
+                return splitAmount;
+            }
+
+            public void setSplitAmount(Integer splitAmount) {
+                this.splitAmount = splitAmount;
+            }
+        }
+
 }
 
