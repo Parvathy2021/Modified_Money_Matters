@@ -40,7 +40,7 @@ public class TransactionDTO {
         this.tagId = tagId;
     }
 
-    public int getAmount() {
+    public double getAmount() {
         return amount;
     }
 
