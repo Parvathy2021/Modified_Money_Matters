@@ -20,7 +20,7 @@ public class Transaction extends Entry{
     @OneToMany(mappedBy = "transaction", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Split> splits;
 
-    public Transaction(int id, int amount, boolean isIncome, String description, Budget budget, User user, boolean isRecurring, Tag tag, List<Split> splits) {
+    public Transaction(int id, Double amount, boolean isIncome, String description, Budget budget, User user, boolean isRecurring, Tag tag, List<Split> splits) {
         super(id, amount, isIncome, description, budget, user);
         this.isRecurring = isRecurring;
         this.tag = tag;
