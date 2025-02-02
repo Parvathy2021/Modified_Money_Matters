@@ -10,9 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/transactions")
@@ -99,11 +97,11 @@ public class TransactionController {
             split.setSplitAmount(splitDto.getSplitAmount());
             split.setTag(tagOptional.get());
             split.setTransaction(savedTransaction);
-
             splitRepository.save(split);
         }
     }
-    return new ResponseEntity<>(savedTransaction, HttpStatus.CREATED);
+
+    return new ResponseEntity<>(true, HttpStatus.CREATED);
 }// Income split endpoint
     @PostMapping("/split-income")
     public ResponseEntity<?> splitIncome(@RequestBody IncomeSplitDto incomeSplitDto) {
