@@ -2,37 +2,38 @@ import React, {useState, useEffect } from 'react';
 import SearchBar from './SearchBar';
 import api from '../../services/api.js';
 
-function TransactionList({budgetId}) {
+function TransactionList({budget_id}) {
 
-    console.log("Received budget ID", budgetId);
+    console.log("Received budget ID", budget_id);
 
     const [transactions, setTransactions] = useState([]);
     const {transService} = api;
 
     useEffect(() => {
 
-        const fetchAllTranscations = async() => {
-            if (!budgetId) {
+        const fetchAllTransactions = async() => {
+            if (!budget_id) {
                 console.error("No budget ID");
                 return;
             }
             try{
-                const results = await transService.getAll(budgetId);
+                const results = await transService.getAll(budget_id);
+                console.log("Fetched transactions", results, budget_id);
                 setTransactions(results);
             } catch (error) {
                 console.error('Could not fetch transactions', error);
             }
         };
-        if(budgetId){
-            fetchAllTranscations();
+        if(budget_id){
+            fetchAllTransactions();
         }
        
-    }, [budgetId, transService]);
+    }, [budget_id, transService]);
     
 
     return(
         <div>
-            <SearchBar setTransactions = {setTransactions} />
+            <SearchBar setTransactions = {setTransactions} budget_id={budget_id} />
             <table class="table-auto">
                 <thead>
                     <tr>

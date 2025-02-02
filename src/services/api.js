@@ -57,9 +57,9 @@ const transService = {
         }
     },
 
-    getAll: async(budgetId, params) => {
+    getAll: async(budget_id, params) => {
         try {
-            const response = await api.get(`api/transactions/budget/${budgetId}`, {params : params});
+            const response = await api.get(`/api/transactions/budget/${budget_id}`, {params : params});
             console.log("API Response", response);
             return response.data;
         } catch (error) {

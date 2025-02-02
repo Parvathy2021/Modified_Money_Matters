@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
 import api from '../../services/api.js';
 
-function SearchBar({ setTransactions, budgetId}) {
+function SearchBar({ setTransactions, budget_id}) {
 
-    console.log("Received budget ID:", budgetId);
+    console.log("Received budget ID:", budget_id);
 
     const [query, setQuery] = useState('');
      const {transService} = api;
@@ -20,8 +20,8 @@ function SearchBar({ setTransactions, budgetId}) {
             } 
         } else {
             try{
-                console.log('Fetching all transactions', budgetId);
-                const results = await transService.getAll(budgetId);
+                console.log('Fetching all transactions', budget_id);
+                const results = await transService.getAll(budget_id);
                 setTransactions(results);
             } catch (error) {
                 console.error("Could not fetch all transactions", error);
