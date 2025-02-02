@@ -12,13 +12,12 @@ function TransactionSearch() {
 
     return(
        <>
-            <div>
-                <h1>Transaction Search</h1>
+        
+        <h1 className="text-2xl font-semibold text-center mb-6 text-gray">Transaction Search</h1>
+        <div className="flex justify-center items-center">
                 <TransactionList budget_id={budget_id} />
-            </div>
-            <div>  
-                <button className="rounded-full px-4 py-2 bg-blue-500 text-white" onClick={(e) => navigate('/profile')}>Cancel</button>
-            </div>
+        </div>
+            
         </>
     )
 
