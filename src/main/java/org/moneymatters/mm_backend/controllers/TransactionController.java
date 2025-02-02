@@ -3,7 +3,7 @@ package org.moneymatters.mm_backend.controllers;
 import jakarta.validation.Valid;
 import org.moneymatters.mm_backend.data.*;
 import org.moneymatters.mm_backend.models.*;
-import org.moneymatters.mm_backend.models.dto.SplitDto;
+import org.moneymatters.mm_backend.models.dto.IncomeSplitDto;
 import org.moneymatters.mm_backend.models.dto.TransactionDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -48,7 +49,7 @@ public class TransactionController {
     transaction.setAmount(transactionDTO.getAmount());
     transaction.setDescription(transactionDTO.getDescription());
     transaction.setRecurring(transactionDTO.isRecurring());
-    transaction.setIncome(transactionDTO.isIncome());
+    transaction.setIsIncome(transactionDTO.isIncome());
 
     Optional<User> userOptional = userRepository.findById(user_id);
     if (userOptional.isEmpty()) {
@@ -113,6 +114,41 @@ public class TransactionController {
         List<Transaction> transactions = transactionRepository.findByUser(userOptional.get());
         return new ResponseEntity<>(transactions, HttpStatus.OK);
     }
+    // Income split endpoint
+    @PostMapping("/split-income")
+    public ResponseEntity<?> splitIncome(@RequestBody IncomeSplitDto incomeSplitDto) {
+        double totalIncome = incomeSplitDto.getTotalIncome();
+        Map<String, Double> allocations = incomeSplitDto.getAllocations();
+
+        // Create transaction for each category split
+        for (Map.Entry<String, Double> entry : allocations.entrySet()) {
+            String tagName = entry.getKey();
+            Double percentage = entry.getValue();
+
+            // Calculate the split amount
+            double splitAmount = (percentage / 100) * totalIncome;
+
+            // Fetch the corresponding tag by name
+            Optional<Tag> tagOptional = tagRepository.findByName(tagName);
+            if (tagOptional.isEmpty()) {
+                return new ResponseEntity<>("Tag not found for name: " + tagName, HttpStatus.NOT_FOUND);
+            }
+            Tag tag = tagOptional.get();
+
+            // Create the transaction for the split
+            Transaction transaction = new Transaction();
+            transaction.setAmount(splitAmount);
+            transaction.setDescription("Income split for " + tag.getName());
+            transaction.setIsIncome(true);  // Set as income
+            transaction.setTag(tag);
+
+            // Save the transaction
+            transactionRepository.save(transaction);
+        }
+
+        return new ResponseEntity<>("Income successfully split into categories", HttpStatus.CREATED);
+
+}
 
 //    View all transactions by specific budget
     @GetMapping("/budget/{budget_id}")
@@ -161,7 +197,7 @@ public class TransactionController {
     Transaction existingTransaction = existingTransactionOpt.get();
     existingTransaction.setAmount(transaction.getAmount());
     existingTransaction.setDescription(transaction.getDescription());
-    existingTransaction.setIncome(transaction.isIncome());
+    existingTransaction.setIsIncome(transaction.isIncome());
     existingTransaction.setRecurring(transaction.isRecurring());
 
         if (budget_id != null) {
