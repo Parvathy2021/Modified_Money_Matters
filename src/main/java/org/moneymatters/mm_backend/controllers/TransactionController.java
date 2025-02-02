@@ -87,10 +87,10 @@ public class TransactionController {
 
     if(transactionDTO.getSplits() != null && !transactionDTO.getSplits().isEmpty()){
         for(TransactionDTO.SplitDto splitDto: transactionDTO.getSplits()){
-            double splitAmount = splitDto.getSplitAmount();
-            String tag = splitDto.getTag();
+//            double splitAmount = splitDto.getSplitAmount();
+//            String tag = splitDto.getTag();
 
-            Optional<Tag> tagOptional = tagRepository.findById(tag_id);
+            Optional<Tag> tagOptional = tagRepository.findById(Integer.parseInt(splitDto.getTag()));
             if(tagOptional.isEmpty()){
                 return new ResponseEntity<>("Tag not found for id: " + splitDto.getTag(),HttpStatus.NOT_FOUND);
             }
@@ -104,19 +104,7 @@ public class TransactionController {
         }
     }
     return new ResponseEntity<>(savedTransaction, HttpStatus.CREATED);
-}
-
-//      View all transactions for a user
-    @GetMapping("/user/{user_id}")
-    public ResponseEntity<?> getUserTransactions(@PathVariable Integer user_id) {
-    Optional<User> userOptional = userRepository.findById(user_id);
-    if (userOptional.isEmpty()) {
-        return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
-    }
-        List<Transaction> transactions = transactionRepository.findByUser(userOptional.get());
-        return new ResponseEntity<>(transactions, HttpStatus.OK);
-    }
-    // Income split endpoint
+}// Income split endpoint
     @PostMapping("/split-income")
     public ResponseEntity<?> splitIncome(@RequestBody IncomeSplitDto incomeSplitDto) {
         double totalIncome = incomeSplitDto.getTotalIncome();
@@ -150,7 +138,19 @@ public class TransactionController {
 
         return new ResponseEntity<>("Income successfully split into categories", HttpStatus.CREATED);
 
-}
+    }
+
+//      View all transactions for a user
+    @GetMapping("/user/{user_id}")
+    public ResponseEntity<?> getUserTransactions(@PathVariable Integer user_id) {
+    Optional<User> userOptional = userRepository.findById(user_id);
+    if (userOptional.isEmpty()) {
+        return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+    }
+        List<Transaction> transactions = transactionRepository.findByUser(userOptional.get());
+        return new ResponseEntity<>(transactions, HttpStatus.OK);
+    }
+
 
 //    View all transactions by specific budget
     @GetMapping("/budget/{budget_id}")
