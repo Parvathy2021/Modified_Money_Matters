@@ -136,7 +136,7 @@ function Transaction() {
                 type="text"
                 value={budget_id}
                 onChange={(e) => setBudget_Id(e.target.value)}
-                className="mt-1 p-2 w-full border rounded-md"
+                className="mt-1 p-2 w-full border rounded-md bg-white"
               />
             </div>
 
@@ -146,7 +146,7 @@ function Transaction() {
                 type="number"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
-                className="mt-1 p-2 w-full border rounded-md"
+                className="mt-1 p-2 w-full border rounded-md bg-white"
                 required
               />
             </div>
@@ -157,7 +157,7 @@ function Transaction() {
                 type="text"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                className="mt-1 p-2 w-full border rounded-md"
+                className="mt-1 p-2 w-full border rounded-md bg-white"
                 required
               />
             </div>
@@ -219,7 +219,7 @@ function Transaction() {
                       value={splitAmount}
                       onChange={(e) => setSplitAmount(e.target.value)}
                       placeholder="Split amount"
-                      className="flex-1 p-2 border rounded-md"
+                      className="flex-1 p-2 border rounded-md bg-white"
                     />
                     <button
                       type="button"
