@@ -55,7 +55,7 @@ export function VertBarChart({ yearlyIncome, yearlyExpenses }) {
 
     return (
         <>
-            <div className='size-5/12'>
+            <div className='size-4/12 flex justify-start items-center min-h-screen'>
                 <Bar options={options} data={data} />
             </div>
         </>
