@@ -17,9 +17,9 @@ const Home = () => {
           </div>
           <div className="flex-1 text-center">
             <article>
-              <h1>Manage Your Budget</h1>
+              <h1>Vizualize Your Budget</h1>
               <br />
-              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempora sapiente autem, fugiat quidem cupiditate maiores ullam praesentium nisi architecto harum, velit corporis quibusdam aut veritatis saepe inventore amet, quia iusto! Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis eum pariatur aut nostrum ex, eligendi magnam provident, reprehenderit dolores impedit voluptas earum odio, magni amet deserunt corporis. Nihil, modi facere.</p>
+              <p>See your finances clearly with interactive charts and easy-to-read visuals. Gain a better understanding of your spending patterns and budgeting trends, so you can make more informed decisions and stay on track to reach your goals.</p>
             </article>
           </div>
         </section>
@@ -28,7 +28,7 @@ const Home = () => {
             <article>
               <h1>Track Your Expenses</h1>
               <br />
-              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempora sapiente autem, fugiat quidem cupiditate maiores ullam praesentium nisi architecto harum, velit corporis quibusdam aut veritatis saepe inventore amet, quia iusto! Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis eum pariatur aut nostrum ex, eligendi magnam provident, reprehenderit dolores impedit voluptas earum odio, magni amet deserunt corporis. Nihil, modi facere.</p>
+              <p>Stay on top of where your money is going. Effortlessly categorize and monitor your daily expenses, so you can identify trends, adjust your habits, and make informed decisions. With real-time tracking, you'll always know exactly where you stand.</p>
             </article>
           </div>
           <div className="flex-1 text-center">

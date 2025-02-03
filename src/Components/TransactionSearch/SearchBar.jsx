@@ -1,7 +1,10 @@
 import React, {useState} from 'react';
 import api from '../../services/api.js';
+import { useNavigate } from 'react-router-dom';
 
 function SearchBar({ setTransactions, budget_id}) {
+
+    const navigate= useNavigate();
 
     console.log("Received budget ID:", budget_id);
 
@@ -43,12 +46,16 @@ function SearchBar({ setTransactions, budget_id}) {
     return (
 
         <form onSubmit={handleSearch}>
+           
+            <div class="flex space-x-4">
             <input 
             type="text" 
             value={query} 
             onChange={(e) => setQuery(e.target.value)}
             />
             <button type="submit">Search</button>
+            <button onClick={(e) => navigate('/profile')} class="pd-4">Cancel</button>
+            </div>
         </form>
     )
 

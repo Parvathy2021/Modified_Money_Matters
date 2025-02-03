@@ -130,7 +130,7 @@ const transService = {
 
     getTag: async(tag_id, params) => {
         try {
-            const response = await api.get(`api/tags/${tag_id}`, {params : params})
+            const response = await api.get('api/transactions/tag/${tag_id}', {params : params})
             return response.data;
         } catch (error) {
             if (error.response) {
@@ -174,14 +174,14 @@ delete: async (id, params = {}) => {
         return;
     }
 
-    try {
+        try {
         const response = await api.delete(`/api/transactions/delete/${id}`, { params });
         return response.data;
-    } catch (error) {
+        } catch (error) {
         console.error("Delete request error:", error);
         throw error;
-    }
-},
+        }
+    },
 
     search: async(query) => {
 

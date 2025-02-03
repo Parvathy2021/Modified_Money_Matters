@@ -81,6 +81,7 @@ const TagManagement = ({ tag_id, onTagSelect }) => {
       isDefault: false,
     };
 
+
     try {
       console.log("Creating new tag:", tagData);
       const response = await api.tagService.createTag(tagData, user.userId);
@@ -182,6 +183,7 @@ const TagManagement = ({ tag_id, onTagSelect }) => {
             </span>
           </div>
         )}
+
       </div>
 
       {/* Create new tag section */}
@@ -193,6 +195,7 @@ const TagManagement = ({ tag_id, onTagSelect }) => {
             value={newTagName}
             onChange={(e) => setNewTagName(e.target.value)}
             placeholder="Tag name"
+
             className="p-2 border rounded-md focus:ring-2 focus:ring-blue-500 bg-white"
             maxLength="50"
           />
