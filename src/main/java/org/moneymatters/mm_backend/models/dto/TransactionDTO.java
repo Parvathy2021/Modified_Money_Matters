@@ -12,7 +12,7 @@ public class TransactionDTO {
     private Integer userId;
     private Integer budgetId;
     private Integer tagId;
-    private int amount;
+    private Double amount;
     private String description;
     @JsonProperty
     private boolean isRecurring;
@@ -47,11 +47,11 @@ public class TransactionDTO {
         this.tagId = tagId;
     }
 
-    public double getAmount() {
+    public Double getAmount() {
         return amount;
     }
 
-    public void setAmount(int amount) {
+    public void setAmount(Double amount) {
         this.amount = amount;
     }
 
