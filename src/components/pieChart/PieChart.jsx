@@ -44,7 +44,7 @@ export function PieChart({ monthlyExpenses }) {
 
     return (
         <>
-            <div className='size-5/12'>
+            <div className='size-4/12'>
                 <Pie data={data} />
             </div>
         </>

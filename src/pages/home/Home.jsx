@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom'
 import './Home.css'
 
 import moneyImage from '../../assets/money-gold-coin-growth-concept-illustration-stacks-of-gold-coin-like-income-graph-with-dollar-free-vector.jpg'
+import img1 from '../../assets/ex-pie2.png'
+import img2 from '../../assets/ex-bar2.png'
 
 const Home = () => {
   return (
@@ -12,7 +14,7 @@ const Home = () => {
         <section className="min-h-full snap-start flex items-center justify-center">
           <div className="flex-1 text-center">
             <article>
-              <img src={moneyImage} alt="Money" className="mx-auto" />
+              <img src={img2} alt="Money" className="mx-auto" />
             </article>
           </div>
           <div className="flex-1 text-center">
@@ -33,7 +35,7 @@ const Home = () => {
           </div>
           <div className="flex-1 text-center">
             <article>
-              <img src={moneyImage} alt="Money" className="mx-auto" />
+              <img src={img1} alt="Money" className="mx-auto" />
             </article>
           </div>
         </section>
