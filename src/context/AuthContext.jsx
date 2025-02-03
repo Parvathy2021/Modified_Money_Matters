@@ -1,70 +1,41 @@
-// src/context/AuthContext.js
-import React, { createContext, useContext, useState, useEffect } from "react";
-import authService from "../services/api";
+import { createContext, useContext, useState, useEffect } from "react";
 
-const AuthContext = createContext(null);
+const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
- 
-  const [user, setUser] = useState(() => {
-    const savedUser = localStorage.getItem("user");
-    return savedUser ? JSON.parse(savedUser) : null;
-  });
-
-  const [isLoading, setIsLoading] = useState(true);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const checkAuth = async () => {
-      if (localStorage.getItem("user")) {
-        setIsLoading(false);
-      } else {
-        setUser(null);
-        setIsLoading(false);
-      }
-    };
-
-    checkAuth();
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    if (storedUser && storedUser.userId) {
+      console.log("✅ User loaded from localStorage:", storedUser);
+      setUser(storedUser);
+    } else {
+      console.warn("🚨 No user found in localStorage.");
+    }
   }, []);
 
-
-  const login = async (credentials) => {
-    const response = await authService.login(credentials);
-    setUser(response);
-    localStorage.setItem("user", JSON.stringify(response));
-    return response;
+  const login = (userData) => {
+    if (!userData || !userData.userId) {
+      console.error("🚨 Invalid login response:", userData);
+      return;
+    }
+    localStorage.setItem("user", JSON.stringify(userData));
+    setUser(userData);
   };
 
- 
-  const register = async (userData) => {
-    const response = await authService.register(userData);
-    return response;
-  };
-
-  const logout = async () => {
-    await authService.logout();
-    setUser(null);
+  const logout = () => {
     localStorage.removeItem("user");
+    setUser(null);
   };
 
   return (
-    <AuthContext.Provider
-      value={{
-        user,
-        login,
-        logout,
-        register,
-        isLoading,
-      }}
-    >
-      {!isLoading && children}
+    <AuthContext.Provider value={{ user, login, logout }}>
+      {children}
     </AuthContext.Provider>
   );
 };
 
 export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error("useAuth must be used within an AuthProvider");
-  }
-  return context;
+  return useContext(AuthContext);
 };

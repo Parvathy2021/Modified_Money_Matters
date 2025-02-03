@@ -10,6 +10,7 @@ import Profile from './pages/profile/Profile';
 import Transaction from './Components/Transaction/Transaction'
 import IncomeSplit from './Components/IncomeSplit/IncomeSplit'
 import Contact from './pages/contact/Contact';
+import TransactionSearch from './Components/TransactionSearch/TransactionSearch';
 
 // Layout Components
 import NavHeader from './Components/navHeader/NavHeader';
@@ -24,6 +25,7 @@ function App() {
   return (
     <AuthProvider>
       <Router>
+        <NavHeader></NavHeader>
         <Routes>
           <Route path='/' element={<Home />}/>
           <Route path='/about' element={<About />}/>
@@ -33,6 +35,7 @@ function App() {
           <Route path='/transaction/add' element={<Transaction />}/>
           <Route path='/incomeSplit' element={<IncomeSplit />}/>
           <Route path='/contact' element={<Contact />}/>
+          <Route path='/transaction/budget/:budget_id' element={<TransactionSearch/>}/>
         </Routes>
         <Footer />
       </Router>
