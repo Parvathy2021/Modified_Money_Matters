@@ -18,8 +18,6 @@ import Footer from './Components/footer/Footer';
 
 import { AuthProvider } from './context/AuthContext';
 
-
-
 function App() {
   return (
     <AuthProvider>

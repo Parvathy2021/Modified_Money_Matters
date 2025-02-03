@@ -120,8 +120,16 @@ function Transaction() {
     return;
   }
 
+  const validAmount = parseFloat(amount);
+
+  if (isNaN(validAmount)) {
+    console.error("Amount is invalid")
+    alert("Invalid amount provided.");
+    return;
+  }
+
     const transaction = {
-      amount: Number(amount),
+      amount: validAmount,
       description,
       isRecurring,
       isIncome,
@@ -137,7 +145,13 @@ function Transaction() {
       tag_id: Number(tag_id),
     };
 
-    console.log("Submitting transaction with params:", params);
+    console.log("Submitting transaction with params:", params); 
+      console.log("Submitting transaction data:", {
+        transaction,
+        params,
+        splits: splits,
+        tag_id: tag_id,
+      });
 
     try {
       const response = await transService.add(transaction, params);
