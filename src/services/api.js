@@ -183,10 +183,9 @@ delete: async (id, params = {}) => {
         }
     },
 
-    search: async(query) => {
-
+    search: async(query, budget_id) => {
         try {
-            const response = await api.get(`api/transactions/search?query=${query}`);
+            const response = await api.get(`/api/transactions/search?query=${query}&budget_id=${budget_id}`);
             return response.data;
         }catch (error) {
             if (error.response) {
