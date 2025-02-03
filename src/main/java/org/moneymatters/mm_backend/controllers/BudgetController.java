@@ -6,6 +6,7 @@ import org.moneymatters.mm_backend.models.Budget;
 import org.moneymatters.mm_backend.models.RecurringTransaction;
 import org.moneymatters.mm_backend.models.Transaction;
 import org.moneymatters.mm_backend.models.User;
+import org.moneymatters.mm_backend.models.dto.DefaultBudgetDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +34,35 @@ public class BudgetController {
 
     @Autowired
     private TagRepository tagRepository;
+
+    public void createDefaultBudgets(User user) {
+        List<DefaultBudgetDTO> defaultBudgets = Arrays.asList(
+                new DefaultBudgetDTO("Monthly Expenses", 2000.00, true),
+                new DefaultBudgetDTO("Emergency Fund", 1000.00, true),
+                new DefaultBudgetDTO("Savings", 500.00, true)
+        );
+
+        for (DefaultBudgetDTO budgetDTO : defaultBudgets) {
+            Optional<Budget> existingBudget = budgetRepository.findByNameAndUser(budgetDTO.getName(), user);
+
+            if (existingBudget.isEmpty()) {
+                Budget budget = new Budget();
+                budget.setName(budgetDTO.getName());
+                budget.setAmount(budgetDTO.getAmount());
+                budget.setDefault(true);
+                budget.setUser(user);
+
+                Budget savedBudget = budgetRepository.save(budget);
+
+                if (user.getBudgets() == null) {
+                    user.setBudgets(new ArrayList<>());
+                }
+                user.getBudgets().add(savedBudget);
+            }
+        }
+        userRepository.save(user);
+        System.out.println("Finished creating default budgets");
+    }
 
 //    Get all budgets in the system
     @GetMapping("/list")

@@ -37,6 +37,12 @@ public class Budget {
     @JsonIgnoreProperties("budget")
     private List<RecurringTransaction> recurringTransactions = new ArrayList<>();
 
+    @Column(nullable = false)
+    private Double amount;
+
+    @Column(name = "is_default")
+    private Boolean isDefault = false;
+
     public Budget(){}
 
     public Budget(String name, User user) {
@@ -88,6 +94,16 @@ public class Budget {
     public void setRecurringTransactions(List<RecurringTransaction> recurringTransactions) {
         this.recurringTransactions = recurringTransactions;
     }
+
+    public Boolean isDefault() {return isDefault;}
+
+    public void setDefault(Boolean isDefault) {this.isDefault = isDefault;}
+
+    public Double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Double amount) {this.amount = amount;}
 
     @Override
     public boolean equals(Object o) {
