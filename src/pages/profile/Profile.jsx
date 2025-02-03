@@ -42,42 +42,63 @@ const Profile = () => {
 
   const findUsername = async () => {
     try {
-      const data = await axios.get("/users.json");
-      setUsername(data.data.find((obj) => obj.id === user_id).username);
+      const data = await axios.get(`http://localhost:8080/api/budgets/view/${user_id}`);
+      setUsername(data.data.budget.user.username);
     } catch (e) {
       console.error(e);
     }
   };
 
-  const findBudgetName = async () => {
-    try {
-      const data = await axios.get("/budgets.json");
-      setBudgetName(data.data.find((obj) => obj.user_id === userId).name);
-    } catch (e) {
-      console.error(e);
-    }
-  };
+  // const findBudgetName = async () => {
+  //   try {
+  //     const data = await axios.get("/budgets.json");
+  //     setBudgetName(data.data.find((obj) => obj.user_id === user_id).name);
+  //   } catch (e) {
+  //     console.error(e);
+  //   }
+  // };
 
   const findMonthlyExpenses = async () => {
     try {
-      const recurringData = await axios.get('/recurringTransactions.json')
-      const transactionData = await axios.get('/transactions.json')
-      const tagsData = await axios.get('./tags.json')
+
+      const fetchData = await axios.get(`http://localhost:8080/api/transactions/budget/${budget_id}`)
+      const tagsData = await axios.get(`http://localhost:8080/api/tags/user/${user_id}`)
 
       let date = new Date().toISOString()
       let yearMonth = date.slice(0, 7)
 
-      let recurringArr = recurringData.data.filter(obj => obj.user_id === userId && obj.isIncome === false && obj.created_date.startsWith(yearMonth))
-      let transactionArr = transactionData.data.filter(obj => obj.user_id === userId && obj.isIncome === false && obj.created_date.startsWith(yearMonth))
-      let recurringExpense = recurringArr.map(item => item.amount)
-      let transactionExpense = transactionArr.map(item => item.amount)
-      let expenses = [...recurringExpense, ...transactionExpense]
-      setMonthlyExpenses(expenses)
+      // console.log(8,fetchData)
+      // console.log(7,tagsData.data);
 
-      let recurringTags = recurringArr.map(item => tagsData.data.find(tag => tag.id === item.tag).name)
-      let transactionTags = transactionArr.map(item => tagsData.data.find(tag => tag.id === item.tag).name)
-      let tags = [...recurringTags, ...transactionTags]
-      setExpenseTags(tags)
+      let filterArr = fetchData.data.filter(obj => !obj.income && obj.createdDate.startsWith(yearMonth))
+
+      // console.log(26,filterArr);
+
+      let allExpenses = [...filterArr]
+
+      // console.log(6,allExpenses);
+
+      let tagExpenseObj = {}
+
+      allExpenses.forEach(item => {
+        let tag = tagsData.data.find(tag => tag.id === item.tagId).name
+
+        if (tagExpenseObj[tag]) {
+          tagExpenseObj[tag] += item.amount
+        } else {
+          tagExpenseObj[tag] = item.amount
+        }
+      })
+
+      // console.log(3, tagExpenseObj);
+
+      let expenses = [];
+      for (let tag in tagExpenseObj) {
+        expenses.push({ [tag]: tagExpenseObj[tag] });
+      }
+
+      console.log(expenses);
+      setMonthlyExpenses(expenses)
     } catch (e) {
       console.error(e)
     }
@@ -85,17 +106,15 @@ const Profile = () => {
 
   const findYearlyData = async () => {
     try {
-      const recurringData = await axios.get('/recurringTransactions.json')
-      const transactionData = await axios.get('/transactions.json')
-
+      const fetchData = await axios.get(`http://localhost:8080/api/transactions/budget/${budget_id}`)
+      
       let date = new Date()
       let year = date.getFullYear().toString()
+      // console.log(5, fetchData);
 
-      let yearRecurringIncome = recurringData.data.filter(obj => obj.user_id === userId && obj.isIncome === true && obj.created_date.startsWith(year))
-      let yearTransactionIncome = transactionData.data.filter(obj => obj.user_id === userId && obj.isIncome === true && obj.created_date.startsWith(year))
+      let filterYearIncome = fetchData.data.filter(obj => obj.income && obj.createdDate.startsWith(year))
 
-      let yearRecurringExpenses = recurringData.data.filter(obj => obj.user_id === userId && obj.isIncome === false && obj.created_date.startsWith(year))
-      let yearTransactionExpenses = transactionData.data.filter(obj => obj.user_id === userId && obj.isIncome === false && obj.created_date.startsWith(year))
+      let filterYearExpenses = fetchData.data.filter(obj => !obj.income && obj.createdDate.startsWith(year))
 
       let yearIncome = []
       let yearExpenses = []
@@ -108,28 +127,18 @@ const Profile = () => {
           monthYear = year + "-" + month.toString()
         }
 
-        let recurringMonthIncome = yearRecurringIncome.filter(obj => obj.created_date.startsWith(monthYear))
-        let transactionMonthIncome = yearTransactionIncome.filter(obj => obj.created_date.startsWith(monthYear))
+        let monthIncome = filterYearIncome.filter(obj => obj.createdDate.startsWith(monthYear))
 
-        let recurringMonthExpenses = yearRecurringExpenses.filter(obj => obj.created_date.startsWith(monthYear))
-        let transactionMonthExpenses = yearTransactionExpenses.filter(obj => obj.created_date.startsWith(monthYear))
+        let monthExpenses = filterYearExpenses.filter(obj => obj.createdDate.startsWith(monthYear))
 
         let totalMonthIncome = 0
         let totalMonthExpenses = 0
 
-        recurringMonthIncome.forEach(obj => {
+        monthIncome.forEach(obj => {
           totalMonthIncome += obj.amount
         })
 
-        recurringMonthExpenses.forEach(obj => {
-          totalMonthExpenses += obj.amount
-        })
-
-        transactionMonthIncome.forEach(obj => {
-          totalMonthIncome += obj.amount
-        })
-
-        transactionMonthExpenses.forEach(obj => {
+        monthExpenses.forEach(obj => {
           totalMonthExpenses += obj.amount
         })
 
@@ -146,10 +155,15 @@ const Profile = () => {
 
   useEffect(() => {
     findUsername()
-    findBudgetName()
-    findMonthlyExpenses()
-    findYearlyData()
+    // findBudgetName()
   }, [])
+
+  useEffect(() => {
+    if (budget_id) {
+      findMonthlyExpenses();
+      findYearlyData()
+    }
+  }, [budget_id]);
 
 
   return (
@@ -177,7 +191,7 @@ const Profile = () => {
              
       <div class="flex space-x-24">
       
-        <PieChart budgetName={budgetName} monthlyExpenses={monthlyExpenses} expenseTags={expenseTags} />
+        <PieChart budgetName={budgetName} monthlyExpenses={monthlyExpenses} />
         <VertBarChart yearlyIncome={yearlyIncome} yearlyExpenses={yearlyExpenses} />
       </div>
     </>
