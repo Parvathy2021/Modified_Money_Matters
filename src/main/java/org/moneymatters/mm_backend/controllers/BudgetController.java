@@ -37,9 +37,9 @@ public class BudgetController {
 
     public void createDefaultBudgets(User user) {
         List<DefaultBudgetDTO> defaultBudgets = Arrays.asList(
-                new DefaultBudgetDTO("Monthly Expenses", 2000.00, true),
-                new DefaultBudgetDTO("Emergency Fund", 1000.00, true),
-                new DefaultBudgetDTO("Savings", 500.00, true)
+                new DefaultBudgetDTO("Monthly Expenses",  true),
+                new DefaultBudgetDTO("Emergency Fund",  true),
+                new DefaultBudgetDTO("Savings",  true)
         );
 
         for (DefaultBudgetDTO budgetDTO : defaultBudgets) {
@@ -48,7 +48,6 @@ public class BudgetController {
             if (existingBudget.isEmpty()) {
                 Budget budget = new Budget();
                 budget.setName(budgetDTO.getName());
-                budget.setAmount(budgetDTO.getAmount());
                 budget.setDefault(true);
                 budget.setUser(user);
 
