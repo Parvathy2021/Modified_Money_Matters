@@ -1,25 +1,29 @@
 import React from "react";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import "./NavHeader.css";
 
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 
+
+
 const NavHeader = () => {
   const { user, logout } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
 
   const hiddenRoutes = ["/", "/login", "/register", "/forgotpassword"];
   if (!user || hiddenRoutes.includes(location.pathname)) return null;
 
-  const handleLogout = async () => {
+  const handleLogout = async (e) => {
+      e.preventDefault();
     try {
       await fetch('http://localhost:8080/logout', {
         credentials: 'include'
       });
       logout();
-      window.location.href = '/login';
+      navigate('/login');
     } catch (error) {
       console.error('Logout failed', error);
     }
@@ -81,7 +85,7 @@ const NavHeader = () => {
                   <MenuItem>
                     <button
                       onClick={handleLogout}
-                      type="submit"
+                      type="button"
                       className="block w-full px-4 py-2 text-left text-sm text-gray-700 data-focus:bg-gray-100 data-focus:text-gray-900 data-focus:outline-hidden"
                     >
                       Sign out
