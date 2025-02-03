@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.apache.coyote.Response;
+import org.moneymatters.mm_backend.data.BudgetRepository;
 import org.moneymatters.mm_backend.data.UserRepository;
 import org.moneymatters.mm_backend.models.User;
 import org.moneymatters.mm_backend.models.dto.LoginFormDto;
@@ -31,6 +32,9 @@ public class AuthenticationController {
 
     @Autowired
     private TagController tagController;
+
+    @Autowired
+    private BudgetController budgetController;
 
     private static final String userSessionKey = "user";
 
@@ -122,6 +126,7 @@ public class AuthenticationController {
                 );
 
                 userRepository.save(newUser);
+                budgetController.createDefaultBudgets(newUser);
                 tagController.createDefaultTags(newUser);
                 setUserInSession(request.getSession(), newUser);
 
@@ -175,7 +180,7 @@ public class AuthenticationController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
             }
 
-            // Create a new session and return success
+            budgetController.createDefaultBudgets(theUser);
             tagController.createDefaultTags(theUser);
             setUserInSession(request.getSession(), theUser);
 
