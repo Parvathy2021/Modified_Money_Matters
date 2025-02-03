@@ -1,4 +1,3 @@
-// TagManagement.jsx
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
 import api from "../../services/api";
@@ -10,30 +9,23 @@ const TagManagement = ({ tag_id, onTagSelect }) => {
   const [error, setError] = useState("");
   const { user } = useAuth();
 
-  // This function extracts unique tags from the nested response
   const extractUniqueTags = (response) => {
-    // First, ensure we have a response to work with
     if (!response) return [];
 
-    // Convert to array if it's not already
     const tagsArray = Array.isArray(response) ? response : [response];
-
-    // Create a Map to store unique tags
     const uniqueTags = new Map();
 
-    // Process each tag
     tagsArray.forEach((tag) => {
       if (tag && tag.id && !uniqueTags.has(tag.id)) {
         uniqueTags.set(tag.id, {
           tag_id: tag.id,
           name: tag.name,
-          color: tag.color || "#808080", // Default color if none provided
-          isDefault: !!tag.default, // Convert to boolean
+          color: tag.color || "#808080",
+          isDefault: !!tag.default,
         });
       }
     });
 
-    // Convert Map values to array
     return Array.from(uniqueTags.values());
   };
 
@@ -49,7 +41,6 @@ const TagManagement = ({ tag_id, onTagSelect }) => {
         const response = await api.tagService.getUserTags(user.userId);
         console.log("Raw API response:", response);
 
-        // Extract and process tags
         const processedTags = extractUniqueTags(response);
         console.log("Processed tags:", processedTags);
 
@@ -58,7 +49,7 @@ const TagManagement = ({ tag_id, onTagSelect }) => {
           setError("");
         } else {
           console.log("No tags found in response");
-          setTags([]); // Set empty array rather than showing error
+          setTags([]);
         }
       } catch (error) {
         console.error("Error fetching tags:", error);
@@ -69,51 +60,50 @@ const TagManagement = ({ tag_id, onTagSelect }) => {
     fetchTags();
   }, [user]);
 
-const handleAddTag = async (e) => {
-  e.preventDefault();
-  if (!newTagName.trim()) {
-    setError("Tag name is required");
-    return;
-  }
-
-  // Check for existing tag with same name
-  const tagExists = tags.some(
-    (tag) => tag.name.toLowerCase() === newTagName.trim().toLowerCase()
-  );
-  if (tagExists) {
-    setError("A tag with this name already exists");
-    return;
-  }
-
-  const tagData = {
-    name: newTagName,
-    color: newTagColor,
-    isDefault: false,
-  };
-
-  try {
-    console.log("Creating new tag:", tagData);
-    const response = await api.tagService.createTag(tagData, user.userId);
-
-    if (response && response.id) {
-      const newTag = {
-        tag_id: response.id,
-        name: response.name,
-        color: response.color,
-        isDefault: response.default,
-      };
-      setTags((prevTags) => [...prevTags, newTag]);
-      setNewTagName("");
-      setNewTagColor("#4ECDC4");
-      setError("");
+  const handleAddTag = async (e) => {
+    e.preventDefault();
+    if (!newTagName.trim()) {
+      setError("Tag name is required");
+      return;
     }
-  } catch (error) {
-    console.error("Error creating tag:", error);
-    const errorMessage =
-      error.response?.data || "Failed to create tag. Please try again.";
-    setError(errorMessage);
-  }
-};
+
+    const tagExists = tags.some(
+      (tag) => tag.name.toLowerCase() === newTagName.trim().toLowerCase()
+    );
+    if (tagExists) {
+      setError("A tag with this name already exists");
+      return;
+    }
+
+    const tagData = {
+      name: newTagName,
+      color: newTagColor,
+      isDefault: false,
+    };
+
+    try {
+      console.log("Creating new tag:", tagData);
+      const response = await api.tagService.createTag(tagData, user.userId);
+
+      if (response && response.id) {
+        const newTag = {
+          tag_id: response.id,
+          name: response.name,
+          color: response.color,
+          isDefault: response.default,
+        };
+        setTags((prevTags) => [...prevTags, newTag]);
+        setNewTagName("");
+        setNewTagColor("#4ECDC4");
+        setError("");
+      }
+    } catch (error) {
+      console.error("Error creating tag:", error);
+      const errorMessage =
+        error.response?.data || "Failed to create tag. Please try again.";
+      setError(errorMessage);
+    }
+  };
 
   return (
     <div className="bg-white p-6 rounded-lg shadow">
@@ -125,62 +115,103 @@ const handleAddTag = async (e) => {
         </div>
       )}
 
+      {/* Enhanced dropdown with colored options */}
       <div className="mb-6">
-        <h3 className="font-medium mb-2">Your Tags</h3>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-          {tags.map((tag) => (
-            <div
-              key={tag.tag_id}
-              data-tag-id={tag.tag_id}
-              className={`flex items-center p-3 rounded-lg cursor-pointer transition-all
-                                ${
-                                  tag_id === tag.tag_id
-                                    ? "ring-2 ring-blue-500 shadow-lg"
-                                    : "hover:shadow-md"
-                                }`}
-              style={{ backgroundColor: `${tag.color}20` }}
-            >
-              <span
-                className="w-4 h-4 rounded-full mr-2"
-                style={{ backgroundColor: tag.color }}
-              />
-              <span className="text-gray-800 truncate">{tag.name}</span>
-              <button
-                type="button"
-                onClick={() => onTagSelect(tag.tag_id)}
-                className="ml-auto text-sm text-blue-500 hover:text-blue-600"
-              >
-                Select
-              </button>
-            </div>
-          ))}
-        </div>
+        <h3 className="font-medium mb-2">Select a Tag</h3>
+        <select
+          value={tag_id || ""}
+          onChange={(e) => onTagSelect(e.target.value)}
+          className="w-full p-2 border rounded-md bg-white focus:ring-2 focus:ring-blue-500"
+          style={{
+            lineHeight: "1.5",
+            paddingLeft: "2rem",
+          }}
+        >
+          <option value="">Choose a tag</option>
+          {/* Default Tags Group */}
+          <optgroup label="Default Tags">
+            {tags
+              .filter((tag) => tag.isDefault)
+              .map((tag) => (
+                <option
+                  key={tag.tag_id}
+                  value={tag.tag_id}
+                  data-color={tag.color}
+                  className="flex items-center"
+                  style={{
+                    paddingLeft: "2rem",
+                    background: `linear-gradient(to right, ${tag.color} 1.5rem, transparent 1.5rem)`,
+                  }}
+                >
+                  {tag.name}
+                </option>
+              ))}
+          </optgroup>
+          {/* Custom Tags Group */}
+          <optgroup label="Custom Tags">
+            {tags
+              .filter((tag) => !tag.isDefault)
+              .map((tag) => (
+                <option
+                  key={tag.tag_id}
+                  value={tag.tag_id}
+                  data-color={tag.color}
+                  style={{
+                    paddingLeft: "2rem",
+                    background: `linear-gradient(to right, ${tag.color} 1.5rem, transparent 1.5rem)`,
+                  }}
+                >
+                  {tag.name}
+                </option>
+              ))}
+          </optgroup>
+        </select>
+
+        {/* Selected tag indicator */}
+        {tag_id && (
+          <div className="mt-2 flex items-center gap-2">
+            <span
+              className="w-4 h-4 rounded-full"
+              style={{
+                backgroundColor: tags.find((t) => t.tag_id === Number(tag_id))
+                  ?.color,
+              }}
+            />
+            <span className="text-sm text-gray-600">
+              Selected: {tags.find((t) => t.tag_id === Number(tag_id))?.name}
+            </span>
+          </div>
+        )}
       </div>
 
+      {/* Create new tag section */}
       <div className="space-y-4">
-        <h3 className="font-medium">Add New Tag</h3>
-        <div className="flex gap-4">
+        <h3 className="font-medium">Create New Tag</h3>
+        <div className="flex flex-col gap-4">
           <input
             type="text"
             value={newTagName}
             onChange={(e) => setNewTagName(e.target.value)}
             placeholder="Tag name"
-            className="flex-1 p-2 border rounded focus:ring-2 focus:ring-blue-500"
+            className="p-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+            maxLength="50"
           />
-          <input
-            type="color"
-            value={newTagColor}
-            onChange={(e) => setNewTagColor(e.target.value)}
-            className="w-12 h-10 p-1 border rounded cursor-pointer"
-            title="Choose tag color"
-          />
-          <button
-            type="button"
-            onClick={handleAddTag}
-            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-          >
-            Add Tag
-          </button>
+          <div className="flex items-center gap-2">
+            <input
+              type="color"
+              value={newTagColor}
+              onChange={(e) => setNewTagColor(e.target.value)}
+              className="w-12 h-10 p-1 border rounded cursor-pointer"
+              title="Choose tag color"
+            />
+            <button
+              type="button"
+              onClick={handleAddTag}
+              className="flex-1 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+            >
+              Add Tag
+            </button>
+          </div>
         </div>
       </div>
     </div>

@@ -19,8 +19,6 @@ import Footer from './Components/footer/Footer';
 // Context
 import { AuthProvider } from './context/AuthContext';
 
-
-
 function App() {
   return (
     <AuthProvider>
