@@ -1,6 +1,8 @@
 package org.moneymatters.mm_backend.controllers;
 
+import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Valid;
+import jakarta.validation.Validator;
 import org.moneymatters.mm_backend.data.*;
 import org.moneymatters.mm_backend.models.*;
 import org.moneymatters.mm_backend.models.dto.IncomeSplitDto;
@@ -11,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/transactions")
@@ -35,6 +38,9 @@ public class TransactionController {
     @Autowired
     private SplitRepository splitRepository;
 
+    @Autowired
+    private Validator validator;
+
 
 //    Create transaction with budget and tag assignment options
 @PostMapping("/add")
@@ -43,11 +49,20 @@ public class TransactionController {
                                             @RequestParam(required = false) Integer budget_id,
                                             @RequestParam(required = false) Integer tag_id) {
 
+    if (transactionDTO.getAmount() == null) {
+        return new ResponseEntity<>("Amount is null: ", HttpStatus.BAD_REQUEST);
+    }
+
+    System.out.println("Amount from DTO: " + transactionDTO.getAmount());
+    System.out.println("Budget ID: " + budget_id);
+    System.out.println("User ID: " + user_id);
+
     Transaction transaction = new Transaction();
     transaction.setAmount(transactionDTO.getAmount());
     transaction.setDescription(transactionDTO.getDescription());
     transaction.setRecurring(transactionDTO.isRecurring());
     transaction.setIsIncome(transactionDTO.isIncome());
+
 
     Optional<User> userOptional = userRepository.findById(user_id);
     if (userOptional.isEmpty()) {
@@ -71,18 +86,41 @@ public class TransactionController {
         transaction.setTag(tagOptional.get());
     }
 
+    Transaction savedTransaction = transactionRepository.save(transaction);
+
     if (transaction.isRecurring()){
         RecurringTransaction recurringTransaction= new RecurringTransaction();
         recurringTransaction.setTransaction(transaction);
+        recurringTransaction.setAmount(transactionDTO.getAmount());
+        recurringTransaction.setDescription(transactionDTO.getDescription());
+        recurringTransaction.setIsIncome(transactionDTO.isIncome());
         recurringTransaction.setRecurringDay(transactionDTO.getRecurringDate());
         recurringTransaction.setTag(transaction.getTag());
+        recurringTransaction.setUser(transaction.getUser());
+        recurringTransaction.setBudgetId(transaction.getBudget());
+        recurringTransaction.setNextTransactionDate(recurringTransaction.calculateNextTransactionDate());
+
+
+        System.out.println("Received recurringTransaction: " +  recurringTransaction.getAmount());
+
+        Set<ConstraintViolation<RecurringTransaction>> violations = validator.validate(recurringTransaction);
+        if (!violations.isEmpty()) {
+            String errorMessages = violations.stream()
+                    .map(violation -> violation.getMessage())
+                    .collect(Collectors.joining(", "));
+            return new ResponseEntity<>(errorMessages, HttpStatus.BAD_REQUEST);
+        }
 
         recurringTransactionRepository.save(recurringTransaction);
     }
-    Transaction savedTransaction = transactionRepository.save(transaction);
+
 
     if(transactionDTO.getSplits() != null && !transactionDTO.getSplits().isEmpty()){
         for(TransactionDTO.SplitDto splitDto: transactionDTO.getSplits()){
+
+            if (splitDto.getTag() == null || splitDto.getTag().isEmpty()){
+                return new ResponseEntity<>("Tag ID cannot be null or empty", HttpStatus.BAD_REQUEST);
+            }
 //            double splitAmount = splitDto.getSplitAmount();
 //            String tag = splitDto.getTag();
 

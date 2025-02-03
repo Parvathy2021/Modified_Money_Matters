@@ -2,6 +2,7 @@ package org.moneymatters.mm_backend.models.dto;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -12,13 +13,14 @@ public class TransactionDTO {
     private Integer userId;
     private Integer budgetId;
     private Integer tagId;
-    private int amount;
+    @NotNull(message = "Amount cannot be null")
+    private Double amount;
     private String description;
     @JsonProperty
     private boolean isRecurring;
     @JsonProperty
     private boolean isIncome;
-    private int recurringDate;
+    private Integer recurringDate;
     private LocalDateTime createdDate;
     private List<SplitDto> splits;
 
@@ -47,11 +49,11 @@ public class TransactionDTO {
         this.tagId = tagId;
     }
 
-    public double getAmount() {
+    public Double getAmount() {
         return amount;
     }
 
-    public void setAmount(int amount) {
+    public void setAmount(Double amount) {
         this.amount = amount;
     }
 
@@ -79,11 +81,11 @@ public class TransactionDTO {
         isIncome = income;
     }
 
-    public int getRecurringDate() {
+    public Integer getRecurringDate() {
         return recurringDate;
     }
 
-    public void setRecurringDate(int recurringDate) {
+    public void setRecurringDate(Integer recurringDate) {
         this.recurringDate = recurringDate;
     }
 
@@ -132,6 +134,23 @@ public class TransactionDTO {
             public void setSplitAmount(Integer splitAmount) {
                 this.splitAmount = splitAmount;
             }
+        }
+
+        @Override
+    public String toString() {
+        return "TransactionDTO{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", budgetId=" + budgetId +
+                ", tagId=" + tagId +
+                ", amount=" + amount +
+                ", description='" + description + '\'' +
+                ", isRecurring=" + isRecurring +
+                ", isIncome=" + isIncome +
+                ", recurringDate=" + recurringDate +
+                ", createdDate=" + createdDate +
+                ", splits=" + splits +
+                '}';
         }
 
 }
