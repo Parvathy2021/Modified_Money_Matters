@@ -1,7 +1,10 @@
 import React, {useState} from 'react';
 import api from '../../services/api.js';
+import { useNavigate } from 'react-router-dom';
 
 function SearchBar({ setTransactions, budget_id}) {
+
+    const navigate= useNavigate();
 
     console.log("Received budget ID:", budget_id);
 
@@ -21,8 +24,18 @@ function SearchBar({ setTransactions, budget_id}) {
         } else {
             try{
                 console.log('Fetching all transactions', budget_id);
-                const results = await transService.getAll(budget_id);
-                setTransactions(results);
+                const results = await transService.getAll(budget_id); 
+                const transactionsTag = await Promise.all(results.map( async (transaction) => {
+                    if (transaction.tag_id) {
+                        const tagData = await transService.getTag(transaction.tag_id);
+                        return { ...transaction, tag: tagData};
+                    } else {
+                        return {...transaction, tag: null};
+                    }
+                }))
+
+
+                setTransactions(transactionsTag);
             } catch (error) {
                 console.error("Could not fetch all transactions", error);
             }
@@ -33,12 +46,16 @@ function SearchBar({ setTransactions, budget_id}) {
     return (
 
         <form onSubmit={handleSearch}>
+           
+            <div class="flex space-x-4">
             <input 
             type="text" 
             value={query} 
             onChange={(e) => setQuery(e.target.value)}
             />
             <button type="submit">Search</button>
+            <button onClick={(e) => navigate('/profile')} class="pd-4">Cancel</button>
+            </div>
         </form>
     )
 

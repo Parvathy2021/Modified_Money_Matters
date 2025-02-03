@@ -191,21 +191,26 @@ const Profile = () => {
     <>
       <h1 className='text-6xl'>Profile: {username}</h1>
       <p>{budgetName}</p>
-      <div> <Link to="/transaction/add">
-                <button className="rounded-full px-4 py-2 bg-blue-500 text-white">Add Transaction</button>
-              </Link></div>
 
+      <div>
+          <Link to="/budget/add">
+            <button className="my-8 mx-2 px-4 rounded-full px-4 py-2 bg-blue-500 text-white">Create Budget</button>
+          </Link>
+          <Link to="/transaction/add">
+          <button className="my-8 mx-2 px-4 rounded-full px-4 py-2 bg-blue-500 text-white">Add Transaction</button>
+        </Link>
+      </div>
       <div> 
-          <select id="budgetSelect" value={budget_id} onChange={handleChange}>
-            <option value=''>Please Select a Budget</option>
+        <select id="budgetSelect" value={budget_id} onChange={handleChange} className= "mx-4 ">
+          <option value=''>Please Select a Budget</option>
             {budgetList.map(budget => (
-            <option key={budget.id} value={budget.id}>{budget.name}</option>
+          <option key={budget.id} value={budget.id}>{budget.name}</option>
             ))}
-          </select>
-                <button className="rounded-full px-4 py-2 bg-blue-500 text-white" onClick={(e) => {console.log("Navigating to: ", `/transaction/budget/${budget_id}`); navigate(`/transaction/budget/${budget_id}`)}}>Search Transactions</button>
-          </div>
+        </select>
+        <button className="rounded-full px-4 py-2 bg-blue-500 text-white" onClick={(e) => {console.log("Navigating to: ", `/transaction/budget/${budget_id}`); navigate(`/transaction/budget/${budget_id}`)}}>Search Transactions</button>
+      </div>
              
-      <div class="flex space-x-24">
+      <div className="flex space-x-24">
       
         <PieChart budgetName={budgetName} monthlyExpenses={monthlyExpenses} expenseTags={expenseTags} />
         <VertBarChart yearlyIncome={yearlyIncome} yearlyExpenses={yearlyExpenses} />
