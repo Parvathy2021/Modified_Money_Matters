@@ -65,7 +65,7 @@ function Transaction() {
           </Link>
         </div>
       </div>
-    );Name
+    );
   }
 
 
@@ -144,14 +144,6 @@ function Transaction() {
         budget_id && !isNaN(Number(budget_id)) ? Number(budget_id) : null,
       tag_id: Number(tag_id),
     };
-
-    console.log("Submitting transaction with params:", params); 
-      console.log("Submitting transaction data:", transaction);
-      //   transaction,
-      //   params,
-      //   splits: splits,
-      //   tag_id: tag_id,
-      // });
 
     try {
       console.log(JSON.stringify(transaction));
