@@ -29,6 +29,9 @@ public class AuthenticationController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private TagController tagController;
+
     private static final String userSessionKey = "user";
 
 //    Helper method to store user ID in session
@@ -119,6 +122,7 @@ public class AuthenticationController {
                 );
 
                 userRepository.save(newUser);
+                tagController.createDefaultTags(newUser);
                 setUserInSession(request.getSession(), newUser);
 
                 //  Success response
@@ -172,6 +176,7 @@ public class AuthenticationController {
             }
 
             // Create a new session and return success
+            tagController.createDefaultTags(theUser);
             setUserInSession(request.getSession(), theUser);
 
             Map<String, Object> successResponse = new HashMap<>();
