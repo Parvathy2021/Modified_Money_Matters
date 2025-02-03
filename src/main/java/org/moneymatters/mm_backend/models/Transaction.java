@@ -3,8 +3,12 @@ package org.moneymatters.mm_backend.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+
+import java.util.List;
 
 @JsonIgnoreProperties({"user", "tag"})
 @Entity
@@ -16,10 +20,14 @@ public class Transaction extends Entry{
     @JsonIgnore
     private Tag tag;
 
-    public Transaction(int id, int amount, boolean isIncome, String description, Budget budget, User user, boolean isRecurring, Tag tag) {
-        super();
+    @OneToMany(mappedBy = "transaction", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Split> splits;
+
+    public Transaction(int id, Double amount, boolean isIncome, String description, Budget budget, User user, boolean isRecurring, Tag tag, List<Split> splits) {
+        super(id, amount, isIncome, description, budget, user);
         this.isRecurring = isRecurring;
         this.tag = tag;
+        this.splits = splits;
     }
 
     public Transaction(boolean isRecurring) {
@@ -27,7 +35,16 @@ public class Transaction extends Entry{
         this.isRecurring = isRecurring;
     }
 
+
     public Transaction() { };
+
+    public List<Split> getSplits() {
+        return splits;
+    }
+
+    public void setSplits(List<Split> splits) {
+        this.splits = splits;
+    }
 
     public boolean isRecurring() {
         return isRecurring;

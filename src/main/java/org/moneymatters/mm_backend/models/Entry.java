@@ -18,7 +18,7 @@ public abstract class Entry {
     private int id;
 
     @NotNull(message = "Amount cannot be null")
-    private Integer amount;
+    private Double amount;
 
     private boolean isIncome;
 
@@ -38,7 +38,7 @@ public abstract class Entry {
     @Column(name="created_date", updatable = false)
     private LocalDateTime createdDate;
 
-    public Entry(int id, int amount, boolean isIncome, String description, Budget budget, User user) {
+    public Entry(int id, Double amount, boolean isIncome, String description, Budget budget, User user) {
         this.id = id;
         this.amount = amount;
         this.isIncome = isIncome;
@@ -82,15 +82,15 @@ public abstract class Entry {
         return isIncome;
     }
 
-    public void setIncome(boolean income) {
-        isIncome = income;
+    public void setIsIncome(boolean income) {
+        this.isIncome = income;
     }
 
-    public Integer getAmount() {
+    public Double getAmount() {
         return amount;
     }
 
-    public void setAmount(int amount) {
+    public void setAmount(Double amount) {
         this.amount = amount;
     }
 

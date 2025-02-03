@@ -1,17 +1,23 @@
 package org.moneymatters.mm_backend.controllers;
 
+import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Valid;
+import jakarta.validation.Validator;
 import org.moneymatters.mm_backend.data.*;
 import org.moneymatters.mm_backend.models.*;
+import org.moneymatters.mm_backend.models.dto.IncomeSplitDto;
 import org.moneymatters.mm_backend.models.dto.TransactionDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/api/transactions")
@@ -33,6 +39,13 @@ public class TransactionController {
     @Autowired
     private TagRepository tagRepository;
 
+    @Autowired
+    private SplitRepository splitRepository;
+
+    @Autowired
+    private Validator validator;
+
+
 //    Create transaction with budget and tag assignment options
 @PostMapping("/add")
     public ResponseEntity<?> addTransaction(@RequestBody @Valid TransactionDTO transactionDTO,
@@ -40,12 +53,19 @@ public class TransactionController {
                                             @RequestParam(required = false) Integer budget_id,
                                             @RequestParam(required = false) Integer tag_id) {
 
-   Transaction transaction = new Transaction();
+    if (transactionDTO.getAmount() == null) {
+        return new ResponseEntity<>("Amount is null: ", HttpStatus.BAD_REQUEST);
+    }
+
+    System.out.println("Amount from DTO: " + transactionDTO.getAmount());
+    System.out.println("Budget ID: " + budget_id);
+    System.out.println("User ID: " + user_id);
+
+    Transaction transaction = new Transaction();
     transaction.setAmount(transactionDTO.getAmount());
     transaction.setDescription(transactionDTO.getDescription());
     transaction.setRecurring(transactionDTO.isRecurring());
-    transaction.setIncome(transactionDTO.isIncome());
-
+    transaction.setIsIncome(transactionDTO.isIncome());
 
 
     Optional<User> userOptional = userRepository.findById(user_id);
@@ -70,17 +90,93 @@ public class TransactionController {
         transaction.setTag(tagOptional.get());
     }
 
+    Transaction savedTransaction = transactionRepository.save(transaction);
+
     if (transaction.isRecurring()){
         RecurringTransaction recurringTransaction= new RecurringTransaction();
         recurringTransaction.setTransaction(transaction);
+        recurringTransaction.setAmount(transactionDTO.getAmount());
+        recurringTransaction.setDescription(transactionDTO.getDescription());
+        recurringTransaction.setIsIncome(transactionDTO.isIncome());
         recurringTransaction.setRecurringDay(transactionDTO.getRecurringDate());
         recurringTransaction.setTag(transaction.getTag());
+        recurringTransaction.setUser(transaction.getUser());
+        recurringTransaction.setBudgetId(transaction.getBudget());
+        recurringTransaction.setNextTransactionDate(recurringTransaction.calculateNextTransactionDate());
+
+
+        System.out.println("Received recurringTransaction: " +  recurringTransaction.getAmount());
+
+        Set<ConstraintViolation<RecurringTransaction>> violations = validator.validate(recurringTransaction);
+        if (!violations.isEmpty()) {
+            String errorMessages = violations.stream()
+                    .map(violation -> violation.getMessage())
+                    .collect(Collectors.joining(", "));
+            return new ResponseEntity<>(errorMessages, HttpStatus.BAD_REQUEST);
+        }
 
         recurringTransactionRepository.save(recurringTransaction);
     }
-    Transaction savedTransaction = transactionRepository.save(transaction);
-    return new ResponseEntity<>(savedTransaction, HttpStatus.CREATED);
-}
+
+
+    if(transactionDTO.getSplits() != null && !transactionDTO.getSplits().isEmpty()){
+        for(TransactionDTO.SplitDto splitDto: transactionDTO.getSplits()){
+
+            if (splitDto.getTag() == null || splitDto.getTag().isEmpty()){
+                return new ResponseEntity<>("Tag ID cannot be null or empty", HttpStatus.BAD_REQUEST);
+            }
+//            double splitAmount = splitDto.getSplitAmount();
+//            String tag = splitDto.getTag();
+
+            Optional<Tag> tagOptional = tagRepository.findById(Integer.parseInt(splitDto.getTag()));
+            if(tagOptional.isEmpty()){
+                return new ResponseEntity<>("Tag not found for id: " + splitDto.getTag(),HttpStatus.NOT_FOUND);
+            }
+
+            Split split = new Split();
+            split.setSplitAmount(splitDto.getSplitAmount());
+            split.setTag(tagOptional.get());
+            split.setTransaction(savedTransaction);
+            splitRepository.save(split);
+        }
+    }
+
+    return new ResponseEntity<>(true, HttpStatus.CREATED);
+}// Income split endpoint
+    @PostMapping("/split-income")
+    public ResponseEntity<?> splitIncome(@RequestBody IncomeSplitDto incomeSplitDto) {
+        double totalIncome = incomeSplitDto.getTotalIncome();
+        Map<String, Double> allocations = incomeSplitDto.getAllocations();
+
+        // Create transaction for each category split
+        for (Map.Entry<String, Double> entry : allocations.entrySet()) {
+            String tagName = entry.getKey();
+            Double percentage = entry.getValue();
+
+            // Calculate the split amount
+            double splitAmount = (percentage / 100) * totalIncome;
+
+            // Fetch the corresponding tag by name
+            Optional<Tag> tagOptional = tagRepository.findByName(tagName);
+            if (tagOptional.isEmpty()) {
+                return new ResponseEntity<>("Tag not found for name: " + tagName, HttpStatus.NOT_FOUND);
+            }
+            Tag tag = tagOptional.get();
+
+            // Create the transaction for the split
+            Transaction transaction = new Transaction();
+            transaction.setAmount(splitAmount);
+            transaction.setDescription("Income split for " + tag.getName());
+            transaction.setIsIncome(true);  // Set as income
+            transaction.setTag(tag);
+
+            // Save the transaction
+            transactionRepository.save(transaction);
+        }
+
+        return new ResponseEntity<>("Income successfully split into categories", HttpStatus.CREATED);
+
+    }
 
 //      View all transactions for a user
     @GetMapping("/user/{user_id}")
@@ -92,6 +188,7 @@ public class TransactionController {
         List<Transaction> transactions = transactionRepository.findByUser(userOptional.get());
         return new ResponseEntity<>(transactions, HttpStatus.OK);
     }
+
 
 //    View all transactions by specific budget
     @GetMapping("/budget/{budget_id}")
@@ -158,7 +255,7 @@ public class TransactionController {
     Transaction existingTransaction = existingTransactionOpt.get();
     existingTransaction.setAmount(transaction.getAmount());
     existingTransaction.setDescription(transaction.getDescription());
-    existingTransaction.setIncome(transaction.isIncome());
+    existingTransaction.setIsIncome(transaction.isIncome());
     existingTransaction.setRecurring(transaction.isRecurring());
 
         if (budget_id != null) {
@@ -190,11 +287,4 @@ public class TransactionController {
     transactionRepository.deleteById(id);
     return new ResponseEntity<>("Transaction deleted successfully", HttpStatus.OK);
 }
-    //Search
-    @GetMapping("/search")
-    public ResponseEntity<?> searchTransactions(@RequestParam String query){
-        List<Transaction> transactions = transactionRepository.findByDescriptionContainingIgnoreCase(query);
-        return new ResponseEntity<>(transactions, HttpStatus.OK);
-    }
-
 }

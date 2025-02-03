@@ -3,10 +3,7 @@ package org.moneymatters.mm_backend.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
@@ -17,7 +14,7 @@ public class RecurringTransaction extends Entry {
     @ManyToOne
     private Transaction transaction;
 
-    @NotBlank(message = "Day cannot be blank")
+
     @Min(value = 1, message = "Number cannot be less than 1 or greater than 31")
     @Max(value = 31, message = "Number cannot be less than 1 or greater than 31")
     private int recurringDay;
@@ -35,7 +32,7 @@ public class RecurringTransaction extends Entry {
         YearMonth yearMonth = YearMonth.now();
         int maxDays = yearMonth.lengthOfMonth();
 
-        int validDay = Math.min(recurringDay,maxDays);
+        int validDay = Math.min(recurringDay, maxDays);
         return LocalDate.of(yearMonth.getYear(), yearMonth.getMonth(), validDay);
 
     }
@@ -48,7 +45,8 @@ public class RecurringTransaction extends Entry {
         this.nextTransactionDate = calculateNextTransactionDate();
     }
 
-    public RecurringTransaction(){}
+    public RecurringTransaction() {
+    }
 
     public Transaction getTransaction() {
         return transaction;
@@ -80,5 +78,24 @@ public class RecurringTransaction extends Entry {
 
     public void setTag(Tag tag) {
         this.tag = tag;
+    }
+
+    @AssertTrue(message = "Recurring day is required if isRecurring is true.")
+    public boolean isRecurringDayValid() {
+        if (transaction != null && transaction.isRecurring()) {
+            return recurringDay > 0;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "RecurringTransaction{" +
+                "transaction=" + transaction +
+                ", recurringDay=" + recurringDay +
+                ", nextTransactionDate=" + nextTransactionDate +
+                ", tag=" + tag +
+                '}';
+
     }
 }
