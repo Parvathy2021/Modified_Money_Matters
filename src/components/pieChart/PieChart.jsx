@@ -4,13 +4,23 @@ import { Pie } from 'react-chartjs-2';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-export function PieChart({ budgetName, monthlyExpenses, expenseDescription, expenseTags }) {
+export function PieChart({ monthlyExpenses }) {
+    const labels = []
+    const values = []
+
+    for (let expense of monthlyExpenses) {
+        for (let tag in expense) {
+            labels.push(tag)
+            values.push(expense[tag])
+        }
+    }
+
     const data = {
-        labels: expenseTags,
+        labels: labels,
         datasets: [
             {
                 label: 'Monthly Amount: ',
-                data: monthlyExpenses,
+                data: values,
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
                     'rgba(54, 162, 235, 0.2)',
@@ -34,7 +44,7 @@ export function PieChart({ budgetName, monthlyExpenses, expenseDescription, expe
 
     return (
         <>
-            <div className='size-5/12'>
+            <div className='size-4/12'>
                 <Pie data={data} />
             </div>
         </>
