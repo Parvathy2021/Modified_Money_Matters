@@ -287,4 +287,13 @@ public class TransactionController {
     transactionRepository.deleteById(id);
     return new ResponseEntity<>("Transaction deleted successfully", HttpStatus.OK);
 }
+
+    @GetMapping("/search")
+    public ResponseEntity<?> searchTransactions(@RequestParam String query){
+        List<Transaction> transactions = transactionRepository.findByDescriptionContainingIgnoreCase(query);
+        return new ResponseEntity<>(transactions, HttpStatus.OK);
+    }
+
+
+
 }

@@ -3,6 +3,7 @@ package org.moneymatters.mm_backend.data;
 import org.moneymatters.mm_backend.models.Transaction;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
@@ -13,4 +14,6 @@ public interface TransactionRepository extends CrudRepository<Transaction, Integ
     List<Transaction> findByTag(org.moneymatters.mm_backend.models.Tag tag);
     List<Transaction> findByUserAndIsRecurring(org.moneymatters.mm_backend.models.User user, boolean isRecurring);
     List<Transaction> findBySplitsContains(org.moneymatters.mm_backend.models.Split split);
+    @Query("SELECT t FROM Transaction t WHERE LOWER(t.description) LIKE LOWER(CONCAT('%', :description, '%'))")
+    List<Transaction> findByDescriptionContainingIgnoreCase(String description);
 }
