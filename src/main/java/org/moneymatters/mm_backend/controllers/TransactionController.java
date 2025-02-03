@@ -289,11 +289,9 @@ public class TransactionController {
 }
 
     @GetMapping("/search")
-    public ResponseEntity<?> searchTransactions(@RequestParam String query){
-        List<Transaction> transactions = transactionRepository.findByDescriptionContainingIgnoreCase(query);
+    public ResponseEntity<?> searchTransactions(@RequestParam String query, @RequestParam Integer budget_id){
+        List<Transaction> transactions = transactionRepository.findByDescriptionContainingIgnoreCase(query, budget_id);
         return new ResponseEntity<>(transactions, HttpStatus.OK);
     }
-
-
 
 }

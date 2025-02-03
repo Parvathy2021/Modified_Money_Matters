@@ -14,6 +14,7 @@ public interface TransactionRepository extends CrudRepository<Transaction, Integ
     List<Transaction> findByTag(org.moneymatters.mm_backend.models.Tag tag);
     List<Transaction> findByUserAndIsRecurring(org.moneymatters.mm_backend.models.User user, boolean isRecurring);
     List<Transaction> findBySplitsContains(org.moneymatters.mm_backend.models.Split split);
-    @Query("SELECT t FROM Transaction t WHERE LOWER(t.description) LIKE LOWER(CONCAT('%', :description, '%'))")
-    List<Transaction> findByDescriptionContainingIgnoreCase(String description);
+    @Query("SELECT t FROM Transaction t WHERE LOWER(t.description) LIKE LOWER(CONCAT('%', :description, '%'))AND t.budget.id = :budget_id")
+    List<Transaction> findByDescriptionContainingIgnoreCase(String description, Integer budget_id);
+
 }
