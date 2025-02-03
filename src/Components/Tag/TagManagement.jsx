@@ -81,6 +81,7 @@ const TagManagement = ({ tag_id, onTagSelect }) => {
       isDefault: false,
     };
 
+
     try {
       console.log("Creating new tag:", tagData);
       const response = await api.tagService.createTag(tagData, user.userId);
@@ -117,7 +118,6 @@ const TagManagement = ({ tag_id, onTagSelect }) => {
 
       {/* Enhanced dropdown with colored options */}
       <div className="mb-6">
-
         <h3 className="font-medium mb-2">Select a Tag</h3>
         <select
           value={tag_id || ""}
@@ -196,8 +196,7 @@ const TagManagement = ({ tag_id, onTagSelect }) => {
             onChange={(e) => setNewTagName(e.target.value)}
             placeholder="Tag name"
 
-
-            className="p-2 border rounded-md focus:ring-2 focus:ring-blue-500"
+            className="p-2 border rounded-md focus:ring-2 focus:ring-blue-500 bg-white"
             maxLength="50"
           />
           <div className="flex items-center gap-2">

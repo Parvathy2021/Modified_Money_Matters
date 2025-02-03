@@ -115,7 +115,7 @@ function Transaction() {
     e.preventDefault();
 
   if (!user || !user.userId) {
-    console.error("🚨 Error: User is not defined in handleSubmit!");
+    console.error("Error: User is not defined in handleSubmit!");
     alert("Authentication issue detected. Please log in again.");
     return;
   }
