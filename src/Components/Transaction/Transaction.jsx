@@ -91,8 +91,16 @@ function Transaction() {
     return;
   }
 
+  const validAmount = parseFloat(amount);
+
+  if (isNaN(validAmount)) {
+    console.error("Amount is invalid")
+    alert("Invalid amount provided.");
+    return;
+  }
+
     const transaction = {
-      amount: Number(amount),
+      amount: validAmount,
       description,
       isRecurring,
       isIncome,
