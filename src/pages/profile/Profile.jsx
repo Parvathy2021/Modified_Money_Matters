@@ -7,6 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import AuthStatus from "../../components/auth/authStatus/AuthStatus";
 import { useAuth } from '../../context/AuthContext';
 import api from '../../services/api';
+import BudgetOverview from '../../Components/BudgetOverview/BudgetOverview';
 
 const Profile = () => {
   const {user} = useAuth();
@@ -194,6 +195,7 @@ const Profile = () => {
         <PieChart budgetName={budgetName} monthlyExpenses={monthlyExpenses} />
         <VertBarChart yearlyIncome={yearlyIncome} yearlyExpenses={yearlyExpenses} />
       </div>
+         <BudgetOverview monthlyExpenses={monthlyExpenses} />
     </>
   )
 }
