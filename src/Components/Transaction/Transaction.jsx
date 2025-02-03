@@ -65,19 +65,19 @@ function Transaction() {
           </Link>
         </div>
       </div>
-    );
+    );Name
   }
 
 
   const handleAddSplit = (e) => {
     e.preventDefault();
     if (splitAmount && tag_id) {
+      
       const newSplit = {
-        amount: parseFloat(splitAmount),
-        tag_id,
-        tagName:
-          document.querySelector(`[data-tag-id="${tag_id}"]`)?.textContent ||
-          "Unknown Tag",
+        splitAmount: parseFloat(splitAmount),
+        tag:parseInt(tag_id),
+         tagName : document.querySelector(`[value="${tag_id}"]`)?.textContent || "Unknown Tag",
+
       };
       setSplits([...splits, newSplit]);
       setSplitAmount("");
@@ -96,7 +96,7 @@ function Transaction() {
             className="flex justify-between items-center bg-gray-100 p-2 rounded"
           >
             <span>
-              {split.tagName}: ${split.amount}
+              {split.tagName}: ${split.splitAmount}
             </span>
             <button
               type="button"
@@ -134,7 +134,7 @@ function Transaction() {
       isRecurring,
       isIncome,
       recurringDate,
-      splits,
+      splits : isSplits? splits : [],
       isSplits,
     };
 
@@ -146,14 +146,15 @@ function Transaction() {
     };
 
     console.log("Submitting transaction with params:", params); 
-      console.log("Submitting transaction data:", {
-        transaction,
-        params,
-        splits: splits,
-        tag_id: tag_id,
-      });
+      console.log("Submitting transaction data:", transaction);
+      //   transaction,
+      //   params,
+      //   splits: splits,
+      //   tag_id: tag_id,
+      // });
 
     try {
+      console.log(JSON.stringify(transaction));
       const response = await transService.add(transaction, params);
       alert("Transaction saved successfully!");
       navigate("/transaction/add");
