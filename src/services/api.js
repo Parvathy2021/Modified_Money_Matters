@@ -109,7 +109,7 @@ const transService = {
     getAll: async(budget_id, params) => {
         try {
 
-            const response = await api.get(`api/transactions/budget/${budget_id}`, {params : params});
+            const response = await api.get(`/api/transactions/budget/${budget_id}`, {params : params});
 
             return response.data;
         } catch (error) {
@@ -130,7 +130,7 @@ const transService = {
 
     getTag: async(tag_id, params) => {
         try {
-            const response = await api.get(`api/tags/${tag_id}`, {params : params})
+            const response = await api.get(`/api/tags/${tag_id}`, {params : params})
             return response.data;
         } catch (error) {
             if (error.response) {
@@ -150,7 +150,7 @@ const transService = {
 
     update: async(id, params) => {
         try{
-            const response = await api.put(`api/transactions/update/${id}`, {params: params});
+            const response = await api.put(`/api/transactions/update/${id}`, {params: params});
             return response.data;
         }catch (error) {
             if (error.response) {
@@ -186,7 +186,7 @@ delete: async (id, params = {}) => {
     search: async(query) => {
 
         try {
-            const response = await api.get(`api/transactions/search?query=${query}`);
+            const response = await api.get(`/api/transactions/search?query=${query}`);
             return response.data;
         }catch (error) {
             if (error.response) {
@@ -209,7 +209,7 @@ const budgetService = {
 
     getByUser: async (user_id) => {
         try{
-            const response = await api.get(`api/budgets/user/${user_id}`)
+            const response = await api.get(`/api/budgets/user/${user_id}`)
             return response.data;
         }catch (error) {
             if (error.response) {
