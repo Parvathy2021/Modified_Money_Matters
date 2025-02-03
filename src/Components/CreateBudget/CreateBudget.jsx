@@ -63,25 +63,45 @@ function CreateBudget(){
 
       return (
         <>
-            <div>
-                <h1>New Budget</h1>
-                <form>
-                    <div>
+            <div className="flex justify-center items-center min-h-screen bg-black">
+                <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+                <h1 className="text-2xl font-semibold text-center mb-6 text-black">New Budget</h1>
+                <form onSubmit={handleSubmit}>
+                    <div className="space-y-4 text-black">
                         <label>Budget Name
                             <input
                             type="text"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
-
-                            ></input>
+                            className="mt-1 p-2 w-full border rounded-md bg-white"
+                            />
                         </label>
                     </div>
+                    <div>
+                        <button
+                            type="submit"
+                            className="my-8 mx-4 px-4 flex-1 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+                        >
+                        Create Budget
+                        </button>
+                        <Link to="/profile" className="flex-1">
+                            <button
+                              type="button"
+                              className="my-8 mx-4 px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600"
+                            >
+                                Cancel
+                            </button>
+                        </Link>
+                    </div>
                 </form>
+                </div>
             </div>
 
 
         </>
 
-      )
+      );
 
 }
+
+export default CreateBudget;

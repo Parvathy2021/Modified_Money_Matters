@@ -18,6 +18,7 @@ import Footer from './Components/footer/Footer';
 
 // Context
 import { AuthProvider } from './context/AuthContext';
+import CreateBudget from './Components/CreateBudget/CreateBudget';
 
 
 
@@ -36,6 +37,7 @@ function App() {
           <Route path='/incomeSplit' element={<IncomeSplit />}/>
           <Route path='/contact' element={<Contact />}/>
           <Route path='/transaction/budget/:budget_id' element={<TransactionSearch/>}/>
+          <Route path='/budget/add' element={<CreateBudget />}/>
         </Routes>
         <Footer />
       </Router>
