@@ -174,14 +174,14 @@ delete: async (id, params = {}) => {
         return;
     }
 
-    try {
+        try {
         const response = await api.delete(`/api/transactions/delete/${id}`, { params });
         return response.data;
-    } catch (error) {
+        } catch (error) {
         console.error("Delete request error:", error);
         throw error;
-    }
-},
+        }
+    },
 
     search: async(query) => {
 

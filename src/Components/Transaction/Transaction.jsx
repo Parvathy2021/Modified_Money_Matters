@@ -1,5 +1,5 @@
 import { split } from 'postcss/lib/list';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import api from '../../services/api.js';
 import {useNavigate, Link} from "react-router-dom";
 import { useAuth } from '../../context/AuthContext';
@@ -7,18 +7,47 @@ import TagManagement from '../Tag/TagManagement.jsx';
 
 function Transaction() {
   const { user } = useAuth();
-  const [budget_id, setBudget_Id] = useState("");
+  const [budget_id, setBudgetId] = useState("");
+  const [budgetList, setBudgetList] = useState([]);
   const [amount, setAmount] = useState("");
   const [description, setDescription] = useState("");
   const [isRecurring, setIsRecurring] = useState(false);
   const [isIncome, setIsIncome] = useState(false);
   const [recurringDate, setRecurring] = useState(null);
   const [tag_id, setTag_Id] = useState("");
-  const [splits, setSplits] = useState([]); // Array to hold splits with tag and amount
+  const [splits, setSplits] = useState([]); 
   const [splitAmount, setSplitAmount] = useState("");
-  const [isSplits, setIsSplits] = useState(false); // State for split Tags checkbox
+  const [isSplits, setIsSplits] = useState(false);
   const navigate = useNavigate();
-  const { transService } = api;
+  const { transService, budgetService } = api;
+
+
+
+  useEffect(() => {
+    const budgetList = async() =>{
+
+        if (!user?.userId) {
+            console.error("User ID is not available");
+            return;
+        }
+
+      try{
+        const result = await budgetService.getByUser(user.userId);
+        setBudgetList(result);
+      } catch (error) {
+        console.error("Error fetching budget data", error);
+      }
+    };
+    if(user?.userId) {
+        budgetList();
+    } else {
+        console.log("User is not defined. Please log in.");
+    }
+  } ,[user]);
+
+  const handleChange = (e) => {
+    setBudgetId(e.target.value);
+  }
 
     if (!user) {
         console.log("User is not defined. Please log in.");
@@ -39,8 +68,9 @@ function Transaction() {
     );
   }
 
+
   const handleAddSplit = (e) => {
-    e.preventDefault(); // Prevent form submission
+    e.preventDefault();
     if (splitAmount && tag_id) {
       const newSplit = {
         amount: parseFloat(splitAmount),
@@ -56,7 +86,6 @@ function Transaction() {
     }
   };
 
-  // Display current splits
   const SplitsList = () => (
     <div className="mt-4">
       <h3 className="font-medium">Current Splits:</h3>
@@ -126,7 +155,6 @@ function Transaction() {
 
     try {
       const response = await transService.add(transaction, params);
-      console.log("Transaction saved:", response);
       alert("Transaction saved successfully!");
       navigate("/transaction/add");
     } catch (error) {
@@ -142,16 +170,15 @@ function Transaction() {
           New Transaction
         </h1>
         <form onSubmit={handleSubmit}>
-          {/* Basic transaction details */}
           <div className="space-y-4 text-black">
             <div>
               <label className="block">Budget</label>
-              <input
-                type="text"
-                value={budget_id}
-                onChange={(e) => setBudget_Id(e.target.value)}
-                className="mt-1 p-2 w-full border rounded-md"
-              />
+              <select id="budgetSelect" value={budget_id} onChange={handleChange} class = "text-gray bg-white">
+            <option value=''>Please Select a Budget</option>
+            {budgetList.map(budget => (
+            <option key={budget.id} value={budget.id}>{budget.name}</option>
+            ))}
+          </select>
             </div>
 
             <div>
@@ -160,7 +187,7 @@ function Transaction() {
                 type="number"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
-                className="mt-1 p-2 w-full border rounded-md"
+                className="mt-1 p-2 w-full border rounded-md bg-white"
                 required
               />
             </div>
@@ -171,12 +198,11 @@ function Transaction() {
                 type="text"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                className="mt-1 p-2 w-full border rounded-md"
+                className="mt-1 p-2 w-full border rounded-md bg-white"
                 required
               />
             </div>
 
-            {/* Checkboxes */}
             <div className="space-y-2">
               <label className="flex items-center space-x-2">
                 <input
@@ -205,13 +231,12 @@ function Transaction() {
                     max="31"
                     value={recurringDate || ""}
                     onChange={(e) => setRecurring(e.target.value)}
-                    className="mt-1 p-2 w-full border rounded-md"
+                    className="mt-1 p-2 w-full border rounded-md bg-white"
                   />
                 </div>
               )}
             </div>
 
-            {/* Tag Management Section */}
             <div className="border-t pt-4 mt-4">
               <label className="flex items-center space-x-2 mb-4">
                 <input
@@ -219,7 +244,7 @@ function Transaction() {
                   checked={isSplits}
                   onChange={() => {
                     setIsSplits(!isSplits);
-                    setSplits([]); // Clear splits when toggling
+                    setSplits([]); 
                   }}
                 />
                 <span>Split this transaction across multiple tags?</span>
@@ -233,7 +258,7 @@ function Transaction() {
                       value={splitAmount}
                       onChange={(e) => setSplitAmount(e.target.value)}
                       placeholder="Split amount"
-                      className="flex-1 p-2 border rounded-md"
+                      className="flex-1 p-2 border rounded-md bg-white"
                     />
                     <button
                       type="button"
@@ -257,7 +282,7 @@ function Transaction() {
               />
             </div>
 
-            {/* Submit and Cancel buttons */}
+          
             <div className="flex space-x-4 mt-6">
               <button
                 type="submit"

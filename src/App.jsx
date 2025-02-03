@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
-// Page Components
+
 import Home from './pages/home/Home';
 import About from './pages/about/About';
 import Login from './Components/Login/Login';
@@ -12,11 +12,10 @@ import IncomeSplit from './Components/IncomeSplit/IncomeSplit'
 import Contact from './pages/contact/Contact';
 import TransactionSearch from './Components/TransactionSearch/TransactionSearch';
 
-// Layout Components
+
 import NavHeader from './Components/navHeader/NavHeader';
 import Footer from './Components/footer/Footer';
 
-// Context
 import { AuthProvider } from './context/AuthContext';
 
 function App() {
