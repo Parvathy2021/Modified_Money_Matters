@@ -12,6 +12,9 @@ import BudgetNotes from '../../Components/budgetNotes/BudgetNotes';
 
 const Profile = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
+  const { transService, budgetService } = api;
+
   const [budgetName, setBudgetName] = useState("")
   const [monthlyExpenses, setMonthlyExpenses] = useState([])
   const [yearlyIncome, setYearlyIncome] = useState([])
@@ -22,21 +25,23 @@ const Profile = () => {
   const [monthExpensesTotal, setMonthExpensesTotal] = useState(0)
 
   const user_id = user.userId;
-  const { transService, budgetService } = api;
-  const navigate = useNavigate();
+ 
+  
 
   useEffect(() => {
-    const budgetList = async () => {
+    const loadBudgetList = async () => {
 
-      try {
+      if(user){
+        try {
         const result = await budgetService.getByUser(user_id);
         setBudgetList(result);
       } catch (error) {
         console.error("Error fetching budget data", error);
       }
+    }
     };
-    budgetList();
-  }, []);
+    loadBudgetList();
+  }, [user, budgetService]);
 
   const handleChange = (e) => {
     setBudgetId(e.target.value);
