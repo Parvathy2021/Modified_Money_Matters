@@ -186,7 +186,8 @@ public class TransactionController {
         return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
     }
         List<Transaction> transactions = transactionRepository.findByUser(userOptional.get());
-        return new ResponseEntity<>(transactions, HttpStatus.OK);
+        List<TransactionDTO> transactionDTOs = transactions.stream().map(this::convertToDTO).collect(Collectors.toList());
+        return new ResponseEntity<>(transactionDTOs, HttpStatus.OK);
     }
 
 
@@ -293,5 +294,41 @@ public class TransactionController {
         List<Transaction> transactions = transactionRepository.findByDescriptionContainingIgnoreCase(query, budget_id);
         return new ResponseEntity<>(transactions, HttpStatus.OK);
     }
+    private TransactionDTO convertToDTO(Transaction transaction){
+        TransactionDTO dto = new TransactionDTO();
+        dto.setId(transaction.getId());
+        dto.setAmount(transaction.getAmount());
+        dto.setDescription(transaction.getDescription());
+        dto.setIncome(transaction.isIncome());
+        dto.setRecurring(transaction.isRecurring());
+        dto.setCreatedDate(transaction.getCreatedDate());
+
+        if(transaction.getUser() != null){
+            dto.setUserId(transaction.getUser().getUser_id());
+        }
+         if(transaction.getBudget() != null){
+             dto.setBudgetId(transaction.getBudget().getId());
+         }
+         if(transaction.getTag() != null){
+             dto.setTagId(transaction.getTag().getId());
+         }
+         // convert splits if they exists
+        if(transaction.getSplits() != null){
+            List<TransactionDTO.SplitDto> splitDtos = transaction.getSplits().stream().map(split -> {
+                TransactionDTO.SplitDto splitDto = new TransactionDTO.SplitDto();
+                splitDto.setSplitAmount(split.getSplitAmount());
+                splitDto.setTag(String.valueOf(split.getTag().getId()));
+
+                return splitDto;
+            }).collect(Collectors.toList());
+            dto.setSplits(splitDtos);
+
+        }
+        return dto;
+    }
+
+
+
 
 }
+
