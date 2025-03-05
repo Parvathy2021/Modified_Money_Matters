@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
 import api from "../../services/api"; // Assuming this has the API services
 import moment from "moment";
+import { split } from "postcss/lib/list";
 
 const BudgetOverview = ({ monthlyExpenses }) => {
   const { user } = useAuth();
@@ -80,6 +81,24 @@ const BudgetOverview = ({ monthlyExpenses }) => {
           }
           groupedData[tag.id].amount += transaction.amount;
         });
+        
+        // Process split transaction if they exists
+        if(transaction.splits && transaction.splits.length > 0){
+          transaction.splits.forEach((split) => {
+            const splitTagId = split.tagId;
+            const splitAmount = split.splitAmount;
+
+            if(splitTagId && splitAmount){
+              if(!groupedData[splitTagId]){
+                groupedData[splitTagId] ={
+                  tagName : 'Unknown',
+                  splitAmount : 0,
+                };
+              }
+              groupedData[splitTagId].splitAmount += splitAmount;
+            }
+          })
+        }
       });
 
       // Convert the grouped data into an array and store in state
