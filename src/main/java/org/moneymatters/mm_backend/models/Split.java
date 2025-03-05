@@ -64,4 +64,5 @@ public class Split {
     public void setTransaction(Transaction transaction) {
         this.transaction = transaction;
     }
+
 }

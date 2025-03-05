@@ -23,6 +23,8 @@ public class TransactionDTO {
     private Integer recurringDate;
     private LocalDateTime createdDate;
     private List<SplitDto> splits;
+    @JsonProperty
+    private boolean isSplit;
 
 
     public Integer getUserId() {
@@ -113,18 +115,26 @@ public class TransactionDTO {
         this.createdDate = createdDate;
     }
 
+    public boolean isSplit() {
+        return isSplit;
+    }
+
+    public void setSplit(boolean split) {
+        isSplit = split;
+    }
+
     // Nested DTO for split
     public static class SplitDto{
 
             private Integer splitAmount;
-            private String tag;
+            private String  tag;
 
             public String getTag() {
                 return tag;
             }
 
-            public void setTag(String tag) {
-                this.tag = tag;
+            public void setTag(String tagId) {
+                this.tag = tagId;
             }
 
             public Integer getSplitAmount() {
@@ -150,6 +160,7 @@ public class TransactionDTO {
                 ", recurringDate=" + recurringDate +
                 ", createdDate=" + createdDate +
                 ", splits=" + splits +
+                ", isSplit=" + isSplit +
                 '}';
         }
 
