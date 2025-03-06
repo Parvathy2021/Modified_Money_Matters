@@ -8,8 +8,8 @@ function TransactionList({budget_id}) {
     console.log("Received budget ID", budget_id);
 
     const [transactions, setTransactions] = useState([]);
-    const [isPopupVisible, setIsPopupVisible] = useState([]);
-    const [selectedTransaction, setSelectedTransactions] = useState([]);
+    const [isPopupVisible, setIsPopupVisible] = useState(false);
+    const [selectedTransaction, setSelectedTransactions] = useState(null);
     
     const {transService} = api;
 
@@ -43,23 +43,20 @@ function TransactionList({budget_id}) {
                                 const splitTagData = await transService.getTag(split.tagId);
                                 return { ...split, tag: splitTagData };
                             }
-                            // return {
-                            //     ...split,
-                            //     tag: splitTagData,
-                            //     splitAmount: parseFloat(split.splitAmount)
-                            // }
+                           
                             return split;
                         }));
                         enrichedTransaction.splits = splitsWithTags;
                     }
-                        return enrichedTransaction;
+                       
                     }
 
                  catch (error) {
                     console.error(`Error processing transaction ${transaction.id}:`, error);
+                 }
                     return enrichedTransaction; // Return transaction even if tag fetch fails
-            }
-        })
+            })
+        
     );
             console.log("Processed transactions:", processedTransactions);
             setTransactions(processedTransactions);
@@ -102,24 +99,33 @@ function TransactionList({budget_id}) {
 
     // Handle viewing split details
     const handleViewSplit = async (transactionId) => {
+        console.log("View Split clicked for transaction ID:", transactionId);
         try {
             const transaction = transactions.find(t => t.id === transactionId);
+            console.log("Found transaction:", transaction);
             if (transaction && transaction.splits) {
+                console.log("Splits found:", transaction.splits);
                 const splitsWithTags = await Promise.all(
                     transaction.splits.map(async (split) => {
                         if (split.tagId) {
                             const tagData = await transService.getTag(split.tagId);
+                            console.log("Tag data for split:", tagData);
                             return { ...split, tag: tagData };
                         }
                         return split;
                     })
                 );
+                 console.log("Enriched transaction with splits and tags:", { ...transaction, splits: splitsWithTags });
                 setSelectedTransactions({
                     ...transaction,
                     splits: splitsWithTags
                 });
+                console.log("Selected transaction state after update:", selectedTransaction);
                
                 setIsPopupVisible(true);
+                console.log(selectedTransaction);   
+            } else {
+                console.error(`Transaction with ID ${transactionId} not found`);
             }
         } catch (error) {
             console.error("Error fetching split data:", error);

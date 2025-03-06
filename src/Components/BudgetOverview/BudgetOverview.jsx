@@ -127,22 +127,6 @@ const BudgetOverview = ({ monthlyExpenses }) => {
     <div className="p-6 bg-white rounded-lg shadow-md">
       <h2 className="text-2xl font-semibold mb-6">Budget Overview</h2>
 
-      {/* Budget Selection */}
-      <div className="mb-4">
-        <label className="block text-gray-700">Select a Budget</label>
-        <select
-          onChange={handleBudgetChange}
-          className="mt-2 p-2 border border-gray-300 rounded-md w-full"
-        >
-          <option value="">Choose a Budget</option>
-          {budgetList.map((budget) => (
-            <option key={budget.id} value={budget.id}>
-              {budget.name}
-            </option>
-          ))}
-        </select>
-      </div>
-
       {/* Date Range Filter */}
       <div className="mb-6">
         <label className="block text-gray-700">Start Date</label>

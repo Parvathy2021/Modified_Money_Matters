@@ -18,15 +18,15 @@ function SplitPopup({ transaction, onClose }) {
                 </button>
                 <h2 className="text-xl font-semibold mb-4">Transaction Details</h2>
                 <div className="space-y-4">
-                    <p><strong>ID:</strong> {transaction.id}</p>
+                    <p><strong>Transaction ID:</strong> {transaction.id}</p>
                     <p><strong>Amount:</strong> {transaction.amount}</p>
                     <p><strong>Description:</strong> {transaction.description}</p>
                     <p><strong>Created On:</strong> {new Date(transaction.createdDate).toLocaleDateString()}</p>
                 </div>
 
                 {/* Split Details Section */}
-                <h3 className="text-lg font-medium mt-6">Split Details</h3>
-                {transaction.splits && transaction.splits.length > 0 ? (
+                <h3 className="text-lg font-medium mt-6">Split Transaction Details</h3>
+                {splits && splits.length > 0 ? (
                     <table className="w-full mt-4 table-auto">
                         <thead>
                             <tr>
@@ -35,10 +35,10 @@ function SplitPopup({ transaction, onClose }) {
                             </tr>
                         </thead>
                         <tbody>
-                            {transaction.splits.map((split, index) => (
+                            {splits.map((split, index) => (
                                 <tr key={index} className="border-b">
                                     <td className="px-4 py-2">{split.splitAmount}</td>
-                                    <td className="px-4 py-2">{split.tag && split.tag.name ? split.tag.name : 'No tag'}</td>
+                                    <td className="px-4 py-2">{split.tag ? split.tag.name  : 'No tag'}</td>
                                 </tr>
                             ))}
                         </tbody>
