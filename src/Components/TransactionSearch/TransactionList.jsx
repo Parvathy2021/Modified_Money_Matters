@@ -112,7 +112,7 @@ function TransactionList({budget_id}) {
                             console.log("Tag data for split:", tagData);
                             return { ...split, tag: tagData };
                         }
-                        return split;
+                        return { ...split, tag: null };
                     })
                 );
                  console.log("Enriched transaction with splits and tags:", { ...transaction, splits: splitsWithTags });
@@ -155,7 +155,7 @@ function TransactionList({budget_id}) {
                         <th scope="col" class="px-6 py-3">Description</th>
                         <th scope="col" class="px-6 py-3">Created On</th>
                         <th scope="col" class="px-6 py-3">Action</th>
-                        <th scope="col" class="px-6 py-3">View Split</th>
+                        <th scope="col" class="px-6 py-3">Split transaction</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -178,7 +178,7 @@ function TransactionList({budget_id}) {
                             <td class="px-6 py-4">
                             <button 
                                    onClick={() =>handleViewSplit(transaction.id) } 
-                                   disabled = {!transaction.split || transaction.splits.length === 0}
+                                   disabled = {!transaction.splits || transaction.splits.length === 0}
                                    className={`${
                                     transaction.splits && transaction.splits.length > 0
                                         ? 'text-green-500 hover:text-green-700 cursor-pointer' 
