@@ -39,12 +39,14 @@ function TransactionList({budget_id}) {
                     if (transaction.splits && transaction.splits.length > 0) {
                         // Get tag data for each split
                         const splitsWithTags = await Promise.all(transaction.splits.map(async (split) => {
+                            console.log("Split in ProcessedTransactions:", split)
+                            console.log("TagId", split.tag.substring(7,8));
                             if (split.tagId) {
                                 const splitTagData = await transService.getTag(split.tagId);
                                 return { ...split, tag: splitTagData };
                             }
                            
-                            return split;
+                            return {...split, tagId:split.tag.substring(7,8)};
                         }));
                         enrichedTransaction.splits = splitsWithTags;
                     }
@@ -107,6 +109,7 @@ function TransactionList({budget_id}) {
                 console.log("Splits found:", transaction.splits);
                 const splitsWithTags = await Promise.all(
                     transaction.splits.map(async (split) => {
+                        console.log("Split Data:", split);
                         if (split.tagId) {
                             const tagData = await transService.getTag(split.tagId);
                             console.log("Tag data for split:", tagData);

@@ -38,7 +38,7 @@ function SplitPopup({ transaction, onClose }) {
                             {splits.map((split, index) => (
                                 <tr key={index} className="border-b">
                                     <td className="px-4 py-2">{split.splitAmount}</td>
-                                    <td className="px-4 py-2">{split.tag ? split.tag.name  : 'No tag'}</td>
+                                    <td className="px-4 py-2">{split.tag != null? split.tag.name : "No Tag"}</td>
                                 </tr>
                             ))}
                         </tbody>

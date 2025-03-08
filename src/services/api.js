@@ -119,7 +119,7 @@ const transService = {
                         splits: transaction.splits.map(split => ({
                             ...split,
                             parentId: transaction.id,
-                            isChild: true
+                            isChild: true,
                         }))
                     };
                 }
