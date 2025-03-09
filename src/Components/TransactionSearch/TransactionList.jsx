@@ -1,12 +1,16 @@
 import React, {useState, useEffect } from 'react';
 import SearchBar from './SearchBar';
 import api from '../../services/api.js';
+import SplitPopup from './SplitPopup.jsx';
 
 function TransactionList({budget_id}) {
 
     console.log("Received budget ID", budget_id);
 
     const [transactions, setTransactions] = useState([]);
+    const [isPopupVisible, setIsPopupVisible] = useState(false);
+    const [selectedTransaction, setSelectedTransactions] = useState(null);
+    
     const {transService} = api;
 
     useEffect(() => {
@@ -18,25 +22,51 @@ function TransactionList({budget_id}) {
             }
             try{
                 const results = await transService.getAll(budget_id);
-                console.log("Fetched transactions", results, budget_id);
+                console.log("raw transaction data:", results );
 
-                const transactionsTag = await Promise.all(results.map( async (transaction) => {
-                    console.log("Processing transaction", transaction);
-                    if (transaction.tagId) {
-                        const tagData = await transService.getTag(transaction.tagId);
-                        console.log("Fetched tag data:", tagData);
-                        return { ...transaction, tag: tagData};
-                    } else {
-                        return {...transaction, tag: null};
+                const processedTransactions = await Promise.all(
+                    results.map(async (transaction) => {
+                        // Create a new object for this transaction
+                        let enrichedTransaction = { ...transaction };
+                        try {
+                            // Get tag data if transaction has a tagId
+                            if (transaction.tagId) {
+                                const tagData = await transService.getTag(transaction.tagId);
+                                enrichedTransaction.tag = tagData;
+                            }
+
+                    // Get split data if exists
+                    if (transaction.splits && transaction.splits.length > 0) {
+                        // Get tag data for each split
+                        const splitsWithTags = await Promise.all(transaction.splits.map(async (split) => {
+                            console.log("Split in ProcessedTransactions:", split)
+                            console.log("TagId", split.tag.substring(7,8));
+                            if (split.tagId) {
+                                const splitTagData = await transService.getTag(split.tagId);
+                                return { ...split, tag: splitTagData };
+                            }
+                           
+                            return {...split, tagId:split.tag.substring(7,8)};
+                        }));
+                        enrichedTransaction.splits = splitsWithTags;
                     }
-                }))
+                       
+                    }
 
-
-                setTransactions(transactionsTag);
-            } catch (error) {
-                console.error('Could not fetch transactions', error);
-            }
+                 catch (error) {
+                    console.error(`Error processing transaction ${transaction.id}:`, error);
+                 }
+                    return enrichedTransaction; // Return transaction even if tag fetch fails
+            })
+        
+    );
+            console.log("Processed transactions:", processedTransactions);
+            setTransactions(processedTransactions);
+        } catch (error) {
+            console.error('Could not fetch transactions:', error);
+        }
         };
+
         if(budget_id){
             fetchAllTransactions();
         }
@@ -68,6 +98,49 @@ function TransactionList({budget_id}) {
             console.log("Did not delete transaction.")
         }
     }
+
+    // Handle viewing split details
+    const handleViewSplit = async (transactionId) => {
+        console.log("View Split clicked for transaction ID:", transactionId);
+        try {
+            const transaction = transactions.find(t => t.id === transactionId);
+            console.log("Found transaction:", transaction);
+            if (transaction && transaction.splits) {
+                console.log("Splits found:", transaction.splits);
+                const splitsWithTags = await Promise.all(
+                    transaction.splits.map(async (split) => {
+                        console.log("Split Data:", split);
+                        if (split.tagId) {
+                            const tagData = await transService.getTag(split.tagId);
+                            console.log("Tag data for split:", tagData);
+                            return { ...split, tag: tagData };
+                        }
+                        return { ...split, tag: null };
+                    })
+                );
+                 console.log("Enriched transaction with splits and tags:", { ...transaction, splits: splitsWithTags });
+                setSelectedTransactions({
+                    ...transaction,
+                    splits: splitsWithTags
+                });
+                console.log("Selected transaction state after update:", selectedTransaction);
+               
+                setIsPopupVisible(true);
+                console.log(selectedTransaction);   
+            } else {
+                console.error(`Transaction with ID ${transactionId} not found`);
+            }
+        } catch (error) {
+            console.error("Error fetching split data:", error);
+            alert("Failed to fetch split data.");
+        }
+    };
+
+    // Close the split popup
+    const closePopup = () => {
+        setIsPopupVisible(false);
+        setSelectedTransactions(null);
+    };
     
 
     return(
@@ -85,6 +158,7 @@ function TransactionList({budget_id}) {
                         <th scope="col" class="px-6 py-3">Description</th>
                         <th scope="col" class="px-6 py-3">Created On</th>
                         <th scope="col" class="px-6 py-3">Action</th>
+                        <th scope="col" class="px-6 py-3">Split transaction</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -104,12 +178,32 @@ function TransactionList({budget_id}) {
                                 Delete
                                 </button>
                             </td>
+                            <td class="px-6 py-4">
+                            <button 
+                                   onClick={() =>handleViewSplit(transaction.id) } 
+                                   disabled = {!transaction.splits || transaction.splits.length === 0}
+                                   className={`${
+                                    transaction.splits && transaction.splits.length > 0
+                                        ? 'text-green-500 hover:text-green-700 cursor-pointer' 
+                                        : 'text-gray-400 cursor-not-allowed'
+                                }`}
+                                >
+                                View Split
+                                </button>
+                                </td>
                         </tr>
                     ))
                 )}
                 </tbody>
             </table>
             </div>
+
+            {isPopupVisible && selectedTransaction && (
+                <SplitPopup
+                    transaction={selectedTransaction}
+                    onClose={closePopup} // Close the popup
+                />
+            )}
         </div>
     );
 };

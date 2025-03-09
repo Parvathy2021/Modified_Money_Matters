@@ -111,7 +111,21 @@ const transService = {
 
             const response = await api.get(`/api/transactions/budget/${budget_id}`, {params : params});
 
-            return response.data;
+            const transformedData = response.data.map(transaction => {
+                if (transaction.splits && transaction.splits.length > 0) {
+                    return {
+                        ...transaction,
+                        hasChildren: true,
+                        splits: transaction.splits.map(split => ({
+                            ...split,
+                            parentId: transaction.id,
+                            isChild: true,
+                        }))
+                    };
+                }
+                return transaction;
+            });
+            return transformedData;
         } catch (error) {
             if (error.response) {
                 console.error("API response error data:", error.response.data);
@@ -201,8 +215,17 @@ delete: async (id, params = {}) => {
             }
             throw { message: 'Network error occurred'}
         }
+    },
+    getSplits: async (transactionId) => {
+        try {
+            const response = await api.get(`/api/transaction/view/${transactionId}`);
+             return response.data.splits || []; // Return the splits data
+        } catch (error) {
+            console.error('Error fetching splits:', error);
+            throw new Error('Failed to fetch splits');
+        }
     }
-}
+};
 
 
 const budgetService = {
