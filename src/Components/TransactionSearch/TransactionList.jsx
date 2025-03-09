@@ -167,7 +167,7 @@ function TransactionList({budget_id}) {
                         <tr key={index} class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200">
                             <td class="px-6 py-4">{transaction.id}</td>
                             <td class="px-6 py-4">{transaction.amount}</td>
-                            <td class="px-6 py-4">{transaction.tag ? transaction.tag.name : 'No tag'}</td>
+                            <td class="px-6 py-4">{transaction.splits && transaction.splits.length > 0 ? 'No tag' : (transaction.tag ? transaction.tag.name : 'No tag')}</td>
                             <td class="px-6 py-4">{transaction.description}</td>
                             <td class="px-6 py-4">{transaction.createdDate ? formatDate(transaction.createdDate) : 'No Date'}</td>
                             <td class="px-6 py-4">
