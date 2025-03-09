@@ -143,14 +143,7 @@ function Login() {
               <input type="checkbox" className="text-align: left" />
               Remember me
             </label>
-            <p>
-              <Link
-                to="/forgotpassword"
-                className="text-blue-600 hover:text-blue-700 text-align:right"
-              >
-                Forgot Password?
-              </Link>
-            </p>
+            
           </div>
 
           <button

@@ -72,6 +72,23 @@ const BudgetOverview = ({ monthlyExpenses }) => {
       const groupedData = {};
 
       filteredTransactions.forEach((transaction) => {
+        if (transaction.splits && transaction.splits.length > 0) {
+          // Process split transactions correctly
+          transaction.splits.forEach((split) => {
+              const splitTagId = split.tagId;
+              const splitAmount = split.splitAmount;
+
+              if (splitTagId && splitAmount) {
+                  if (!groupedData[splitTagId]) {
+                      groupedData[splitTagId] = {
+                          tagName: tags.find(tag => tag.id === splitTagId)?.name || 'Unknown',
+                          amount: 0,
+                      };
+                  }
+                  groupedData[splitTagId].amount += splitAmount;
+              }
+          });
+        } else{
         transaction.tags.forEach((tag) => {
           if (!groupedData[tag.id]) {
             groupedData[tag.id] = {
@@ -82,22 +99,22 @@ const BudgetOverview = ({ monthlyExpenses }) => {
           groupedData[tag.id].amount += transaction.amount;
         });
         
-        // Process split transaction if they exists
-        if(transaction.splits && transaction.splits.length > 0){
-          transaction.splits.forEach((split) => {
-            const splitTagId = split.tagId;
-            const splitAmount = split.splitAmount;
+        // // Process split transaction if they exists
+        // if(transaction.splits && transaction.splits.length > 0){
+        //   transaction.splits.forEach((split) => {
+        //     const splitTagId = split.tagId;
+        //     const splitAmount = split.splitAmount;
 
-            if(splitTagId && splitAmount){
-              if(!groupedData[splitTagId]){
-                groupedData[splitTagId] ={
-                  tagName : 'Unknown',
-                  splitAmount : 0,
-                };
-              }
-              groupedData[splitTagId].splitAmount += splitAmount;
-            }
-          })
+        //     if(splitTagId && splitAmount){
+        //       if(!groupedData[splitTagId]){
+        //         groupedData[splitTagId] ={
+        //           tagName : 'Unknown',
+        //           splitAmount : 0,
+        //         };
+        //       }
+        //       groupedData[splitTagId].splitAmount += splitAmount;
+        //     }
+        //   })
         }
       });
 
@@ -106,7 +123,7 @@ const BudgetOverview = ({ monthlyExpenses }) => {
     };
 
     filterAndGroupTransactions();
-  }, [transactions, selectedDateRange]);
+  }, [transactions, selectedDateRange, tags]);
 
   // Handle budget selection
   const handleBudgetChange = (e) => {

@@ -63,14 +63,30 @@ const Profile = () => {
 
       let tagExpenseObj = {}
 
-      allExpenses.forEach(item => {
-        let tag = tagsData.data.find(tag => tag.id === item.tagId).name
+      allExpenses.forEach(item => 
+        {
+          if(item.tagId != null)
+          {
+          let tag = tagsData.data.find(tag =>  tag.id === item.tagId).name
 
-        if (tagExpenseObj[tag]) {
-          tagExpenseObj[tag] += item.amount
-        } else {
-          tagExpenseObj[tag] = item.amount
-        }
+          if (tagExpenseObj[tag]) {
+            tagExpenseObj[tag] += item.amount
+          } else {
+            tagExpenseObj[tag] = item.amount
+          }
+          }
+          else{
+            item.splits.forEach(split =>{
+              var tagIdParsed = parseInt(split.tag.substring(7,8));
+              let tag = tagsData.data.find(tag =>  tag.id === tagIdParsed).name
+
+              if (tagExpenseObj[tag]) {
+                tagExpenseObj[tag] += split.splitAmount
+              } else {
+                tagExpenseObj[tag] = split.splitAmount
+              }
+            });
+          }
       })
 
       let expenses = [];
