@@ -8,6 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @JsonIgnoreProperties({"user", "tag", "hibernateLazyInitializer", "handler"})
@@ -24,11 +25,14 @@ public class Transaction extends Entry{
     @JsonIgnoreProperties("transaction")
     private List<Split> splits;
 
-    public Transaction(int id, Double amount, boolean isIncome, String description, Budget budget, User user, boolean isRecurring, Tag tag, List<Split> splits) {
+    private boolean isSplit;
+
+    public Transaction(int id, Double amount, boolean isIncome, String description, Budget budget, User user, boolean isRecurring, Tag tag, List<Split> splits, boolean isSplit) {
         super(id, amount, isIncome, description, budget, user);
         this.isRecurring = isRecurring;
         this.tag = tag;
         this.splits = splits;
+        this.isSplit = isSplit;
     }
 
     public Transaction(boolean isRecurring) {
@@ -36,6 +40,21 @@ public class Transaction extends Entry{
         this.isRecurring = isRecurring;
     }
 
+    public boolean isSplit() {
+        return isSplit;
+    }
+
+    public void setSplit(boolean split) {
+        isSplit = split;
+    }
+
+    public void updateIsSplitStatus(){
+        if (splits != null && !splits.isEmpty()) {
+            this.isSplit = true;
+        } else {
+            this.isSplit = false;
+        }
+    }
 
     public Transaction() { };
 
@@ -45,6 +64,22 @@ public class Transaction extends Entry{
 
     public void setSplits(List<Split> splits) {
         this.splits = splits;
+        updateIsSplitStatus();
+    }
+
+    public void addSplit(Split split){
+        if(this.splits == null){
+            this.splits = new ArrayList<>();
+        }
+        this.splits.add(split);
+        updateIsSplitStatus();
+    }
+
+    public void removeSplit (Split split){
+        if(this.splits != null){
+            this.splits.remove(split);
+            updateIsSplitStatus();
+        }
     }
 
     public boolean isRecurring() {

@@ -82,13 +82,21 @@ public class TransactionController {
     transaction.setBudgetId(budgetOptional.get());
     }
 
+    if (transactionDTO.getSplits() != null && !transactionDTO.getSplits().isEmpty()) {
+        transaction.setSplit(true);
+    }
+    
     if (tag_id != null) {
         Optional<Tag> tagOptional = tagRepository.findById(tag_id);
         if (tagOptional.isEmpty()) {
             return new ResponseEntity<>("Tag not found", HttpStatus.NOT_FOUND);
         }
-        transaction.setTag(tagOptional.get());
+        if(!transaction.isSplit()) {
+            transaction.setTag(tagOptional.get());
+        }
     }
+
+
 
     Transaction savedTransaction = transactionRepository.save(transaction);
 
@@ -123,10 +131,9 @@ public class TransactionController {
         for(TransactionDTO.SplitDto splitDto: transactionDTO.getSplits()){
 
             if (splitDto.getTag() == null || splitDto.getTag().isEmpty()){
-                return new ResponseEntity<>("Tag ID cannot be null or empty", HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>("Tag name cannot be null or empty", HttpStatus.BAD_REQUEST);
             }
-//            double splitAmount = splitDto.getSplitAmount();
-//            String tag = splitDto.getTag();
+
 
             Optional<Tag> tagOptional = tagRepository.findById(Integer.parseInt(splitDto.getTag()));
             if(tagOptional.isEmpty()){
@@ -142,41 +149,25 @@ public class TransactionController {
     }
 
     return new ResponseEntity<>(true, HttpStatus.CREATED);
-}// Income split endpoint
-    @PostMapping("/split-income")
-    public ResponseEntity<?> splitIncome(@RequestBody IncomeSplitDto incomeSplitDto) {
-        double totalIncome = incomeSplitDto.getTotalIncome();
-        Map<String, Double> allocations = incomeSplitDto.getAllocations();
-
-        // Create transaction for each category split
-        for (Map.Entry<String, Double> entry : allocations.entrySet()) {
-            String tagName = entry.getKey();
-            Double percentage = entry.getValue();
-
-            // Calculate the split amount
-            double splitAmount = (percentage / 100) * totalIncome;
-
-            // Fetch the corresponding tag by name
-            Optional<Tag> tagOptional = tagRepository.findByName(tagName);
-            if (tagOptional.isEmpty()) {
-                return new ResponseEntity<>("Tag not found for name: " + tagName, HttpStatus.NOT_FOUND);
-            }
-            Tag tag = tagOptional.get();
-
-            // Create the transaction for the split
-            Transaction transaction = new Transaction();
-            transaction.setAmount(splitAmount);
-            transaction.setDescription("Income split for " + tag.getName());
-            transaction.setIsIncome(true);  // Set as income
-            transaction.setTag(tag);
-
-            // Save the transaction
-            transactionRepository.save(transaction);
+}
+    @GetMapping("/{transactionId}/splits")
+    public ResponseEntity<?> getSplitTransactions(@PathVariable Integer transactionId) {
+        Optional<Transaction> transactionOptional = transactionRepository.findById(transactionId);
+        if (transactionOptional.isEmpty()) {
+            return new ResponseEntity<>("Transaction not found", HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>("Income successfully split into categories", HttpStatus.CREATED);
+        Transaction transaction = transactionOptional.get();
+        List<TransactionDTO.SplitDto> splitDtos = transaction.getSplits().stream().map(split -> {
+            TransactionDTO.SplitDto splitDto = new TransactionDTO.SplitDto();
+            splitDto.setSplitAmount(split.getSplitAmount());
+            splitDto.setTag(split.getTag() != null ? split.getTag().getName() : null);
+            return splitDto;
+        }).collect(Collectors.toList());
 
+        return new ResponseEntity<>(splitDtos, HttpStatus.OK);
     }
+
 
 //      View all transactions for a user
     @GetMapping("/user/{user_id}")
@@ -210,6 +201,16 @@ public class TransactionController {
         dto.setRecurring(transaction.isRecurring());
         dto.setIncome(transaction.isIncome());
         dto.setCreatedDate(transaction.getCreatedDate());
+
+        // Map splits
+        List<TransactionDTO.SplitDto> splitDtos = transaction.getSplits().stream().map(split -> {
+            TransactionDTO.SplitDto splitDto = new TransactionDTO.SplitDto();
+            splitDto.setSplitAmount(split.getSplitAmount());  // Assuming Split has an amount field
+            splitDto.setTag(String.valueOf(split.getTag()));  // Assuming Split has a tag field
+            return splitDto;
+        }).collect(Collectors.toList());
+
+        dto.setSplits(splitDtos);
 
         if (transaction.getTag() != null) {
             dto.setTagId(transaction.getTag().getId());
@@ -313,7 +314,7 @@ public class TransactionController {
              dto.setTagId(transaction.getTag().getId());
          }
          // convert splits if they exists
-        if(transaction.getSplits() != null){
+        if(transaction.getSplits() != null && !transaction.getSplits().isEmpty()){
             List<TransactionDTO.SplitDto> splitDtos = transaction.getSplits().stream().map(split -> {
                 TransactionDTO.SplitDto splitDto = new TransactionDTO.SplitDto();
                 splitDto.setSplitAmount(split.getSplitAmount());
