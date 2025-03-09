@@ -82,17 +82,21 @@ public class TransactionController {
     transaction.setBudgetId(budgetOptional.get());
     }
 
+    if (transactionDTO.getSplits() != null && !transactionDTO.getSplits().isEmpty()) {
+        transaction.setSplit(true);
+    }
+    
     if (tag_id != null) {
         Optional<Tag> tagOptional = tagRepository.findById(tag_id);
         if (tagOptional.isEmpty()) {
             return new ResponseEntity<>("Tag not found", HttpStatus.NOT_FOUND);
         }
-        transaction.setTag(tagOptional.get());
+        if(!transaction.isSplit()) {
+            transaction.setTag(tagOptional.get());
+        }
     }
 
-    if (transactionDTO.getSplits() != null && !transactionDTO.getSplits().isEmpty()) {
-        transaction.setSplit(true);
-    }
+
 
     Transaction savedTransaction = transactionRepository.save(transaction);
 
