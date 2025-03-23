@@ -30,6 +30,7 @@ public class RecurringTransaction extends Entry {
     public LocalDate calculateNextTransactionDate() {
 
         YearMonth yearMonth = YearMonth.now();
+        yearMonth = yearMonth.plusMonths(1);
         int maxDays = yearMonth.lengthOfMonth();
 
         int validDay = Math.min(recurringDay, maxDays);
