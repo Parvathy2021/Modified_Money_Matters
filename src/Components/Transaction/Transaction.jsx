@@ -148,6 +148,7 @@ function Transaction() {
     try {
       console.log(JSON.stringify(transaction));
       const response = await transService.add(transaction, params);
+      window.location.reload()
       alert("Transaction saved successfully!");
       navigate("/transaction/add");
     } catch (error) {
