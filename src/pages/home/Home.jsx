@@ -6,13 +6,29 @@ import './Home.css'
 import moneyImage from '../../assets/money-gold-coin-growth-concept-illustration-stacks-of-gold-coin-like-income-graph-with-dollar-free-vector.jpg'
 import img1 from '../../assets/ex-pie2.png'
 import img2 from '../../assets/ex-bar2.png'
-
+import MoneyMatters from '../../assets/Money Matters.png'
 const Home = () => {
   return (
     <div>
       <article className="h-screen overflow-y-scroll snap-y snap-mandatory">
+      <section className="min-h-full snap-start flex items-center justify-center">
+          <div className="flex-1 flex items-center justify-center">
+            <article>
+              <img src={MoneyMatters} alt="Money" className="mx-auto w-3.75/4 font-bold" // Centers and resizes the image
+              />
+            </article>
+          </div>
+          <div className="flex-1 flex items-center justify-center">
+            <article>
+              <h1 className="text-center text-6xl font-extrabold">
+                Money Matters
+              </h1>
+            </article>
+          </div>
+        </section>
+
         <section className="min-h-full snap-start flex items-center justify-center">
-          <div className="flex-1 text-center">
+        <div className="flex-1 flex items-center justify-center">
             <article>
               <img src={img2} alt="Money" className="mx-auto" />
             </article>
