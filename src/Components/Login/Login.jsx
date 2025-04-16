@@ -143,9 +143,16 @@ function Login() {
               <input type="checkbox" className="text-align: left" />
               Remember me
             </label>
-            
+            <p>
+              <Link
+                to="/forgotpassword"
+                className="text-blue-600 hover:text-blue-700 text-align:right"
+              >
+                Forgot Password?
+              </Link>
+            </p>
           </div>
-
+            
           <button
             type="submit"
             className="w-full py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"

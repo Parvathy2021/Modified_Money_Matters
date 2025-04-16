@@ -18,6 +18,7 @@ import Footer from './Components/footer/Footer';
 
 import { AuthProvider } from './context/AuthContext';
 import CreateBudget from './Components/CreateBudget/CreateBudget';
+import ForgotPassword from './Components/ForgotPassword/ForgotPassword';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
           <Route path='/about' element={<About />}/>
           <Route path='/login' element={<Login />}/>
           <Route path='/register' element={<Register />}/>
+          <Route path='/forgotpassword' element={<ForgotPassword />}/>
           <Route path='/profile' element={<Profile />}/>
           <Route path='/transaction/add' element={<Transaction />}/>
           <Route path='/incomeSplit' element={<IncomeSplit />}/>
